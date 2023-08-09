@@ -14,7 +14,7 @@ type FormValues = {
 
 export default function CreateClientForm() {
     const { register, handleSubmit, formState: { errors }, control } = useForm<FormValues>();
-    const { fields: phonesFields, append: appendPhone, remove } = useFieldArray({
+    const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
     });
@@ -30,14 +30,11 @@ export default function CreateClientForm() {
 
             <FieldWrapper title="Телефоны"
                 field={<>
-                    {phonesFields.map(({ phone, id }, i) => <div className={id}>
+                    {phonesFields.map(({ id }, i) => <div key={id} className="d-flex">
                         <input placeholder="Введите номер телефона" {...register(`phones.${i}.phone`, { required: true })} />
+                        <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
-                    <div
-                        onClick={() => {
-                            appendPhone({ phone: "" })
-                        }}
-                        className="btn btn-outline-dark btn-sm">Добавить номер</div>
+                    <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm">Добавить номер</div>
                 </>}
             />
 
