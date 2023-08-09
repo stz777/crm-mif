@@ -1,15 +1,17 @@
 import { pool } from "@/app/db/connect"
+import Link from "next/link";
 
 export default async function Page() {
     const clients = await getClients();
     return <>
-        <h1>Клиент</h1>
+        <h1>Клиенты</h1>
         <table className="table table-bordered table-striped w-auto">
             <thead>
                 <tr className="sticky-top">
                     <th>id</th>
                     <th>ФИО</th>
                     <th>Контакты</th>
+                    <th />
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +31,9 @@ export default async function Page() {
                                 </tr>)}
                             </tbody>
                         </table>
+                    </td>
+                    <td>
+                        <Link className="btn btn-outline-dark btn-sm" href={`/clients/edit/${client.id}`}>Редактировать</Link>
                     </td>
                 </tr>)}
             </tbody>
