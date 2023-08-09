@@ -1,6 +1,6 @@
 import { db_connection } from "@/app/db/connect";
 
-export default async function createClientFn(fio: string) {
+export default async function createClientFn(fio: string): Promise<number> {
     return await new Promise(r => {
         db_connection.query(
             `INSERT INTO clients (full_name) VALUES (?)`,
