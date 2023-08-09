@@ -9,7 +9,8 @@ interface PhoneFiels {
 
 type FormValues = {
     fio: string
-    phones: PhoneFiels[];
+    phones: { phone: string }[];
+    emails: { email: string }[];
 };
 
 export default function CreateClientForm() {
@@ -17,6 +18,10 @@ export default function CreateClientForm() {
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
+    });
+    const { fields: emailFields, append: appendEmail, remove: removeEmail } = useFieldArray({
+        control,
+        name: "emails",
     });
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -35,6 +40,16 @@ export default function CreateClientForm() {
                         <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm">Добавить номер</div>
+                </>}
+            />
+
+            <FieldWrapper title="Email"
+                field={<>
+                    {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
+                        <input placeholder="Введите email" {...register(`emails.${i}.email`, { required: true })} />
+                        <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
+                    </div>)}
+                    <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm">Добавить email</div>
                 </>}
             />
 
