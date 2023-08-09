@@ -23,7 +23,7 @@ export default function CreateClientForm() {
 
             <FieldWrapper title="Имя клиента"
                 field={<>
-                    <input {...register("fio", { required: true })} />
+                    <input {...register("fio", { required: true })} placeholder="ФИО" />
                     <div>{errors.fio && <span>Это обязательное поле</span>}</div>
                 </>}
             />
