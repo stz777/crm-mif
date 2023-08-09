@@ -71,4 +71,17 @@ export default function CreateClientForm() {
 
 const onSubmit = (data: any) => {
     console.log(data);
+    fetch(
+        "/api/clients/create",
+        {
+            method: "POST",
+            body: JSON.stringify(data)
+        }
+    ).then(
+        x => x.json()
+    )
+        .then(x => {
+            console.log('x', x);
+
+        })
 }
