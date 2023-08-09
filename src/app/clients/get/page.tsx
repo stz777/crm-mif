@@ -4,7 +4,7 @@ export default async function Page() {
     const clients = await getClients();
     return <>
         <h1>Клиент</h1>
-        <table className="table table-bordered position-relative">
+        <table className="table table-bordered table-striped w-auto">
             <thead>
                 <tr className="sticky-top">
                     <th>id</th>
