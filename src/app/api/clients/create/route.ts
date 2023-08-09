@@ -9,6 +9,7 @@ export async function POST(req: any, res: any) {
 
     const phones = data.phones;
     const emails = data.emails;
+    const telegram = data.telegram;
 
 
     for (let index = 0; index < phones.length; index++) {
@@ -26,6 +27,15 @@ export async function POST(req: any, res: any) {
             client: newClientId,
             data_type: "email",
             data: email
+        })
+    }
+
+    for (let index = 0; index < telegram.length; index++) {
+        const { telegram: tgUsername } = telegram[index];
+        await createClientMetaFn({
+            client: newClientId,
+            data_type: "telegram",
+            data: tgUsername
         })
     }
 
