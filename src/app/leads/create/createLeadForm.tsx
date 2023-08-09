@@ -37,7 +37,7 @@ export default function CreateLeadForm() {
 const onSubmit = (data: any) => {
     console.log(data);
     fetch(
-        "/api/clients/create",
+        "/api/leads/create",
         {
             method: "POST",
             body: JSON.stringify(data)
