@@ -69,19 +69,26 @@ export async function POST(
 }
 
 async function updateClient(clientData: any, clientId: number) {
-    pool.query(`UPDATE clients SET full_name = "${clientData.fio}"`,
-        function (err) {
-            if (err) {
-                console.log('err #dm5n8ge', err);
-            }
-        })
+    await new Promise(r => {
+        pool.query(`UPDATE clients SET full_name = "${clientData.fio}"`,
+            function (err) {
+                if (err) {
+                    console.log('err #dm5n8ge', err);
+                }
+                r(true);
+            })
+    })
 }
 
 async function clearClientMeta(clientId: number) {
-    pool.query(`DELETE FROM clients_meta WHERE client = ${clientId}`,
-        function (err) {
-            if (err) {
-                console.log('err #cmvfdo3jf;', err);
-            }
-        })
+    const qs = `DELETE FROM clients_meta WHERE client = ${clientId}`;
+    await new Promise(r => {
+        pool.query(qs,
+            function (err, res) {
+                if (err) {
+                    console.log('err #cmvfdo3jf;', err);
+                }
+                r(true);
+            })
+    })
 }
