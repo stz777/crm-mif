@@ -93,7 +93,6 @@ const onSubmit = (data: any, clientId: number) => {
     )
         .then(x => {
             console.log('x', x);
-
         })
 }
 
