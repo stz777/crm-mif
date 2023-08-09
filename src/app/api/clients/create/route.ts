@@ -8,6 +8,7 @@ export async function POST(req: any, res: any) {
     const newClientId: number = await createClientFn(data.fio);
 
     const phones = data.phones;
+    const emails = data.emails;
 
 
     for (let index = 0; index < phones.length; index++) {
@@ -16,6 +17,15 @@ export async function POST(req: any, res: any) {
             client: newClientId,
             data_type: "phone",
             data: phone
+        })
+    }
+
+    for (let index = 0; index < emails.length; index++) {
+        const { email } = emails[index];
+        await createClientMetaFn({
+            client: newClientId,
+            data_type: "email",
+            data: email
         })
     }
 
