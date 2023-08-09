@@ -3,10 +3,6 @@
 import FieldWrapper from "@/app/ui/form/fieldWrapper";
 import { useFieldArray, useForm } from "react-hook-form";
 
-interface PhoneFiels {
-    phone: string
-}
-
 type FormValues = {
     fio: string
     phones: { phone: string }[];
