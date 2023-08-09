@@ -37,7 +37,7 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
         name: "telegram",
     });
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(data => onSubmit(data, props.clientData.id))}>
 
             <FieldWrapper title="Имя клиента"
                 field={<>
@@ -81,10 +81,9 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
 }
 
 
-const onSubmit = (data: any) => {
-    console.log(data);
+const onSubmit = (data: any, clientId: number) => {
     fetch(
-        "/api/clients/create",
+        `/api/clients/edit/${clientId}`,
         {
             method: "POST",
             body: JSON.stringify(data)
@@ -97,3 +96,10 @@ const onSubmit = (data: any) => {
 
         })
 }
+
+
+// fetch("/api/clients/edit/18",
+//     {
+//         method: "POST",
+//         body:JSON.stringify(null)
+//     })
