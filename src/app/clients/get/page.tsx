@@ -72,13 +72,13 @@ async function getClientMeta(clientId: number): Promise<ClientMetaInterface[]> {
 }
 
 
-interface ClientInterface {
+export interface ClientInterface {
     id: number
     full_name: string
     meta: ClientMetaInterface[]
 }
 
-interface ClientMetaInterface {
+export interface ClientMetaInterface {
     id: number
     client: number
     data_type: string
