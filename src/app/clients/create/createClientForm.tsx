@@ -1,19 +1,21 @@
 "use client"
 
+import FieldWrapper from "@/app/ui/form/fieldWrapper";
 import { useForm } from "react-hook-form";
 
 export default function CreateClientForm() {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
-    console.log(watch("example")); // watch input value by passing the name of it
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
 
-            <input defaultValue="test" {...register("example")} />
-
-            <input {...register("exampleRequired", { required: true })} />
-            {errors.exampleRequired && <span>This field is required</span>}
+            <FieldWrapper
+                title="Имя клиента"
+                field={<>
+                    <input {...register("fio", { required: true })} />
+                    <div>{errors.fio && <span>Это обязательное поле</span>}</div>
+                </>}
+            ></FieldWrapper>
 
             <input type="submit" />
         </form>
