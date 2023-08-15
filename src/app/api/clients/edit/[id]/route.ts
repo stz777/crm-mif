@@ -2,6 +2,7 @@ import { ClientInterface } from "@/app/clients/get/page";
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import createClientMetaFn from "../../create/createClientMetaFn";
+import { sendMessageToTg } from "@/app/api/bugReport/route";
 
 export async function POST(
     request: Request,
@@ -71,9 +72,30 @@ export async function POST(
 async function updateClient(clientData: any, clientId: number) {
     await new Promise(r => {
         pool.query(`UPDATE clients SET full_name = "${clientData.fio}"`,
-            function (err) {
+            function (err, res) {
                 if (err) {
-                    console.log('err #dm5n8ge', err);
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#dm5n8ge",
+                                error: err,
+                                values: {
+                                    clientData,
+                                    clientId
+                                }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                if (res) {
+                    sendMessageToTg(
+                        [
+                            `Изменили данные клиента #${clientId}`,
+                            `новые данные `,
+                            JSON.stringify(clientData, null, 2)
+                        ].join("\n"),
+                        "5050441344"
+                    )
                 }
                 r(true);
             })
@@ -86,7 +108,15 @@ async function clearClientMeta(clientId: number) {
         pool.query(qs,
             function (err, res) {
                 if (err) {
-                    console.log('err #cmvfdo3jf;', err);
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#cmvfdo3jf",
+                                error: err,
+                                values: { clientId }
+                            }, null, 2),
+                        "5050441344"
+                    )
                 }
                 r(true);
             })

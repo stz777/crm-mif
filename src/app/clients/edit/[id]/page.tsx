@@ -1,6 +1,7 @@
 import { pool } from "@/app/db/connect";
 import { ClientInterface, ClientMetaInterface } from "../../get/page";
 import EditClientForm from "./editClientForm";
+import { sendMessageToTg } from "@/app/api/bugReport/route";
 
 export default async function Page({ params }: { params: { id: number } }) {
     const { id } = params;
@@ -9,7 +10,7 @@ export default async function Page({ params }: { params: { id: number } }) {
 
     return <>
         <h1>Редактирование клиента {id}</h1>
-        <EditClientForm clientData={client}/>
+        <EditClientForm clientData={client} />
     </>
 }
 
@@ -19,7 +20,15 @@ async function getClient(clientId: number): Promise<ClientInterface> {
             `SELECT * FROM clients WHERE id = ${clientId}`,
             function (err: any, res: ClientInterface[]) {
                 if (err) {
-                    console.log('err #mdsasd34nd', err);
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#mdsasd34nd",
+                                error: err,
+                                values: { clientId }
+                            }, null, 2),
+                        "5050441344"
+                    )
                 }
                 r(res);
             })
@@ -34,7 +43,15 @@ async function getClientMeta(clientId: number): Promise<ClientMetaInterface[]> {
     return await new Promise(r => {
         pool.query(`SELECT * FROM clients_meta WHERE client = ${clientId}`, function (err: any, res: any) {
             if (err) {
-                console.log('err #msk3ng0c', err);
+                sendMessageToTg(
+                    JSON.stringify(
+                        {
+                            errorNo: "#msk3ng0c",
+                            error: err,
+                            values: { clientId }
+                        }, null, 2),
+                    "5050441344"
+                )
             }
             r(res);
         })

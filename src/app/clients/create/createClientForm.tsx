@@ -70,7 +70,6 @@ export default function CreateClientForm() {
 
 
 const onSubmit = (data: any) => {
-    console.log(data);
     fetch(
         "/api/clients/create",
         {
