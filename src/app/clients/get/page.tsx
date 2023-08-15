@@ -1,3 +1,4 @@
+import { sendBugReport } from "@/app/api/bugReport/route";
 import { pool } from "@/app/db/connect"
 import Link from "next/link";
 
@@ -47,7 +48,15 @@ async function getClients(): Promise<ClientInterface[]> {
     const clients: ClientInterface[] = await new Promise(r => {
         pool.query("SELECT * FROM clients", function (err: any, res: ClientInterface[]) {
             if (err) {
-                console.log('err #mdsasd34nd', err);
+                sendBugReport(
+                    JSON.stringify(
+                        {
+                            errorNo: "#mdsasd34nd",
+                            error: err,
+                            values: {}
+                        }, null, 2),
+                    "5050441344"
+                )
             }
             r(res);
         })
@@ -67,7 +76,15 @@ async function getClientMeta(clientId: number): Promise<ClientMetaInterface[]> {
     return await new Promise(r => {
         pool.query(`SELECT * FROM clients_meta WHERE client = ${clientId}`, function (err: any, res: any) {
             if (err) {
-                console.log('err #msk3ng0c', err);
+                sendBugReport(
+                    JSON.stringify(
+                        {
+                            errorNo: "#msk3ng0c",
+                            error: err,
+                            values: { clientId }
+                        }, null, 2),
+                    "5050441344"
+                )
             }
             r(res);
         })
