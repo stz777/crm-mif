@@ -2,10 +2,7 @@ import { pool } from "@/app/db/connect"
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { Add_Payment } from "./add_payment/add_payment";
-
 import { FaCheck } from "react-icons/fa"
-
-
 
 dayjs.locale("ru")
 
@@ -40,14 +37,25 @@ export default async function Page() {
                     <td>{lead.description}</td>{/*description*/}
                     <td>
                         <ul className="list-group">
-                            {lead.payments?.map(payment => <li key={payment.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                <div>{payment.sum}</div>
-                                <div>{!payment.confirmed ? <>
-                                    <button className="btn btn-sm btn-outline-success me-2">Подтвердить</button>
-                                    <button className="btn btn-sm btn-outline-danger">Отменить</button>
-                                </> : <><FaCheck color="green" /></>}</div>
-                            </li>)}
+                            {lead.payments?.map(payment =>
+                                <li key={payment.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>{payment.sum}</div>
+                                    <div>{!payment.confirmed ? <div className="d-flex ms-2">
+                                        <button className="btn btn-sm btn-outline-success me-2">Подтвердить</button>
+                                        <button className="btn btn-sm btn-outline-danger">Отменить</button>
+                                    </div> : <><FaCheck color="green" /></>}</div>
+                                </li>)}
+                            <li className="list-group-item">{(() => {
+                                let totalSum = 0;
+                                if (lead.payments?.length) {
+                                    totalSum = lead.payments
+                                        .map(({ sum }) => sum)
+                                        .reduce((a, b) => a + b);
+                                }
+                                return <div className="fw-bold">Σ {totalSum}</div>
+                            })()}</li>
                         </ul>
+
                         <div className="mt-2"><Add_Payment lead_id={lead.id} /></div>
                     </td>{/*payments list*/}
                     <td>
@@ -74,7 +82,6 @@ export default async function Page() {
                             const предоплатаПроведена = totalSum > 0;
                             return <CheckPaymentUI done={предоплатаПроведена} />
                         })()}
-                        {/* <CheckPaymentUI done={false} /> */}
                     </td>{/*внесена предоплата*/}
                     <td>{lead.sum}</td>{/*сумма заказа*/}
                     <td>{lead.done_at || "-"}</td>{/*дата выполнения*/}

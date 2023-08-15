@@ -18,9 +18,9 @@ export function Add_Payment(props: { lead_id: number }) {
     return <>
         {isOPen && <>
             <form onSubmit={handleSubmit(onSubmit)} className="mb-2">
-                <div className="text-strong">Введите сумму оплаты</div>
+                <div className="text-strong">Добавить оплату</div>
                 <input {...register("sum")} type="number" />
-                <button className="btn btn-sm btn-outline-dark ms-2">Провести</button>
+                <div><button className="btn btn-sm btn-outline-dark mt-2">Провести</button></div>
             </form>
         </>}
         {/* <button
