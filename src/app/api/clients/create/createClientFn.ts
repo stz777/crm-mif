@@ -18,8 +18,15 @@ export default async function createClientFn(fio: string): Promise<number> {
                         "5050441344"
                     )
                 }
-                if (res){
-
+                if (res) {
+                    sendMessageToTg(
+                        [
+                            `Создан новый клиент`,
+                            `id: ${res.insertId}`,
+                            `ФИО:  ${fio}`
+                        ].join("\n"),
+                        "5050441344"
+                    )
                     r(res.insertId);
                 }
             })

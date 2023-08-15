@@ -72,7 +72,7 @@ export async function POST(
 async function updateClient(clientData: any, clientId: number) {
     await new Promise(r => {
         pool.query(`UPDATE clients SET full_name = "${clientData.fio}"`,
-            function (err) {
+            function (err, res) {
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(
@@ -84,6 +84,16 @@ async function updateClient(clientData: any, clientId: number) {
                                     clientId
                                 }
                             }, null, 2),
+                        "5050441344"
+                    )
+                }
+                if (res) {
+                    sendMessageToTg(
+                        [
+                            `Изменили данные клиента #${clientId}`,
+                            `новые данные `,
+                            JSON.stringify(clientData, null, 2)
+                        ].join("\n"),
                         "5050441344"
                     )
                 }
