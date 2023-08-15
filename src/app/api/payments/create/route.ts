@@ -1,6 +1,6 @@
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
-import { sendBugReport } from "../../bugReport/route";
+import { sendMessageToTg } from "../../bugReport/route";
 
 export async function POST(
     request: Request,
@@ -14,7 +14,7 @@ export async function POST(
         [lead_id, sum, 1],
         function (err, res) {
             if (err) {
-                sendBugReport(
+                sendMessageToTg(
                     JSON.stringify(
                         {
                             errorNo: "#ckdjn3m3n3oe",

@@ -1,5 +1,5 @@
 import { pool } from "@/app/db/connect";
-import { sendBugReport } from "../../bugReport/route";
+import { sendMessageToTg } from "../../bugReport/route";
 
 export default async function createClientMetaFn({ client, data_type, data }: ClientMetaType) {
     return await new Promise(r => {
@@ -8,7 +8,7 @@ export default async function createClientMetaFn({ client, data_type, data }: Cl
             [client, data_type, data],
             function (err, res: any) {
                 if (err) {
-                    sendBugReport(
+                    sendMessageToTg(
                         JSON.stringify(
                             {
                                 errorNo: "#k3k5n60",

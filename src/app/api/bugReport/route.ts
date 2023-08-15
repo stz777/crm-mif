@@ -5,7 +5,7 @@ export async function POST(
     { params }: { params: { id: number } }
 ) {
     const { text } = await request.json();
-    const res: any = await sendBugReport(text, "5050441344");
+    const res: any = await sendMessageToTg(text, "5050441344");
     return NextResponse.json({
         success: true,
         res
@@ -14,8 +14,8 @@ export async function POST(
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 
-export async function sendBugReport(message: string, chat_id: string) {
-    const url = `https://api.telegram.org/bot${token}/sendBugReport`
+export async function sendMessageToTg(message: string, chat_id: string) {
+    const url = `https://api.telegram.org/bot${token}/sendMessageToTg`
     return await fetch(
         url,
         {

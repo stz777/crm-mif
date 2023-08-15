@@ -1,4 +1,4 @@
-import { sendBugReport } from "@/app/api/bugReport/route";
+import { sendMessageToTg } from "@/app/api/bugReport/route";
 import { pool } from "@/app/db/connect"
 import Link from "next/link";
 
@@ -48,7 +48,7 @@ async function getClients(): Promise<ClientInterface[]> {
     const clients: ClientInterface[] = await new Promise(r => {
         pool.query("SELECT * FROM clients", function (err: any, res: ClientInterface[]) {
             if (err) {
-                sendBugReport(
+                sendMessageToTg(
                     JSON.stringify(
                         {
                             errorNo: "#mdsasd34nd",
@@ -76,7 +76,7 @@ async function getClientMeta(clientId: number): Promise<ClientMetaInterface[]> {
     return await new Promise(r => {
         pool.query(`SELECT * FROM clients_meta WHERE client = ${clientId}`, function (err: any, res: any) {
             if (err) {
-                sendBugReport(
+                sendMessageToTg(
                     JSON.stringify(
                         {
                             errorNo: "#msk3ng0c",

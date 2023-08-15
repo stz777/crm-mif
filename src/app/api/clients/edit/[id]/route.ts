@@ -2,7 +2,7 @@ import { ClientInterface } from "@/app/clients/get/page";
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import createClientMetaFn from "../../create/createClientMetaFn";
-import { sendBugReport } from "@/app/api/bugReport/route";
+import { sendMessageToTg } from "@/app/api/bugReport/route";
 
 export async function POST(
     request: Request,
@@ -74,7 +74,7 @@ async function updateClient(clientData: any, clientId: number) {
         pool.query(`UPDATE clients SET full_name = "${clientData.fio}"`,
             function (err) {
                 if (err) {
-                    sendBugReport(
+                    sendMessageToTg(
                         JSON.stringify(
                             {
                                 errorNo: "#dm5n8ge",
@@ -98,7 +98,7 @@ async function clearClientMeta(clientId: number) {
         pool.query(qs,
             function (err, res) {
                 if (err) {
-                    sendBugReport(
+                    sendMessageToTg(
                         JSON.stringify(
                             {
                                 errorNo: "#cmvfdo3jf",

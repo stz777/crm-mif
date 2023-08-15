@@ -1,5 +1,5 @@
 import { pool } from "@/app/db/connect";
-import { sendBugReport } from "../../bugReport/route";
+import { sendMessageToTg } from "../../bugReport/route";
 
 export default async function createClientFn(fio: string): Promise<number> {
     return await new Promise(r => {
@@ -8,7 +8,7 @@ export default async function createClientFn(fio: string): Promise<number> {
             [fio],
             function (err, res: any) {
                 if (err) {
-                    sendBugReport(
+                    sendMessageToTg(
                         JSON.stringify(
                             {
                                 errorNo: "#djb39f",
@@ -18,8 +18,10 @@ export default async function createClientFn(fio: string): Promise<number> {
                         "5050441344"
                     )
                 }
-                if (res)
+                if (res){
+
                     r(res.insertId);
+                }
             })
     })
 
