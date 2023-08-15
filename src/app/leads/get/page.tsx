@@ -31,26 +31,36 @@ export default async function Page() {
             </thead>
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
-                    <td>{lead.id}</td>
-                    <td>{lead.client}</td>
+                    <td>{lead.id}</td> {/*lead id*/}
+                    <td>{lead.client}</td>{/*client id*/}
                     <td>{
                         dayjs(lead.deadline)
                             .format("DD.MM.YYYY")
-                    }</td>
-                    <td>{lead.description}</td>
+                    }</td>{/*deadline*/}
+                    <td>{lead.description}</td>{/*description*/}
                     <td>
                         <pre>{JSON.stringify(lead.payments, null, 2)}</pre>
                         <Add_Payment />
-                    </td>
+                    </td>{/*payments list*/}
                     <td>
-                        <CheckPaymentUI done={true} />
-
-                    </td>
+                        {(() => {
+                            let totalSum = 0;
+                            const leadSum = lead.sum;
+                            if (lead.payments?.length) {
+                                totalSum = lead.payments
+                                    .map(({ sum }) => sum)
+                                    .reduce((a, b) => a + b);
+                            }
+                            const полнаяОплатаПроведена = leadSum <= totalSum;
+                            // const totalSum = lead.payments.length === 0 ? 0 : lead.payments;
+                            return <CheckPaymentUI done={полнаяОплатаПроведена} />
+                        })()}
+                    </td>{/*оплата полностью проведена*/}
                     <td>
                         <CheckPaymentUI done={false} />
-                    </td>
-                    <td>{lead.sum}</td>
-                    <td>{lead.done_at || "-"}</td>
+                    </td>{/*внесена предоплата*/}
+                    <td>{lead.sum}</td>{/*сумма заказа*/}
+                    <td>{lead.done_at || "-"}</td>{/*дата выполнения*/}
                 </tr>)}
             </tbody>
         </table> : <>нет заказов...</>}
@@ -117,5 +127,6 @@ interface PaymentInterface {
     done_by: number
     created_date: string
     declined: boolean
+    sum: number
 }
 
