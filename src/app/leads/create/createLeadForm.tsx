@@ -11,7 +11,11 @@ type FormValues = {
 };
 
 export default function CreateLeadForm() {
-    const { register, handleSubmit, formState: { errors }, control } = useForm<FormValues>();
+    const { register, handleSubmit, formState: { errors }, control } = useForm<FormValues>({
+        defaultValues:{
+            
+        }
+    });
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <FieldWrapper title="Заголовок"
