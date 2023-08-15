@@ -39,8 +39,16 @@ export default async function Page() {
                     }</td>{/*deadline*/}
                     <td>{lead.description}</td>{/*description*/}
                     <td>
-                        <pre>{JSON.stringify(lead.payments, null, 2)}</pre>
-                        <Add_Payment />
+                        <ul className="list-group">
+                            {lead.payments?.map(payment => <li key={payment.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                <div>{payment.sum}</div>
+                                <div>{!payment.confirmed ? <>
+                                    <button className="btn btn-sm btn-outline-success me-2">Подтвердить</button>
+                                    <button className="btn btn-sm btn-outline-danger">Отменить</button>
+                                </> : <><FaCheck color="green" /></>}</div>
+                            </li>)}
+                        </ul>
+                        <div className="mt-2"><Add_Payment lead_id={lead.id} /></div>
                     </td>{/*payments list*/}
                     <td>
                         {(() => {
@@ -52,12 +60,21 @@ export default async function Page() {
                                     .reduce((a, b) => a + b);
                             }
                             const полнаяОплатаПроведена = leadSum <= totalSum;
-                            // const totalSum = lead.payments.length === 0 ? 0 : lead.payments;
                             return <CheckPaymentUI done={полнаяОплатаПроведена} />
                         })()}
                     </td>{/*оплата полностью проведена*/}
                     <td>
-                        <CheckPaymentUI done={false} />
+                        {(() => {
+                            let totalSum = 0;
+                            if (lead.payments?.length) {
+                                totalSum = lead.payments
+                                    .map(({ sum }) => sum)
+                                    .reduce((a, b) => a + b);
+                            }
+                            const предоплатаПроведена = totalSum > 0;
+                            return <CheckPaymentUI done={предоплатаПроведена} />
+                        })()}
+                        {/* <CheckPaymentUI done={false} /> */}
                     </td>{/*внесена предоплата*/}
                     <td>{lead.sum}</td>{/*сумма заказа*/}
                     <td>{lead.done_at || "-"}</td>{/*дата выполнения*/}
@@ -99,7 +116,7 @@ async function getLeads(): Promise<LeadInterface[]> {
 async function getPaymentsByLeadId(leadId: number): Promise<PaymentInterface[]> {
     return await new Promise(r => {
         pool.query(
-            `SELECT * FROM payments WHERE lead = ${leadId}`,
+            `SELECT * FROM payments WHERE lead_id = ${leadId}`,
             function (err: any, res: PaymentInterface[]) {
                 if (err) {
                     console.log('err #dm3n5nd9s', err);
@@ -126,7 +143,7 @@ interface PaymentInterface {
     lead: number
     done_by: number
     created_date: string
-    declined: boolean
+    confirmed: boolean
     sum: number
 }
 
