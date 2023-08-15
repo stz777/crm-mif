@@ -1,23 +1,47 @@
 "use client"
-
+import { registerLocale } from "react-datepicker";
+import ru from 'date-fns/locale/ru';
 import FieldWrapper from "@/app/ui/form/fieldWrapper";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import DatePicker from "react-datepicker";
+registerLocale('ru', ru)
 
 type FormValues = {
     title: string
     client: number
     description: string
-    deadline: string
+    deadline: any
 };
 
 export default function CreateLeadForm() {
     const { register, handleSubmit, formState: { errors }, control } = useForm<FormValues>({
-        defaultValues:{
-            
+        defaultValues: {
+            title: "title",
+            client: 2,
+            description: "description",
         }
     });
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            <FieldWrapper title="Дедлайн"
+                field={<>
+                    <Controller
+                        control={control}
+                        name="deadline"
+                        render={({ field }) => (
+                            <DatePicker
+                                locale="ru"
+                                {...field}
+                                dateFormat="dd.MM.yyyy"
+                                selected={field.value}
+                                onChange={(date) => field.onChange(date)}
+                                placeholderText="выберите дату"
+                            />
+                        )}
+                    />
+                </>}
+            />
+
             <FieldWrapper title="Заголовок"
                 field={<>
                     <input {...register("title", { required: true })} placeholder="Заголовок" />
@@ -39,7 +63,6 @@ export default function CreateLeadForm() {
 }
 
 const onSubmit = (data: any) => {
-    console.log(data);
     fetch(
         "/api/leads/create",
         {
