@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { Add_Payment } from "./add_payment/add_payment";
 import { FaCheck } from "react-icons/fa"
+import { sendBugReport } from "@/app/api/bugReport/route";
 
 dayjs.locale("ru")
 
@@ -107,7 +108,15 @@ async function getLeads(): Promise<LeadInterface[]> {
             "SELECT * FROM leads",
             function (err: any, res: LeadInterface[]) {
                 if (err) {
-                    console.log('err #mc8c73g3f', err);
+                    sendBugReport(
+                        JSON.stringify(
+                            {
+                                errorNo: "#mc8c73g3f",
+                                error: err,
+                                values: {}
+                            }, null, 2),
+                        "5050441344"
+                    )
                 }
                 r(res);
             }
@@ -126,7 +135,15 @@ async function getPaymentsByLeadId(leadId: number): Promise<PaymentInterface[]> 
             `SELECT * FROM payments WHERE lead_id = ${leadId}`,
             function (err: any, res: PaymentInterface[]) {
                 if (err) {
-                    console.log('err #dm3n5nd9s', err);
+                    sendBugReport(
+                        JSON.stringify(
+                            {
+                                errorNo: "#dm3n5nd9s",
+                                error: err,
+                                values: { leadId }
+                            }, null, 2),
+                        "5050441344"
+                    )
                 }
                 r(res);
             }
