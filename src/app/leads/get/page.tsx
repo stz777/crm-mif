@@ -2,7 +2,13 @@ import { pool } from "@/app/db/connect"
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { Add_Payment } from "./add_payment/add_payment";
+
+import { FaCheck } from "react-icons/fa"
+
+
+
 dayjs.locale("ru")
+
 
 export default async function Page() {
     const leads = await getLeads();
@@ -17,8 +23,10 @@ export default async function Page() {
                     <th>дедлайн</th>
                     <th>описание</th>
                     <th>оплаты</th>
+                    <th>оплата</th>
+                    <th>аванс</th>
                     <th>сумма заказа</th>
-                    <th>дата файт. выполнения</th>
+                    <th>дата факт. выполнения</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,13 +39,15 @@ export default async function Page() {
                     }</td>
                     <td>{lead.description}</td>
                     <td>
-                        <div className="d-flex">
-                            <div></div>
-                            <div></div>
-                        </div>
                         <pre>{JSON.stringify(lead.payments, null, 2)}</pre>
                         <Add_Payment />
-                        {/* {lead.description} */}
+                    </td>
+                    <td>
+                        <CheckPaymentUI done={true} />
+
+                    </td>
+                    <td>
+                        <CheckPaymentUI done={false} />
                     </td>
                     <td>{lead.sum}</td>
                     <td>{lead.done_at || "-"}</td>
@@ -45,6 +55,16 @@ export default async function Page() {
             </tbody>
         </table> : <>нет заказов...</>}
     </>
+}
+
+
+function CheckPaymentUI(props: { done: boolean }) {
+    return <div className="border border-dark d-flex justify-align-center align-items-middle" style={{
+        width: 20, height: 20
+    }}>
+        {props.done && <FaCheck color="red" />}
+
+    </div>
 }
 
 async function getLeads(): Promise<LeadInterface[]> {
