@@ -18,6 +18,8 @@ export default function RootLayout({
             <li><Link href="/clients/get">Клиенты</Link></li>
             <li><Link href="/leads/create">Создать заказ</Link></li>
             <li><Link href="/leads/get">Заказы</Link></li>
+            <li><Link href="/employees/create">Создать сотрудника</Link></li>
+            <li><Link href="/employees/get">Сотрудники</Link></li>
           </ul>
         </header>
         {children}
