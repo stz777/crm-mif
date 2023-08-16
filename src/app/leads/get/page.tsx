@@ -4,6 +4,7 @@ import 'dayjs/locale/ru'
 import { Add_Payment } from "./add_payment/add_payment";
 import { FaCheck } from "react-icons/fa"
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+import Link from "next/link";
 
 dayjs.locale("ru")
 
@@ -16,8 +17,8 @@ export default async function Page() {
         {leads ? <table className="table table-bordered">
             <thead>
                 <tr>
-                    <th>id заказа</th>
-                    <th>id клиента</th>
+                    <th>Заказ</th>
+                    <th>Клиент</th>
                     <th>дедлайн</th>
                     <th>описание</th>
                     <th>оплаты</th>
@@ -29,7 +30,7 @@ export default async function Page() {
             </thead>
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
-                    <td>{lead.id}</td> {/*lead id*/}
+                    <td><Link href={`/leads/single/${lead.id}`}>Заказ #{lead.id}</Link></td> {/*lead id*/}
                     <td>{lead.client}</td>{/*client id*/}
                     <td>{
                         dayjs(lead.deadline)
