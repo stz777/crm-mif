@@ -1,18 +1,18 @@
 "use client"
 
 import FieldWrapper from "@/app/ui/form/fieldWrapper";
-import { log } from "console";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from 'react-toastify';
 
 type FormValues = {
-    fio: string
+    username: string
     phones: { phone: string }[];
     emails: { email: string }[];
-    telegram: string;
+    telegram_id: string;
 };
 
 export default function CreateEmployeeForm() {
-    const { register, handleSubmit, formState: { errors }, control } = useForm<FormValues>();
+    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>();
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
@@ -28,11 +28,11 @@ export default function CreateEmployeeForm() {
         }
     });
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
 
             <FieldWrapper title="Имя сотрудника"
                 field={<>
-                    <input {...register("fio", { required: true })} />
+                    <input {...register("username", { required: true })} />
                 </>}
             />
 
@@ -58,7 +58,7 @@ export default function CreateEmployeeForm() {
 
             <FieldWrapper title="Телеграм"
                 field={<>
-                    <input {...register("telegram", { required: true })} />
+                    <input {...register("telegram_id", { required: true })} />
                 </>}
             />
 
@@ -68,7 +68,7 @@ export default function CreateEmployeeForm() {
     );
 }
 
-const onSubmit = (data: any) => {
+const onSubmit = (data: any, resetForm: any) => {
     fetch(
         "/api/employees/create",
         {
@@ -83,7 +83,14 @@ const onSubmit = (data: any) => {
                 throw new Error(response.statusText);
             }
         }
-    )
+    ).then(data => {
+        // console.log('data', data);
+        if (data.success) {
+            toast.success("Сотрудник создан");
+            resetForm();
+        }
+
+    })
         .catch(error => {
             const statusText = String(error);
             fetch(
