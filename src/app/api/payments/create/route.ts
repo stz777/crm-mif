@@ -1,6 +1,6 @@
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
-import { sendMessageToTg } from "../../bugReport/route";
+import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 
 export async function POST(
     request: Request,

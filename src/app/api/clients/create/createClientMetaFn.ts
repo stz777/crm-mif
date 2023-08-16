@@ -1,5 +1,5 @@
 import { pool } from "@/app/db/connect";
-import { sendMessageToTg } from "../../bugReport/route";
+import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 
 export default async function createClientMetaFn({ client, data_type, data }: ClientMetaType) {
     return await new Promise(r => {

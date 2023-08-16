@@ -1,4 +1,4 @@
-import { sendMessageToTg } from "@/app/api/bugReport/route";
+import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { pool } from "@/app/db/connect"
 import Link from "next/link";
 

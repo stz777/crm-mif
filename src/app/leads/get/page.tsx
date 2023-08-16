@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { Add_Payment } from "./add_payment/add_payment";
 import { FaCheck } from "react-icons/fa"
-import { sendMessageToTg } from "@/app/api/bugReport/route";
+import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 
 dayjs.locale("ru")
 

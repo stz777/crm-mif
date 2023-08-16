@@ -2,7 +2,7 @@ import { ClientInterface } from "@/app/clients/get/page";
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import createClientMetaFn from "../../create/createClientMetaFn";
-import { sendMessageToTg } from "@/app/api/bugReport/route";
+import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 
 export async function POST(
     request: Request,
