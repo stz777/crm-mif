@@ -12,6 +12,7 @@ export default async function Page() {
                     <th>Телеграм</th>
                     <th>Регистрация в телеге</th>
                     <th>Контакты</th>
+                    <th>Заказы</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,17 +21,8 @@ export default async function Page() {
                     <td>{employee.username}</td>
                     <td>{employee.telegram_id}</td>
                     <td>{employee.tg_chat_id}</td>
-                    <td>{(() => {
-                        if (!employee.meta) return null;
-                        return <table>
-                            <tbody>
-                                {employee.meta.map(meta => <tr key={meta.id}>
-                                    <td>{meta.data_type}</td>
-                                    <td>{meta.data}</td>
-                                </tr>)}
-                            </tbody>
-                        </table>
-                    })()}</td>
+                    <td>{!employee.meta ? null : <table><tbody>{employee.meta.map(meta => <tr key={meta.id}><td>{meta.data_type}</td><td>{meta.data}</td></tr>)}</tbody></table>}</td>
+                    <td>{!employee.leads ? null : <pre>{JSON.stringify(employee.leads, null, 2)}</pre>}</td>
                 </tr>)}
             </tbody>
         </table>

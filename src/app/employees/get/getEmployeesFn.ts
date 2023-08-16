@@ -26,6 +26,11 @@ export async function getEmployees(): Promise<Employee[]> {
         employees[index].meta = await getEmployeeMeta(employeeId);
     }
 
+    for (let index = 0; index < employees.length; index++) {
+        const { id: employeeId } = employees[index];
+        employees[index].leads = await getLeadsPerEmployeeId(employeeId);
+    }
+
     return employees;
 
 }
@@ -52,9 +57,31 @@ async function getEmployeeMeta(employeeId: number): Promise<EmployeeMeta[]> {
             }
         )
     });
-
     return employees;
+}
 
+async function getLeadsPerEmployeeId(employeeId: number): Promise<any[]> {
+    return await new Promise((resolve, reject) => {
+        pool.query(`SELECT * FROM leads_roles WHERE user = ${employeeId}`,
+            function (err: any, res: EmployeeMeta[]) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#nf93nfkvfv6s",
+                                error: err,
+                                values: { employeeId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                    reject(false);
+                }
+                if (res) {
+                    resolve(res);
+                }
+            }
+        )
+    });
 }
 
 
@@ -62,8 +89,9 @@ interface Employee {
     id: number
     username: string
     telegram_id: string
-    meta?: EmployeeMeta[]
     tg_chat_id: number
+    meta?: EmployeeMeta[]
+    leads?: any[]
 }
 
 interface EmployeeMeta {
