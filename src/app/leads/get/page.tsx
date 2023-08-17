@@ -7,6 +7,7 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import Link from "next/link";
 import ConfirmPayment from "./confirmPayment";
 import DeclinePayment from "./declinePayment";
+import CloseLead from "./closeLead";
 
 dayjs.locale("ru")
 
@@ -44,7 +45,7 @@ export default async function Page() {
                         const date2 = dayjs(lead.created_date);
                         const diffInDays = date1.diff(date2, 'day');
                         const limit = 1;
-                        if(lead.done_at) return <span className="badge text-bg-success">выполнено</span>
+                        if (lead.done_at) return <span className="badge text-bg-success">выполнено</span>
                         if (diffInDays <= limit) return <span className="badge text-bg-danger">срочно</span>
                         if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
                         return <>{diffInDays}</>
@@ -101,7 +102,7 @@ export default async function Page() {
                     <td>{lead.sum}</td>{/*сумма заказа*/}
                     <td>{lead.done_at || "-"}</td>{/*дата выполнения*/}
                     <td>
-
+                        <CloseLead leadId={lead.id} />
                     </td>
                 </tr>)}
             </tbody>
