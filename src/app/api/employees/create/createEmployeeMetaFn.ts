@@ -4,7 +4,7 @@ import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 export default async function createEmployeeMetaFn({ employee, data_type, data }: EmployeeMetaType) {
     return await new Promise(r => {
         pool.query(
-            `INSERT INTO employees_meta ( employee, data_type, data) VALUES (?,?,?)`,
+            `INSERT INTO employees_meta ( employee_id, data_type, data) VALUES (?,?,?)`,
             [employee, data_type, data],
             function (err, res: any) {
                 if (err) {
