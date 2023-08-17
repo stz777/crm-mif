@@ -1,9 +1,13 @@
 "use client"
-import FieldWrapper from "@/app/ui/form/fieldWrapper"
+import Image from "next/image"
+import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { FaChevronCircleRight } from "react-icons/fa"
+import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
+
 export default function MessageForm({ leadId }: { leadId: number }) {
+
+    const [previewImages, setPreviewImages] = useState([]);
     const {
         register,
         handleSubmit,
@@ -16,23 +20,90 @@ export default function MessageForm({ leadId }: { leadId: number }) {
             essense_id: leadId
         }
     })
+
+    const handleImageChange = async (e: any) => {
+        const files = e.target.files;
+        const newImages: any = Array.from(previewImages);
+        for (let i = 0; i < files.length; i++) {
+            const imageBase64 = await new Promise(r => {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const previewImage = reader.result;
+                    r(previewImage);
+                };
+                reader.readAsDataURL(file);
+            });
+            newImages.push(imageBase64);
+        }
+        setPreviewImages(newImages);
+    };
+
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         // reset();
         sendMessage(data);
     }
 
     return (
-        <div className="card" style={{ maxWidth: "500px" }}>
+        <div className="card" >
             <div className="card-body bg-secondary">
                 <form className="">
-                    <div className="d-flex align-items-end">
+                    <div className="d-flex align-items-end" style={{ maxWidth: "500px" }}>
                         <textarea {...register("text", { required: true })} placeholder="Введите сообщение" className="form-control" />
                         <FaChevronCircleRight onClick={handleSubmit(onSubmit)} size={25} className="ms-2" />
+                    </div>
+
+                    <div>
+                        <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
+                        <div className="d-flex">
+                            {previewImages.map((image, index) => (
+                                <ImageWrapper key={index} index={index}>
+                                    <Image
+                                        loader={() => image}
+                                        src={image}
+                                        alt=""
+                                        width={100}
+                                        height={0}
+                                        style={{
+                                            height: "auto",
+                                            // marginBottom: 5,
+                                            cursor: "pointer",
+                                        }}
+                                    />
+                                </ImageWrapper>
+                            ))}
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     )
+}
+
+
+function ImageWrapper({ children, index }: any) {
+    const [viewDel, setViewDel] = useState(false);
+    return <>
+        <div
+            className="position-relative  cursor-pointer"
+            onMouseOver={() => {
+                setViewDel(true);
+            }}
+            onMouseLeave={() => {
+                setViewDel(false);
+            }}
+        >
+            {children}
+            {viewDel && <div
+                className="position-absolute top-0 w-100 h-100 bg-white d-flex justify-content-center align-items-center"
+                onClick={() => {
+                    console.log('delete', index);
+
+                }}
+            >
+                <FaTrash color="red" />
+            </div>}
+        </div></>
 }
 
 
@@ -43,6 +114,13 @@ async function sendMessage(data: any) {
 
     formdata.append("essense", data.essense);
     formdata.append("essense_id", data.essense_id);
+
+    const images = data.images;
+
+    for (let i = 0; i < images.length; i++) {
+        formdata.append('images', images[i]);
+    }
+
     fetch(
         "/api/message/send",
         {

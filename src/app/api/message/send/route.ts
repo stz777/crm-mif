@@ -15,6 +15,10 @@ export async function POST(
     const essense = items.find((item: any) => item[0] === "essense")[1];
     const essense_id = items.find((item: any) => item[0] === "essense_id")[1];
 
+    const images = items.find((item: any) => item[0] === "essense_id")[1];
+    console.log(items);
+
+
     const messageId = await saveMessage(text, essense, essense_id, 13);
 
     if (!messageId) {
