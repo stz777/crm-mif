@@ -1,11 +1,16 @@
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
+import slugify from 'slugify'
+import fs from "fs"
+
 
 export async function POST(
     request: Request,
     { params }: { params: { id: number } }
 ) {
+
+    const imagesFolder: string = String(process.env.IMAGES_FOLDER);
 
     const formData = await request.formData();
 
@@ -15,16 +20,35 @@ export async function POST(
     const essense = items.find((item: any) => item[0] === "essense")[1];
     const essense_id = items.find((item: any) => item[0] === "essense_id")[1];
 
-    const images = items.find((item: any) => item[0] === "essense_id")[1];
-    console.log(items);
-
-
     const messageId = await saveMessage(text, essense, essense_id, 13);
 
     if (!messageId) {
         return NextResponse.json({
             success: false,
         });
+    }
+
+    for (let index = 0; index < items.length; index++) {
+        const [name, value]: any = items[index]
+        if (value instanceof File && name === "images") {
+
+            let filename = slugify(value.name.toLocaleLowerCase().replace(/[^ a-zA-Zа-яА-Я0-9-.]/igm, ""));
+
+            const imageIsExists = await checkImageIsExists(filename);
+            if (imageIsExists) {
+                const splittedFilename = filename.split(".");
+                const newfilename = splittedFilename[0] + String(Date.now()) + "." + splittedFilename[1];
+                filename = newfilename;
+            }
+
+            await saveImageToDB(filename, messageId)
+
+            const buffer = await value.arrayBuffer();
+            const filePath = `${imagesFolder}/${filename}`;
+
+            fs.writeFileSync(filePath, Buffer.from(buffer));
+
+        }
     }
 
     return NextResponse.json({
@@ -53,6 +77,79 @@ async function saveMessage(text: string, essense: string, essense_id: number, se
                 }
                 if (result) {
                     resolve(result.insertId)
+                }
+            }
+        )
+    })
+}
+
+
+async function checkImageIsExists(imageName: string) {
+    return new Promise((resolve) => {
+        pool.query(
+            "SELECT * FROM media WHERE name = ?",
+            [imageName],
+            function (err, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#ndn3kvfd9",
+                                error: err,
+                                values: { imageName }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                    resolve(null)
+                }
+                if (res) {
+                    resolve(res.length > 0)
+                }
+            }
+        )
+    })
+}
+
+async function saveImageToDB(imageName: string, messageId: number) {
+    // return {
+    //     imageName,
+    //     messageId
+    // }
+    return new Promise((resolve) => {
+        pool.query(
+            "INSERT INTO media (message, is_image, name) VALUES(?,?,?)",
+            [messageId, 1, imageName],
+            function (err, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#md8ch3nmkx9",
+                                error: err,
+                                values: {
+                                    imageName,
+                                    messageId
+                                }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                    resolve(null)
+                }
+                if (res.insertId) {
+                    resolve(res.insertId)
+                } else {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#dn2nnfls",
+                                error: "Хуйня какая-то произошла",
+                                values: {
+                                    imageName,
+                                    messageId
+                                }
+                            }, null, 2),
+                        "5050441344"
+                    )
                 }
             }
         )
