@@ -23,6 +23,7 @@ export default async function Page() {
                     <th>Клиент</th>
                     <th>создан</th>
                     <th>дедлайн</th>
+                    <th>срочность</th>
                     <th>описание</th>
                     <th>оплаты</th>
                     <th>оплата</th>
@@ -37,7 +38,17 @@ export default async function Page() {
                     <td><Link href={`/leads/single/${lead.id}`}>Заказ #{lead.id}</Link></td> {/*lead id*/}
                     <td>{lead.client}</td>{/*client id*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
-                    <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*deadline*/}
+                    <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
+                    <td>{(() => {
+                        const date1 = dayjs(lead.deadline);
+                        const date2 = dayjs(lead.created_date);
+                        const diffInDays = date1.diff(date2, 'day');
+                        const limit = 1;
+                        if(lead.done_at) return <span className="badge text-bg-success">выполнено</span>
+                        if (diffInDays <= limit) return <span className="badge text-bg-danger">срочно</span>
+                        if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
+                        return <>{diffInDays}</>
+                    })()}</td>
                     <td>{lead.description}</td>{/*description*/}
                     <td>
                         <ul className="list-group">

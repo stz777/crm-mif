@@ -35,7 +35,7 @@ export function Add_Payment(props: { lead_id: number }) {
                 </form>
             </div>
         </div> : <button
-            className="btn btn-sm btn-outline-dark"
+            className="btn btn-sm btn-outline-dark text-nowrap"
             onClick={() => {
                 setIsOpen(true);
             }}>Добавить оплату</button>}
