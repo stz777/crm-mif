@@ -31,7 +31,7 @@ export async function POST(
 
 
 async function createEmployee(username: string, telegram_id: string): Promise<number | false> {
-    return await new Promise((response, reject) => {
+    return await new Promise((resolve) => {
         pool.query(
             `INSERT INTO employees (username,telegram_id) VALUES (?,?)`,
             [username, telegram_id],
@@ -46,10 +46,10 @@ async function createEmployee(username: string, telegram_id: string): Promise<nu
                             }, null, 2),
                         "5050441344"
                     )
-                    reject(false);
+                    resolve(false);
                 }
                 if (res) {
-                    response(res.insertId)
+                    resolve(res.insertId)
                 }
             }
         );

@@ -13,11 +13,11 @@ export default function RootLayout({
     <html lang="ru">
       <body>
         <header>
-          <div className="container">
+          <div className="container mt-2">
             <NavBar />
           </div>
         </header>
-        <div className="container">
+        <div className="container mt-3">
           {children}
         </div>
         <ToastContainer />
@@ -27,7 +27,7 @@ export default function RootLayout({
 }
 
 function NavBar() {
-  return <div className="container-fluid">
+  return <div className="">
     <div className="d-flex">
       <div className="me-2">
         <Link href="/employees/create" className="btn btn-sm btn-outline-dark mb-2">Создать сотрудника</Link><br />
