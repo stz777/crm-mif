@@ -13,6 +13,12 @@ export async function POST(
 
     const employeeId = await createEmployee(username, telegram_id);
 
+
+
+    if (!employeeId) return NextResponse.json({
+        success: false,
+    });
+
     if (typeof employeeId === "number") {
         for (let index = 0; index < emails.length; index++) {
             const { email } = emails[index];
@@ -23,6 +29,20 @@ export async function POST(
             await createEmployeeMetaFn({ employee: employeeId, data_type: "phone", data: phone })
         }
     }
+
+
+    const [employee] = await getEmployeeById(employeeId);
+
+    sendMessageToTg(
+        [
+            "Создан новый сотрудник",
+            employee.username
+            // errorNo: "#dmsn3m9c83",
+            // error: err,
+            // values: { username }
+        ].join("\n"),
+        "5050441344"
+    )
 
     return NextResponse.json({
         success: true,
@@ -54,4 +74,39 @@ async function createEmployee(username: string, telegram_id: string): Promise<nu
             }
         );
     })
+}
+
+
+async function getEmployeeById(id: number): Promise<Employee[]> {
+    const employees: Employee[] = await new Promise((resolve) => {
+        pool.getConnection(function (err, conn) {
+            pool.query("SELECT id, username, telegram_id, tg_chat_id FROM employees",
+                function (err: any, res: Employee[]) {
+                    if (err) {
+                        sendMessageToTg(
+                            JSON.stringify(
+                                {
+                                    errorNo: "#nddv8en3c",
+                                    error: err,
+                                    values: {}
+                                }, null, 2),
+                            "5050441344"
+                        )
+                    }
+                    resolve(res);
+                }
+            )
+            pool.releaseConnection(conn);
+        })
+    });
+
+    return employees;
+
+}
+
+interface Employee {
+    id: number
+    username: string
+    telegram_id: string
+    tg_chat_id: number
 }
