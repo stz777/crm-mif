@@ -91,7 +91,7 @@ const onSubmit = (data: any, resetForm: any) => {
     ).then(data => {
         if (data.success) {
             toast.success("Заказ создан");
-            // resetForm();
+            resetForm();
         } else {
             toast.error("Что-то пошло не так");
         }
