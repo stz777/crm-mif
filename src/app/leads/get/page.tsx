@@ -36,7 +36,7 @@ export default async function Page() {
             </thead>
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
-                    <td><Link href={`/leads/single/${lead.id}`}>Заказ #{lead.id}</Link></td> {/*lead id*/}
+                    <td><Link href={`/leads/single/${lead.id}`} className="text-nowrap">Заказ #{lead.id}</Link></td> {/*lead id*/}
                     <td>{lead.client}</td>{/*client id*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
@@ -100,9 +100,11 @@ export default async function Page() {
                         })()}
                     </td>{/*внесена предоплата*/}
                     <td>{lead.sum}</td>{/*сумма заказа*/}
-                    <td>{lead.done_at || "-"}</td>{/*дата выполнения*/}
                     <td>
-                        <CloseLead leadId={lead.id} />
+                        <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "-"}</span>
+                    </td>{/*дата выполнения*/}
+                    <td>
+                        {lead.done_at ? <>Закрыто</> : <CloseLead leadId={lead.id} />}
                     </td>
                 </tr>)}
             </tbody>
