@@ -2,7 +2,7 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { pool } from "@/app/db/connect";
 
 export async function getEmployees(): Promise<Employee[]> {
-    const employees: Employee[] = await new Promise((resolve, reject) => {
+    const employees: Employee[] = await new Promise((resolve) => {
         pool.getConnection(function (err, conn) {
             pool.query("SELECT id, username, telegram_id, tg_chat_id FROM employees",
                 function (err: any, res: Employee[]) {
