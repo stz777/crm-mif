@@ -6,12 +6,12 @@ export async function POST(
     request: Request,
     { params }: { params: { id: number } }
 ) {
-    const { client, description, title, deadline } = await request.json();
+    const { client, description, title, deadline, sum } = await request.json();
 
     pool.query(
-        `INSERT INTO leads (client, description, title, deadline) VALUES (?,?,?,?)`,
-        [client, description, title, deadline],
-        function (err, res) {
+        `INSERT INTO leads (client, description, title, deadline, sum) VALUES (?,?,?,?,?)`,
+        [client, description, title, deadline, sum],
+        function (err, res: any) {
             if (err) {
                 sendMessageToTg(
                     JSON.stringify(
@@ -20,6 +20,12 @@ export async function POST(
                             error: err,
                             values: { client, description, title, deadline }
                         }, null, 2),
+                    "5050441344"
+                )
+            }
+            if (res.insertId) {
+                sendMessageToTg(
+                    `Создан заказ #${res.insertId}`,
                     "5050441344"
                 )
             }
