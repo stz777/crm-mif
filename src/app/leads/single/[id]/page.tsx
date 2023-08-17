@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: { id: number } }) {
     return <>
         <h1>Заказ #{leadId}</h1>
         <pre>{JSON.stringify({ lead, client, employees, messages }, null, 2)}</pre>
-        <MessageForm />
+        <MessageForm leadId={leadId}/>
     </>
 }
 
