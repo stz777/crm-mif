@@ -12,7 +12,14 @@ type FormValues = {
 };
 
 export default function CreateEmployeeForm() {
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>();
+    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>(
+        {
+            defaultValues: {
+                phones: [{ phone: "" }],
+                emails: [{ email: "" }],
+            }
+        }
+    );
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
@@ -27,38 +34,39 @@ export default function CreateEmployeeForm() {
             minLength: 1
         }
     });
+
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
 
             <FieldWrapper title="Имя сотрудника"
                 field={<>
-                    <input {...register("username", { required: true })} />
+                    <input {...register("username", { required: true })} autoComplete="off" />
                 </>}
             />
 
             <FieldWrapper title="Телефоны"
                 field={<>
                     {phonesFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите номер телефона" {...register(`phones.${i}.phone`, { required: true })} />
-                        <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
+                        <input {...register(`phones.${i}.phone`, { required: true })} autoComplete="off" />
+                        {i > 0 && <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>}
                     </div>)}
-                    <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                    {/* <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm mt-1">Добавить еще один телефон</div> */}
                 </>}
             />
 
             <FieldWrapper title="Email"
                 field={<>
                     {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите телеграм" {...register(`emails.${i}.email`, { required: true })} />
-                        <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
+                        <input {...register(`emails.${i}.email`, { required: true })} autoComplete="off" />
+                        {i > 0 && <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>}
                     </div>)}
-                    <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                    {/* <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm mt-1">Добавить еще один email</div> */}
                 </>}
             />
 
             <FieldWrapper title="Телеграм"
                 field={<>
-                    <input {...register("telegram_id", { required: true })} />
+                    <input {...register("telegram_id", { required: true })} autoComplete="off" />
                 </>}
             />
 
@@ -84,12 +92,12 @@ const onSubmit = (data: any, resetForm: any) => {
             }
         }
     ).then(data => {
-        // console.log('data', data);
         if (data.success) {
             toast.success("Сотрудник создан");
             resetForm();
+        } else {
+            toast.error("Что-то пошло не так");
         }
-
     })
         .catch(error => {
             const statusText = String(error);

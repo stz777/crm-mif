@@ -4,13 +4,13 @@ export default async function Page() {
     const employees = await getEmployees();
     return <>
         <h1>Сотрудники</h1>
-        <table className="table table-bordered">
+        <table className="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>id</th>
                     <th>Имя сотрудника</th>
                     <th>Телеграм</th>
-                    <th>Регистрация в телеге</th>
+                    <th>Телега подтверждена</th>
                     <th>Контакты</th>
                     <th>Заказы</th>
                 </tr>

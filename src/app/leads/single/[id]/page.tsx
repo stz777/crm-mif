@@ -41,8 +41,6 @@ function MessagesArea({ messages }: { messages: Message[] }) {
                             }}
                         >{message.text}</pre>
                         <AttachmentsArea attachments={message.attachments} />
-                        {/* <div>{message.}</div> */}
-                        <pre>{JSON.stringify(message, null, 2)}</pre>
                     </div>)}
             </div>
         </div>

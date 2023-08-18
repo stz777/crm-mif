@@ -38,7 +38,7 @@ function NavBar() {
         <Link href="/clients/get" className="btn btn-sm btn-outline-dark">Список клиентов</Link>
       </div>
       <div>
-        <Link href="/leads/create" className="btn btn-sm btn-outline-dark mb-2">Создать заказ</Link><br />
+        {/* <Link href="/leads/create" className="btn btn-sm btn-outline-dark mb-2">Создать заказ</Link><br /> */}
         <Link href="/leads/get" className="btn btn-sm btn-outline-dark">Список заказов</Link>
       </div>
     </div>

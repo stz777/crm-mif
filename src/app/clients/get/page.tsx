@@ -34,7 +34,9 @@ export default async function Page() {
                         </table>
                     </td>
                     <td>
-                        <Link className="btn btn-outline-dark btn-sm" href={`/clients/edit/${client.id}`}>Редактировать</Link>
+                        <div className="mb-2"><Link className="btn btn-outline-dark btn-sm" href={`/clients/edit/${client.id}`}>Редактировать</Link></div>
+                        <div className="mb-2"><Link className="btn btn-outline-dark btn-sm" href={`/leads/create/${client.id}`}>Создать заказ</Link></div>
+
                     </td>
                 </tr>)}
             </tbody>

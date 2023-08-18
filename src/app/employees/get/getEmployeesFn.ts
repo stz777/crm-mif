@@ -40,8 +40,10 @@ export async function getEmployees(): Promise<Employee[]> {
 
 async function getEmployeeMeta(employeeId: number): Promise<EmployeeMeta[]> {
     const employees: EmployeeMeta[] = await new Promise((resolve, reject) => {
-        pool.query("SELECT * FROM employees_meta",
-            function (err: any, res: EmployeeMeta[]) {
+        pool.query(
+            "SELECT * FROM employees_meta WHERE employee_id = ?",
+            [employeeId],
+            function (err: any, res: any) {
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(

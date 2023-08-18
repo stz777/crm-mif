@@ -1,21 +1,37 @@
-import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
-import { pool } from "@/app/db/connect"
+import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+import { pool } from "@/app/db/connect";
+import { NextResponse } from "next/server";
 
-export default async function getEmployeesByLeadId(leadId: number): Promise<Employee[] | false> {
+export async function GET(
+    request: Request,
+    { params }: { params: { leadId: number } }
+) {
+
+    const { leadId } = params;
+
+    const data = await getEmployeesByLeadId(leadId);
+
+    return NextResponse.json({
+        success: true,
+        leadId,
+        data
+    });
+}
+
+async function getEmployeesByLeadId(leadId: number): Promise<Employee[] | false> {
     return new Promise((resolve) => {
         pool.query(
-            `SELECT leads_roles.user as user_id, leads_roles.role, employees.username
-            FROM leads_roles 
-            LEFT JOIN (employees)
-            ON (employees.id = leads_roles.user)
-            WHERE leads_roles.lead_id = ?`,
+            `SELECT employees.id as user_id, leads_roles.role, employees.username
+            FROM employees 
+            LEFT JOIN (leads_roles)
+            ON (employees.id = leads_roles.user AND leads_roles.lead_id = ?)`,
             [leadId],
             function (err, result: any[]) {
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#n4ndc83b",
+                                errorNo: "#mdndm34n",
                                 error: err,
                                 values: { leadId }
                             }, null, 2),
@@ -27,7 +43,7 @@ export default async function getEmployeesByLeadId(leadId: number): Promise<Empl
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#md8dndkdmd3",
+                                errorNo: "#md8dn3",
                                 error: "Запросили сотрудника, которого нет",
                                 values: { leadId }
                             }, null, 2),
