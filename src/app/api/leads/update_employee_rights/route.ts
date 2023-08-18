@@ -1,0 +1,198 @@
+import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+import { pool } from "@/app/db/connect";
+import dayjs from "dayjs";
+import { NextResponse } from "next/server";
+
+export async function POST(
+    request: Request,
+    { params }: { params: { employeeId: number } }
+) {
+
+    const { employeeId, role, leadId } = await request.json()
+
+    const currentRole = await getCurrentRole(employeeId, leadId);
+    console.log({ currentRole, role });
+
+    if (!currentRole) { //В бд не задана роль
+
+        if (role === "no_rights") { // прислали отмену роли
+            return NextResponse.json({
+                success: true,
+            });
+        } else { // прислали новую роль
+            const newRoleId = await createNewRole(employeeId, leadId, role);
+            if (newRoleId) { // новая роль создалась
+                return NextResponse.json({
+                    success: true,
+                });
+            } else { // произошла неведомая хуйня
+                return NextResponse.json({
+                    success: false,
+                });
+            }
+        }
+
+    } else { // в бд есть роль
+
+        if (role === "no_rights") { // прислали отмену роли
+            const deletedRows = await deleteCurrentRole(employeeId, leadId);
+            if (deletedRows) {
+                return NextResponse.json({
+                    success: true,
+                });
+            } else {
+                return NextResponse.json({
+                    success: false,
+                });
+            }
+        } else { //прислали новую роль
+            const updatedRow = await updateCurrentRole(employeeId, leadId, role);
+            if (updatedRow) {
+                return NextResponse.json({
+                    success: true,
+                });
+            } else {
+                return NextResponse.json({
+                    success: false,
+                });
+            }
+        }
+
+    }
+
+    /*
+        роли может не быть в бд
+            пришла роль
+            пришла отмена роли
+        роль может быть в бд
+            пришла роль
+            пришла отмена роли
+    */
+
+    console.log(currentRole);
+
+    return NextResponse.json({
+        success: true,
+        // data
+    });
+
+
+}
+
+
+async function getCurrentRole(employeeId: number, leadId: number) {
+    return await new Promise(resolve => {
+        pool.query(
+            `SELECT * FROM leads_roles WHERE user = ? AND lead_id = ?`,
+            [employeeId, leadId],
+            function (err, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#ms87fhdn3",
+                                error: err,
+                                values: { employeeId, leadId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                resolve(res?.pop());
+            }
+        );
+    })
+}
+
+async function createNewRole(employeeId: number, leadId: number, role: string) {
+    return await new Promise(resolve => {
+        pool.query(
+            `INSERT INTO leads_roles (user,lead_id,role) VALUES (?,?,?)`,
+            [employeeId, leadId, role],
+            function (err, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#n3nd9v8dj",
+                                error: err,
+                                values: { employeeId, leadId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                // console.log('res',res.insertId);
+
+                resolve(res?.insertId);
+            }
+        );
+    })
+}
+
+async function deleteCurrentRole(employeeId: number, leadId: number) {
+    return await new Promise(resolve => {
+        pool.query(
+            `DELETE FROM leads_roles WHERE user = ? AND lead_id = ?`,
+            [employeeId, leadId],
+            function (err, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#dkdm35n74",
+                                error: err,
+                                values: { employeeId, leadId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                if (!res.affectedRows) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#dmdj3k",
+                                error: "Произошла неведомая хуйня",
+                                values: { employeeId, leadId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                resolve(res?.affectedRows);
+            }
+        );
+    })
+}
+
+
+async function updateCurrentRole(employeeId: number, leadId: number, role: string) {
+    return await new Promise(resolve => {
+        pool.query(
+            `UPDATE leads_roles SET role = ? WHERE user = ? AND lead_id = ?`,
+            [role, employeeId, leadId],
+            function (err, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#ndkdkefvfdo",
+                                error: err,
+                                values: { employeeId, leadId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                if (!res.affectedRows) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#ncndkso4hj",
+                                error: "Произошла неведомая хуйня",
+                                values: { employeeId, leadId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                resolve(res?.affectedRows);
+            }
+        );
+    })
+}

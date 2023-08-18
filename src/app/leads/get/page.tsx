@@ -8,13 +8,12 @@ import Link from "next/link";
 import ConfirmPayment from "./confirmPayment";
 import DeclinePayment from "./declinePayment";
 import CloseLead from "./closeLead";
+import { RightsManagement } from "./righsManagement/rightsManagement";
 
 dayjs.locale("ru")
 
-
 export default async function Page() {
     const leads = await getLeads();
-
     return <>
         <h1>Заказы</h1>
         {leads ? <table className="table table-bordered">
@@ -104,7 +103,10 @@ export default async function Page() {
                         <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "-"}</span>
                     </td>{/*дата выполнения*/}
                     <td>
-                        {lead.done_at ? <>Закрыто</> : <CloseLead leadId={lead.id} />}
+                        <div className="d-flex nowrap">
+                            {lead.done_at ? <>Заказ закрыт</> : <CloseLead leadId={lead.id} />}
+                            <div className="ms-2"><RightsManagement leadId={lead.id} /></div>
+                        </div>
                     </td>
                 </tr>)}
             </tbody>
