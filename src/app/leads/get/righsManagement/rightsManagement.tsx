@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import { Employee, getEmployeesByLeadId } from "./getEmployeesByLeadId";
-import { useForm, SubmitHandler, } from "react-hook-form"
+import { useForm, } from "react-hook-form"
 import { toast } from "react-toastify";
 
 export function RightsManagement({ leadId }: { leadId: number }) {
@@ -19,10 +19,6 @@ export function RightsManagement({ leadId }: { leadId: number }) {
             setEmployees(null);
         }
     }, [open])
-
-    useEffect(() => {
-        setOpen(true);
-    }, [])
 
     if (!open) return <button className="btn btn-sm btn-outline-dark" onClick={() => setOpen(true)}>Права</button>
 
