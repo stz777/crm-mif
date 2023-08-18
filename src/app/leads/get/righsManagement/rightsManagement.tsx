@@ -37,7 +37,7 @@ export function RightsManagement({ leadId }: { leadId: number }) {
                     return <>
                         <table className="table table-bordered">
                             <tbody>
-                                {employees.map(employee => <tr key={employee.user_id}>
+                                {employees.map((employee, i) => <tr key={employee.user_id + leadId + i}>
                                     <td className="text-nowrap">{employee.username}</td>
                                     <td className="text-nowrap"> <RightsForm role={employee.role} employeeId={employee.user_id} leadId={leadId} />  </td>
                                 </tr>)}
@@ -78,13 +78,13 @@ function RightsForm({ role, employeeId, leadId }: { role: string | null, employe
                         className="form-check-input"
                         type="radio"
                         value={role[1]}
-                        id={String(role[1])}
+                        id={role[1] + employeeId + leadId}
                         {...register("role")}
                         onChange={(e) => {
                             onChangeUserRole(employeeId, leadId, e.target.value);
                         }}
                     />
-                    <label className="form-check-label" htmlFor={String(role[1])}>
+                    <label className="form-check-label" htmlFor={role[1] + employeeId + leadId}>
                         {role[0]}
                     </label>
                 </div>)}

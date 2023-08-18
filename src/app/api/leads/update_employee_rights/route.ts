@@ -11,7 +11,6 @@ export async function POST(
     const { employeeId, role, leadId } = await request.json()
 
     const currentRole = await getCurrentRole(employeeId, leadId);
-    console.log({ currentRole, role });
 
     if (!currentRole) { //В бд не задана роль
 
@@ -59,24 +58,6 @@ export async function POST(
         }
 
     }
-
-    /*
-        роли может не быть в бд
-            пришла роль
-            пришла отмена роли
-        роль может быть в бд
-            пришла роль
-            пришла отмена роли
-    */
-
-    console.log(currentRole);
-
-    return NextResponse.json({
-        success: true,
-        // data
-    });
-
-
 }
 
 
@@ -120,7 +101,6 @@ async function createNewRole(employeeId: number, leadId: number, role: string) {
                         "5050441344"
                     )
                 }
-                // console.log('res',res.insertId);
 
                 resolve(res?.insertId);
             }
