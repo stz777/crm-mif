@@ -8,11 +8,23 @@ import { LeadInterface } from "./page";
 import { Add_Payment } from "./add_payment";
 import { FaCheck } from "react-icons/fa"
 import dayjs from 'dayjs'
-// import 'dayjs/locale/ru'
+import { useState } from "react";
 
-export default function Client({ leads }: { leads: LeadInterface[] }) {
+export default function Client(props: { leads: LeadInterface[] }) {
+    const [leads, setLeads] = useState(props.leads)
     return <>
         <h1>Заказы</h1>
+
+        <button onClick={async () => {
+            fetch("/api/leads/get")
+                .then(
+                    async r => {
+                        const data = await r.json();
+                        setLeads(data.leads);
+                    }
+                )
+        }} className="btn btn-outline-dark">обновить</button>
+
         {leads ? <table className="table table-bordered">
             <thead>
                 <tr>
@@ -111,13 +123,10 @@ export default function Client({ leads }: { leads: LeadInterface[] }) {
     </>
 }
 
-
-
 function CheckPaymentUI(props: { done: boolean }) {
     return <div className="border border-dark d-flex justify-align-center align-items-middle" style={{
         width: 20, height: 20
     }}>
         {props.done && <FaCheck color="red" />}
-
     </div>
 }

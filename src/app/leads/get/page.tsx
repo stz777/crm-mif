@@ -14,7 +14,7 @@ export default async function Page() {
 }
 
 
-async function getLeads(): Promise<LeadInterface[]> {
+export async function getLeads(): Promise<LeadInterface[]> {
     const leads: LeadInterface[] = await new Promise(r => {
         pool.query(
             "SELECT * FROM leads",
