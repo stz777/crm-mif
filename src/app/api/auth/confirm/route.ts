@@ -7,11 +7,20 @@ export async function POST(
 ) {
     const resquestData = await request.json();
     if (resquestData.code) {
-        const user = await getUserByCode(resquestData.code);
+        const user: any = await getUserByCode(resquestData.code);
         if (user) {
-            return NextResponse.json({
-                success: true,
-            });
+            const newToken = generateRandomString();
+            const updated = await insertCodeToDb(newToken, user.id);
+            if (updated) {
+                return NextResponse.json({
+                    success: true,
+                    token: newToken,
+                });
+            } else {
+                return NextResponse.json({
+                    success: false,
+                });
+            }
         } else {
             return NextResponse.json({
                 success: false,
@@ -45,6 +54,42 @@ async function getUserByCode(code: string) {
                 } else {
                     resolve(null)
                 }
+            }
+        )
+    })
+}
+
+function generateRandomString() {
+    const length = 20;
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        result += chars[randomIndex];
+    }
+    return result;
+}
+
+
+
+async function insertCodeToDb(token: string, userId: number) {
+    return await new Promise(resolve => {
+        pool.query(
+            "UPDATE employees SET token = ? WHERE id = ?",
+            [token, userId],
+            function (err, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#mdn8sd6d5f",
+                                error: err,
+                                values: { token, userId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                resolve(res?.changedRows);
             }
         )
     })
