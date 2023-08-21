@@ -15,6 +15,7 @@ export async function POST(
                 return NextResponse.json({
                     success: true,
                     token: newToken,
+                    user:user.username,
                 });
             } else {
                 return NextResponse.json({
