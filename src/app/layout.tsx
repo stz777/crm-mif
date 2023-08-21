@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LogoutBTN from "./api/auth/logout/logoutBTN";
 
 export default function RootLayout({
   children,
@@ -14,7 +15,10 @@ export default function RootLayout({
       <body>
         <header>
           <div className="container mt-2">
-            <NavBar />
+            <div className="d-flex">
+              <NavBar />
+              <div><LogoutBTN /></div>
+            </div>
           </div>
         </header>
         <div className="container mt-3">
