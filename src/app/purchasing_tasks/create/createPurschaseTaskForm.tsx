@@ -70,7 +70,7 @@ const onSubmit = (data: any, resetForm: any) => {
         }
     ).then(data => {
         if (data.success) {
-            toast.success("Закупка создана");
+            toast.success("Задача-закупка создана");
             resetForm();
         } else {
             toast.error("Что-то пошло не так");
