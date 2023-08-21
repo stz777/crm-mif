@@ -5,10 +5,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LogoutBTN from "./api/auth/logout/logoutBTN";
 import { cookies } from 'next/headers'
-import { pool } from "./db/connect";
-import { sendMessageToTg } from "./api/bugReport/sendMessageToTg";
-import { Employee } from "./components/types/employee";
-import { BasePermissions } from "./components/types/basePermissions";
 import getBasePermissions from "./components/permissions/getBasePermissions";
 import { getUserByToken } from "./components/getUserByToken";
 
@@ -44,7 +40,7 @@ async function NavBar() {
 
   if (!user) return null;
 
-  const basePermissions = await getBasePermissions(user.id)
+  const basePermissions = await getBasePermissions(user.id, !!user.is_manager)
 
   return <div className="">
     <div className="d-flex">

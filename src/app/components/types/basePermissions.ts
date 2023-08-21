@@ -1,5 +1,9 @@
 export interface BasePermissions {
-    createEmployees: boolean
-    viewEmployees: boolean
-    createClient: boolean
+    createEmployees: Bool
+    viewEmployees: Bool
+    createClient: Bool
+    createOrders: Bool
+    viewOrders: Bool
 }
+
+type Bool = boolean | "1" | "0"

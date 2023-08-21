@@ -1,10 +1,11 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+import { Employee, EmployeeMeta } from "@/app/components/types/employee";
 import { pool } from "@/app/db/connect";
 
 export async function getEmployees(): Promise<Employee[]> {
     const employees: Employee[] = await new Promise((resolve) => {
         pool.getConnection(function (err, conn) {
-            pool.query("SELECT id, username, telegram_id, tg_chat_id FROM employees",
+            pool.query("SELECT id, username, telegram_id, tg_chat_id, is_manager FROM employees",
                 function (err: any, res: Employee[]) {
                     if (err) {
                         sendMessageToTg(
@@ -87,20 +88,4 @@ async function getLeadsPerEmployeeId(employeeId: number): Promise<any[]> {
             }
         )
     });
-}
-
-
-interface Employee {
-    id: number
-    username: string
-    telegram_id: string
-    tg_chat_id: number
-    meta?: EmployeeMeta[]
-    leads?: any[]
-}
-
-interface EmployeeMeta {
-    id: number
-    data_type: string
-    data: string
 }
