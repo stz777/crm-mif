@@ -4,11 +4,12 @@ import ConfirmPayment from "./confirmPayment";
 import DeclinePayment from "./declinePayment";
 import CloseLead from "./closeLead";
 import { RightsManagement } from "./righsManagement/rightsManagement";
-import { LeadInterface } from "./page";
+import { LeadInterface } from "@/app/components/types/lead";
 import { Add_Payment } from "./add_payment";
 import { FaCheck } from "react-icons/fa"
 import dayjs from 'dayjs'
 import { useState } from "react";
+import { AddExpense } from "./addExpense";
 
 export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean }) {
     const [leads, setLeads] = useState(props.leads)
@@ -34,6 +35,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     <th>дедлайн</th>
                     <th>срочность</th>
                     <th>описание</th>
+                    {props.is_manager && <th>Расходы</th>}
                     {props.is_manager && <th>оплаты</th>}
                     <th>оплата</th>
                     <th>аванс</th>
@@ -60,6 +62,32 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     })()}</td>
                     <td>{lead.description}</td>{/*description*/}
 
+                    {props.is_manager && <td>
+                        <table >
+                            {lead.expensesPerLead?.map(expense =>
+                                <tr key={expense.id}>
+                                    <td>{expense.sum}</td>
+                                    <td>{expense.comment}</td>
+                                </tr>)}
+
+                            <tr>
+                                {(() => {
+                                    let totalSum = 0;
+                                    if (lead.payments?.length) {
+                                        totalSum = lead.payments
+                                            .map(({ sum }) => sum)
+                                            .reduce((a, b) => a + b);
+                                    }
+                                    return <>
+                                        <td className="fw-bold">Σ</td>
+                                        <td className="fw-bold">{totalSum}</td>
+                                    </>
+                                })()}</tr>
+                        </table>
+
+                        <div className="mt-2"><AddExpense lead_id={lead.id} /></div>
+
+                    </td>}{/*expenses list*/}
                     {props.is_manager && <td>
                         <ul className="list-group">
                             {lead.payments?.map(payment =>

@@ -52,8 +52,11 @@ async function NavBar() {
         {basePermissions.createClient && <><Link href="/clients/create" className="btn btn-sm btn-outline-dark mb-2">Создать клиента</Link><br /></>}
         {basePermissions.createClient && <Link href="/clients/get" className="btn btn-sm btn-outline-dark">Список клиентов</Link>}
       </div>
-      <div>
+      <div className="me-2">
         <Link href="/leads/get" className="btn btn-sm btn-outline-dark">Список заказов</Link>
+      </div>
+      <div className="me-2">
+        {basePermissions.viewFinReport && <Link href="/fin_report" className="btn btn-sm btn-outline-dark">Отчет</Link>}
       </div>
     </div>
   </div>

@@ -8,5 +8,6 @@ export default async function getBasePermissions(userID: number, isManager: bool
         createClient: isBoss || isManager,
         createOrders: isBoss || isManager,
         viewOrders: isBoss || isManager,
+        viewFinReport: isBoss,
     };
 }
