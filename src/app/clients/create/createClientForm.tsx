@@ -2,6 +2,7 @@
 
 import FieldWrapper from "@/app/ui/form/fieldWrapper";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 type FormValues = {
     fio: string
@@ -11,7 +12,7 @@ type FormValues = {
 };
 
 export default function CreateClientForm() {
-    const { register, handleSubmit, formState: { errors }, control } = useForm<FormValues>();
+    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>();
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
@@ -25,7 +26,7 @@ export default function CreateClientForm() {
         name: "telegram",
     });
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(e=>onSubmit(e,reset))}>
 
             <FieldWrapper title="Имя клиента"
                 field={<>
@@ -69,7 +70,7 @@ export default function CreateClientForm() {
 }
 
 
-const onSubmit = (data: any) => {
+const onSubmit = (data: any,resetForm:any) => {
     fetch(
         "/api/clients/create",
         {
@@ -77,10 +78,44 @@ const onSubmit = (data: any) => {
             body: JSON.stringify(data)
         }
     ).then(
-        x => x.json()
-    )
-        .then(x => {
-            console.log('x', x);
-
+        response => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new Error(response.statusText);
+            }
+        }
+    ).then(data => {
+        if (data.success) {
+            toast.success("Клиент создан");
+            // resetForm();
+        } else {
+            toast.error("Что-то пошло не так");
+        }
+    })
+        .catch(error => {
+            const statusText = String(error);
+            fetch(
+                `/api/bugReport`,
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: {
+                            err: "#admck3jm",
+                            data: {
+                                statusText,
+                                values: data
+                            }
+                        }
+                    })
+                }
+            )
+                .then(x => x.json())
+                .then(x => {
+                    console.log(x);
+                })
         })
 }

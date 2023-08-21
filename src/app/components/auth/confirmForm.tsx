@@ -32,7 +32,7 @@ export default function ConfirmForm() {
             }
         ).then(data => {
             if (data.success) {
-                document.cookie = `auth=${data.token}; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT`;
+                document.cookie = `auth=${data.token}; expires=Tue, 19 Jan 2038 03:14:07 GMT`;
                 toast.success("Вы успешно авторизировались");
             } else {
                 toast.error("Что-то пошло не так");

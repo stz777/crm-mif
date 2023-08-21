@@ -4,6 +4,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LogoutBTN from "./api/auth/logout/logoutBTN";
+import { cookies } from 'next/headers'
+import getBasePermissions from "./components/permissions/getBasePermissions";
+import { getUserByToken } from "./components/getUserByToken";
 
 export default function RootLayout({
   children,
@@ -30,19 +33,26 @@ export default function RootLayout({
   )
 }
 
-function NavBar() {
+async function NavBar() {
+
+  const auth = cookies().get('auth');
+  const user = await getUserByToken(String(auth?.value));
+
+  if (!user) return null;
+
+  const basePermissions = await getBasePermissions(user.id, !!user.is_manager)
+
   return <div className="">
     <div className="d-flex">
       <div className="me-2">
-        <Link href="/employees/create" className="btn btn-sm btn-outline-dark mb-2">Создать сотрудника</Link><br />
-        <Link href="/employees/get" className="btn btn-sm btn-outline-dark">Список сотрудников</Link>
+        {basePermissions.createEmployees && <><Link href="/employees/create" className="btn btn-sm btn-outline-dark mb-2">Создать сотрудника</Link><br /></>}
+        {basePermissions.viewEmployees && <Link href="/employees/get" className="btn btn-sm btn-outline-dark">Список сотрудников</Link>}
       </div>
       <div className="me-2">
-        <Link href="/clients/create" className="btn btn-sm btn-outline-dark mb-2">Создать клиента</Link><br />
-        <Link href="/clients/get" className="btn btn-sm btn-outline-dark">Список клиентов</Link>
+        {basePermissions.createClient && <><Link href="/clients/create" className="btn btn-sm btn-outline-dark mb-2">Создать клиента</Link><br /></>}
+        {basePermissions.createClient && <Link href="/clients/get" className="btn btn-sm btn-outline-dark">Список клиентов</Link>}
       </div>
       <div>
-        {/* <Link href="/leads/create" className="btn btn-sm btn-outline-dark mb-2">Создать заказ</Link><br /> */}
         <Link href="/leads/get" className="btn btn-sm btn-outline-dark">Список заказов</Link>
       </div>
     </div>
