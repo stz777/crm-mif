@@ -68,6 +68,11 @@ async function NavBar() {
         {<Link href="/suppliers/create" className="btn btn-sm btn-outline-dark mb-2">Создать поставщика</Link>}<br />
         {<Link href="/suppliers/get" className="btn btn-sm btn-outline-dark ">Список поставщиков</Link>}
       </div>
+      <div className="me-2">
+        <div>n.p.</div>
+        {<Link href="/materials/get" className="btn btn-sm btn-outline-dark mb-2">Материалы</Link>}<br />
+        {/* {<Link href="/suppliers/get" className="btn btn-sm btn-outline-dark ">Список поставщиков</Link>} */}
+      </div>
     </div>
   </div>
 }
