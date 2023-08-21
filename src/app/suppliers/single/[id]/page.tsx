@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { id: number } }) {
     </>
 }
 
-async function getSupplierById(supplierId: number): Promise<SupplierInterface> {
+export async function getSupplierById(supplierId: number): Promise<SupplierInterface> {
     return await new Promise(r => {
         pool.query("SELECT * FROM suppliers WHERE id = ?",
             [supplierId],
