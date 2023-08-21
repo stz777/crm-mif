@@ -58,6 +58,10 @@ async function NavBar() {
       <div className="me-2">
         {basePermissions.viewFinReport && <Link href="/fin_report" className="btn btn-sm btn-outline-dark">Отчет</Link>}
       </div>
+      <div className="me-2">
+        <div>n.p.</div>
+        {<Link href="/purchasing_tasks/create" className="btn btn-sm btn-outline-dark">Создать закупку</Link>}
+      </div>
     </div>
   </div>
 }
