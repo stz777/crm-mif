@@ -12,7 +12,6 @@ export default async function Page() {
                     <th>номер</th>
                     <th>Наименование</th>
                     <th>Контакты</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -20,7 +19,6 @@ export default async function Page() {
                     <td><Link href={`/suppliers/single/${supplier.id}`}>Поставщик #{supplier.id}</Link></td>
                     <td>{supplier.name}</td>
                     <td><pre style={{ font: "initial" }} className="m-0 p-0">{supplier.contacts}</pre></td>
-                    <td>Добавить товар</td>
                 </tr>)}
             </tbody>
         </table>
