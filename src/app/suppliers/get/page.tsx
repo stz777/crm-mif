@@ -1,4 +1,5 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+import { SupplierInterface } from "@/app/components/types/supplierInterface";
 import { pool } from "@/app/db/connect"
 import Link from "next/link";
 
@@ -42,10 +43,4 @@ async function getSuppliers(): Promise<SupplierInterface[]> {
             r(res ? res : []);
         })
     });
-}
-
-export interface SupplierInterface {
-    id: number
-    name: string
-    contacts: string
 }
