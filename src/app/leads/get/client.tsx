@@ -10,7 +10,7 @@ import { FaCheck } from "react-icons/fa"
 import dayjs from 'dayjs'
 import { useState } from "react";
 
-export default function Client(props: { leads: LeadInterface[] }) {
+export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean }) {
     const [leads, setLeads] = useState(props.leads)
     return <>
         <h1>Заказы</h1>
@@ -34,10 +34,10 @@ export default function Client(props: { leads: LeadInterface[] }) {
                     <th>дедлайн</th>
                     <th>срочность</th>
                     <th>описание</th>
-                    <th>оплаты</th>
+                    {props.is_manager && <th>оплаты</th>}
                     <th>оплата</th>
                     <th>аванс</th>
-                    <th>сумма заказа</th>
+                    {props.is_manager && <th>сумма заказа</th>}
                     <th>дата факт. выполнения</th>
                     <th></th>
                 </tr>
@@ -59,7 +59,8 @@ export default function Client(props: { leads: LeadInterface[] }) {
                         return <>{diffInDays}</>
                     })()}</td>
                     <td>{lead.description}</td>{/*description*/}
-                    <td>
+
+                    {props.is_manager && <td>
                         <ul className="list-group">
                             {lead.payments?.map(payment =>
                                 <li key={payment.id} className="list-group-item d-flex justify-content-between align-items-center">
@@ -81,8 +82,8 @@ export default function Client(props: { leads: LeadInterface[] }) {
                             })()}</li>
                         </ul>
                         <div className="mt-2"><Add_Payment lead_id={lead.id} /></div>
-                    </td>{/*payments list*/}
-                    <td>
+                    </td>}{/*payments list*/}
+                    {<td>
                         {(() => {
                             let totalSum = 0;
                             const leadSum = lead.sum;
@@ -94,7 +95,7 @@ export default function Client(props: { leads: LeadInterface[] }) {
                             const полнаяОплатаПроведена = leadSum <= totalSum;
                             return <CheckPaymentUI done={полнаяОплатаПроведена} />
                         })()}
-                    </td>{/*оплата полностью проведена*/}
+                    </td>}{/*оплата полностью проведена*/}
                     <td>
                         {(() => {
                             let totalSum = 0;
@@ -107,14 +108,18 @@ export default function Client(props: { leads: LeadInterface[] }) {
                             return <CheckPaymentUI done={предоплатаПроведена} />
                         })()}
                     </td>{/*внесена предоплата*/}
-                    <td>{lead.sum}</td>{/*сумма заказа*/}
+                    {props.is_manager && <td>{lead.sum}</td>}{/*сумма заказа*/}
                     <td>
                         <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "-"}</span>
                     </td>{/*дата выполнения*/}
                     <td>
                         <div className="d-flex nowrap">
-                            {lead.done_at ? <>Заказ закрыт</> : <CloseLead leadId={lead.id} />}
-                            <div className="ms-2"><RightsManagement leadId={lead.id} /></div>
+                            {(() => {
+                                if (lead.done_at) return <>Заказ закрыт</>
+                                if (props.is_boss) return <CloseLead leadId={lead.id} />
+                                return <>В работе</>
+                            })()}
+                            {props.is_boss && <div className="ms-2"><RightsManagement leadId={lead.id} /></div>}
                         </div>
                     </td>
                 </tr>)}

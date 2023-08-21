@@ -4,15 +4,20 @@ import 'dayjs/locale/ru'
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 
 import Client from "./client";
+import { getUserByToken } from "@/app/components/getUserByToken";
+import { cookies } from "next/headers";
 
-dayjs.locale("ru")
+dayjs.locale("ru");
 
 export default async function Page() {
+    const auth = cookies().get('auth');
+    const user = await getUserByToken(String(auth?.value));
     const leads = await getLeads();
-    return <Client leads={leads} />
-    
+    const is_boss = [1, 2].includes(Number(user?.id));
+    return <>
+        <Client leads={leads} is_manager={!!user?.is_manager} is_boss={is_boss} />
+    </>
 }
-
 
 export async function getLeads(): Promise<LeadInterface[]> {
     const leads: LeadInterface[] = await new Promise(r => {
