@@ -4,6 +4,7 @@ export interface BasePermissions {
     createClient: Bool
     createOrders: Bool
     viewOrders: Bool
+    viewFinReport: Bool
 }
 
 type Bool = boolean | "1" | "0"
