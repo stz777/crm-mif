@@ -7,6 +7,7 @@ export interface LeadInterface {
     done_at: string | null
     sum: number
     payments?: PaymentInterface[]
+    expensesPerLead?: ExpensesPerLeadInterface[]
 }
 
 export interface PaymentInterface {
@@ -16,4 +17,10 @@ export interface PaymentInterface {
     created_date: string
     confirmed: boolean
     sum: number
+}
+
+export interface ExpensesPerLeadInterface {
+    id: number
+    sum: number
+    comment: string
 }

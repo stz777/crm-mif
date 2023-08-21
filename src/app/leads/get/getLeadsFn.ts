@@ -1,6 +1,7 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { LeadInterface, PaymentInterface } from "@/app/components/types/lead";
+import getExpensesByLeadId from "./getExpensesByLeadId";
 
 export async function getLeads(): Promise<LeadInterface[]> {
     const leads: LeadInterface[] = await new Promise(r => {
@@ -25,6 +26,7 @@ export async function getLeads(): Promise<LeadInterface[]> {
     for (let index = 0; index < leads.length; index++) {
         const { id: leadId } = leads[index];
         leads[index].payments = await getPaymentsByLeadId(leadId);
+        leads[index].expensesPerLead = await getExpensesByLeadId(leadId);
     }
     return leads;
 }
