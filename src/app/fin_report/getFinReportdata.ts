@@ -1,18 +1,21 @@
 import { sendMessageToTg } from "../api/bugReport/sendMessageToTg";
+import { ExpensesPerLeadInterface, PaymentInterface } from "../components/types/lead";
 import { pool } from "../db/connect";
 
 export default async function getFinReportdata() {
     const payments = await getPayments();
+    const expensesPerLead = await getExpensesPerLead();
     return {
         payments,
+        expensesPerLead
     };
 }
 
-async function getPayments() {
+async function getPayments(): Promise<PaymentInterface[]> {
     return await new Promise(resolve => {
         pool.query(
             "SELECT * FROM payments",
-            function (err: any, res: any) {
+            function (err: any, res: PaymentInterface[]) {
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify({
@@ -22,7 +25,27 @@ async function getPayments() {
                         "5050441344"
                     )
                 }
-                resolve(res);
+                resolve(res ? res : []);
+            }
+        )
+    })
+}
+
+async function getExpensesPerLead(): Promise<ExpensesPerLeadInterface[]> {
+    return await new Promise(resolve => {
+        pool.query(
+            "SELECT * FROM expenses_per_lead",
+            function (err: any, res: ExpensesPerLeadInterface[]) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify({
+                            error: err,
+                            code: "#d8djdn3n3"
+                        }, null, 2),
+                        "5050441344"
+                    )
+                }
+                resolve(res ? res : []);
             }
         )
     })

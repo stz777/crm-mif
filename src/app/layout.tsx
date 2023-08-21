@@ -56,7 +56,7 @@ async function NavBar() {
         <Link href="/leads/get" className="btn btn-sm btn-outline-dark">Список заказов</Link>
       </div>
       <div className="me-2">
-        {basePermissions.viewFinReport && <Link href="/leads/get" className="btn btn-sm btn-outline-dark">Отчет</Link>}
+        {basePermissions.viewFinReport && <Link href="/fin_report" className="btn btn-sm btn-outline-dark">Отчет</Link>}
       </div>
     </div>
   </div>
