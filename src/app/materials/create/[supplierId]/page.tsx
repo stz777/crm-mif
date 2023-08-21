@@ -7,7 +7,7 @@ export default async function Page({ params }: { params: { supplierId: number } 
     return <>
         <h1>Создать материал</h1>
         <h3>Поставщик: {supplier.name}</h3>
-        <CreateMaterialForm />
+        <CreateMaterialForm supplier_id={supplier.id}/>
     </>
 }
 

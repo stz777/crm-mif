@@ -6,22 +6,21 @@ import { toast } from "react-toastify";
 
 type FormValues = {
     name: string
-    description: string;
+    supplier_id: number
 };
 
-export default function CreateMaterialForm() {
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>();
+export default function CreateMaterialForm(props: { supplier_id: number }) {
+    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>(
+        {
+            defaultValues: { supplier_id: props.supplier_id }
+        }
+    );
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
 
             <FieldWrapper title="Наименование"
                 field={<>
                     <input {...register("name", { required: true })} />
-                </>}
-            />
-            <FieldWrapper title="Описание"
-                field={<>
-                    <textarea {...register("description", { required: true })} />
                 </>}
             />
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
