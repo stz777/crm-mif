@@ -8,19 +8,8 @@ export interface Employee {
     is_manager: boolean | 1 | 0
 }
 
-
-
 export interface EmployeeMeta {
     id: number
     data_type: string
     data: string
 }
-
-// interface Employee {
-//     id: number
-//     username: string
-//     telegram_id: string
-//     tg_chat_id: number
-//     meta?: EmployeeMeta[]
-//     leads?: any[]
-// }
