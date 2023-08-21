@@ -18,7 +18,6 @@ export default function CreatePurschaseTaskForm() {
     const { register, handleSubmit, formState: { errors }, control, reset } = useForm<Inputs>();
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
-            {/* <input defaultValue="test" {...register("example")} /> */}
             <FieldWrapper title="Дедлайн"
                 field={<>
                     <Controller
@@ -49,19 +48,17 @@ export default function CreatePurschaseTaskForm() {
                     <textarea  {...register("comment", { required: true })} autoComplete="off" />
                 }
             />
-            {/* <input type="submit" /> */}
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );
 }
 
 const onSubmit = (data: any, resetForm: any) => {
-    // console.log('data', data);
-
     fetch(
         "/api/purchasing_tasks/create",
         {
-            method: "POST"
+            method: "POST",
+            body: JSON.stringify(data)
         }
     ).then(
         response => {
@@ -74,7 +71,7 @@ const onSubmit = (data: any, resetForm: any) => {
     ).then(data => {
         if (data.success) {
             toast.success("Закупка создана");
-            // resetForm();
+            resetForm();
         } else {
             toast.error("Что-то пошло не так");
         }
