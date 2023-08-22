@@ -10,12 +10,14 @@ export default async function Page() {
         <table className="table table-bordered table-striped w-auto">
             <thead>
                 <tr>
+                    <th>артикул</th>
                     <th>наименование</th>
                     <th>поставщик</th>
                 </tr>
             </thead>
             <tbody>
                 {materials.map(material => <tr key={material.id}>
+                    <td>{material.id}</td>
                     <td>{material.name}</td>
                     <td> <Link href={`/suppliers/single/${material.supplier}`}>Поставщик #{material.supplier}</Link></td>
                 </tr>)}
