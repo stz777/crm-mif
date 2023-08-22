@@ -53,7 +53,7 @@ export default function MessageForm({ leadId }: { leadId: number }) {
                         <FaChevronCircleRight onClick={handleSubmit(onSubmit)} size={25} className="ms-2" />
                     </div>
 
-                    <div>
+                    <div className=" mt-3">
                         <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
                         <div className="d-flex">
                             {previewImages.map((image, index) => (
@@ -82,19 +82,19 @@ export default function MessageForm({ leadId }: { leadId: number }) {
 
 
 function ImageWrapper({ children, index }: any) {
-    const [viewDel, setViewDel] = useState(false);
+    // const [viewDel, setViewDel] = useState(false);
     return <>
         <div
-            className="position-relative  cursor-pointer"
-            onMouseOver={() => {
-                setViewDel(true);
-            }}
-            onMouseLeave={() => {
-                setViewDel(false);
-            }}
+            className="position-relative"
+            // onMouseOver={() => {
+            //     setViewDel(true);
+            // }}
+            // onMouseLeave={() => {
+            //     setViewDel(false);
+            // }}
         >
             {children}
-            {viewDel && <div
+            {/* {viewDel && <div
                 className="position-absolute top-0 w-100 h-100 bg-white d-flex justify-content-center align-items-center"
                 onClick={() => {
                     console.log('delete', index);
@@ -102,13 +102,13 @@ function ImageWrapper({ children, index }: any) {
                 }}
             >
                 <FaTrash color="red" />
-            </div>}
+            </div>} */}
         </div></>
 }
 
 
 async function sendMessage(data: any) {
-    console.log(data);
+    // console.log(data);
     const formdata = new FormData();
     formdata.append("text", data.text);
 

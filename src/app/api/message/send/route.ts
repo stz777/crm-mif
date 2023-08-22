@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import slugify from 'slugify'
 import fs from "fs"
+import { cookies } from 'next/headers'
+import { getUserByToken } from "@/app/components/getUserByToken";
 
 
 export async function POST(
@@ -20,7 +22,15 @@ export async function POST(
     const essense = items.find((item: any) => item[0] === "essense")[1];
     const essense_id = items.find((item: any) => item[0] === "essense_id")[1];
 
-    const messageId = await saveMessage(text, essense, essense_id, 13);
+    const auth = cookies().get('auth');
+    const user = await getUserByToken(String(auth?.value));
+
+
+    if (!user) return NextResponse.json({
+        success: false,
+    });
+
+    const messageId = await saveMessage(text, essense, essense_id, user.id);
 
     if (!messageId) {
         return NextResponse.json({

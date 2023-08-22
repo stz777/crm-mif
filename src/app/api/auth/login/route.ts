@@ -14,7 +14,7 @@ export async function POST(
             if (updated) {
                 sendMessageToTg(
                     `Код доступа ${randomNumber}`,
-                    "5050441344"
+                    String(tg_chat_id)
                 )
                 return NextResponse.json({
                     success: true,

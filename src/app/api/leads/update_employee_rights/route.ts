@@ -84,7 +84,7 @@ async function getCurrentRole(employeeId: number, leadId: number) {
     })
 }
 
-async function createNewRole(employeeId: number, leadId: number, role: string) {
+export async function createNewRole(employeeId: number, leadId: number, role: string) {
     return await new Promise(resolve => {
         pool.query(
             `INSERT INTO leads_roles (user,lead_id,role) VALUES (?,?,?)`,
