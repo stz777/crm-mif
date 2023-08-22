@@ -28,7 +28,6 @@ export async function POST(
         }
     }
 
-
     const [employee] = await getEmployeeById(employeeId);
 
     sendMessageToTg(
@@ -77,25 +76,26 @@ async function createEmployee(username: string, telegram_id: string, role: numbe
 
 async function getEmployeeById(id: number): Promise<Employee[]> {
     const employees: Employee[] = await new Promise((resolve) => {
-        pool.getConnection(function (err, conn) {
-            pool.query("SELECT id, username, telegram_id, tg_chat_id FROM employees",
-                function (err: any, res: Employee[]) {
-                    if (err) {
-                        sendMessageToTg(
-                            JSON.stringify(
-                                {
-                                    errorNo: "#nddv8en3c",
-                                    error: err,
-                                    values: {}
-                                }, null, 2),
-                            "5050441344"
-                        )
-                    }
-                    resolve(res);
+        pool.query(
+            "SELECT id, username, telegram_id, tg_chat_id FROM employees WHERE id= ?",
+            [id],
+            function (err: any, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#nddv8en3c",
+                                error: err,
+                                values: {}
+                            }, null, 2),
+                        "5050441344"
+                    )
                 }
-            )
-            pool.releaseConnection(conn);
-        })
+                resolve(res);
+            }
+        )
+        // pool.releaseConnection(conn);
+        // })
     });
 
     return employees;

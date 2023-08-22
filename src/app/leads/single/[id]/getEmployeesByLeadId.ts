@@ -4,7 +4,7 @@ import { pool } from "@/app/db/connect"
 export default async function getEmployeesByLeadId(leadId: number): Promise<Employee[] | false> {
     return new Promise((resolve) => {
         pool.query(
-            `SELECT leads_roles.user as user_id, leads_roles.role, employees.username
+            `SELECT leads_roles.user as user_id, leads_roles.role, employees.username, employees.tg_chat_id
             FROM leads_roles 
             LEFT JOIN (employees)
             ON (employees.id = leads_roles.user)
@@ -44,6 +44,7 @@ export default async function getEmployeesByLeadId(leadId: number): Promise<Empl
 
 interface Employee {
     id: number
+    user_id: number
     username: string
     telegram_id: string
     tg_chat_id: number

@@ -5,6 +5,8 @@ import slugify from 'slugify'
 import fs from "fs"
 import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
+import getEmployeesByLeadId from "@/app/leads/single/[id]/getEmployeesByLeadId";
+// import { getEmployeesByLeadId } from "@/app/leads/get/righsManagement/getEmployeesByLeadId";
 
 
 export async function POST(
@@ -37,6 +39,10 @@ export async function POST(
             success: false,
         });
     }
+
+
+    noticeEmployees(essense_id);
+
 
     for (let index = 0; index < items.length; index++) {
         const [name, value]: any = items[index]
@@ -165,3 +171,24 @@ async function saveImageToDB(imageName: string, messageId: number) {
         )
     })
 }
+
+
+async function noticeEmployees(leadId: number) {
+    const employees = await getEmployeesByLeadId(leadId);
+    console.log('employees', employees);
+    if (employees) {
+        for (let index = 0; index < employees.length; index++) {
+            const { user_id, tg_chat_id } = employees[index];
+            console.log('user_id', user_id);
+            if (tg_chat_id) {
+                sendMessageToTg(
+                    `Пришло сообщение в чат по заказу #${leadId}`,
+                    String(tg_chat_id)
+                );
+            }
+        }
+    }
+}
+
+
+
