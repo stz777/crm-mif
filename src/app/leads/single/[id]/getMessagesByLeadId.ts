@@ -1,8 +1,8 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { pool } from "@/app/db/connect"
 
-export default async function getMessagesByLeadId(leadId: number): Promise<Message[] | false> {
-    const messages: Message[] | false = await new Promise((resolve) => {
+export default async function getMessagesByLeadId(leadId: number): Promise<MessageInterface[] | false> {
+    const messages: MessageInterface[] | false = await new Promise((resolve) => {
         pool.query(
             `SELECT messages.id, messages.text, messages.text, messages.created_date, employees.username
              FROM messages 
@@ -61,7 +61,7 @@ async function getMediaByMessageId(messageId: number): Promise<Media[]> {
     });
 }
 
-export interface Message {
+export interface MessageInterface {
     id: number
     text: string
     username: string
