@@ -42,6 +42,7 @@ export default function MessageForm({ leadId }: { leadId: number }) {
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         // reset();
         sendMessage(data);
+        reset();
     }
 
     return (
@@ -122,7 +123,7 @@ async function sendMessage(data: any) {
     }
 
     fetch(
-        "/api/message/send",
+        "/api/messages/send",
         {
             method: "POST",
             body: formdata
