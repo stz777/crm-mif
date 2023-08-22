@@ -21,11 +21,13 @@ export default async function Page({ params }: { params: { id: number } }) {
         {materials ? <table className="table table-bordered table-striped w-auto">
             <thead>
                 <tr>
+                    <th>артикул</th>
                     <th>наименование</th>
                 </tr>
             </thead>
             <tbody>
                 {materials.map(material => <tr key={material.id}>
+                    <td>{material.id}</td>
                     <td>{material.name}</td>
                 </tr>)}
             </tbody>

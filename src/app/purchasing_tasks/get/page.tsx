@@ -17,7 +17,6 @@ export default async function Page() {
                     <th>дата создания</th>
                     <th>дедлайн</th>
                     <th>дата выполнения</th>
-                    <th>Закупки</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,7 +27,6 @@ export default async function Page() {
                     <td>{dayjs(task.created_date).format("DD.MM.YYYY")}</td>
                     <td>{dayjs(task.deadline).format("DD.MM.YYYY")}</td>
                     <td>{task.done_at ? dayjs(task.done_at).format("DD.MM.YYYY") : "-"}</td>
-                    <td></td>
                 </tr>)}
             </tbody>
         </table>

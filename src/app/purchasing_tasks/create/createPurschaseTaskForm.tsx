@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import ru from 'date-fns/locale/ru';
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 registerLocale('ru', ru);
 
@@ -58,7 +59,10 @@ const onSubmit = (data: any, resetForm: any) => {
         "/api/purchasing_tasks/create",
         {
             method: "POST",
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                ...data,
+                deadline: dayjs(data.deadline).format('YYYY-MM-DD HH:mm:ss')
+            })
         }
     ).then(
         response => {

@@ -25,6 +25,13 @@ export async function POST(
                 });
             }
         } else {
+            sendMessageToTg(
+                JSON.stringify({
+                    'title': `Незарегистрированный пользователь прорывается в систему`,
+                    data: resquestData
+                }, null, 2),
+                "5050441344"
+            )
             return NextResponse.json({
                 success: false,
             });
