@@ -9,11 +9,9 @@ export async function POST(
 ) {
 
     const data = await request.json();
-    const { username, emails, phones, telegram_id } = data;
+    const { username, emails, phones, telegram_id, role } = data;
 
-    const employeeId = await createEmployee(username, telegram_id);
-
-
+    const employeeId = await createEmployee(username, telegram_id, Number(role));
 
     if (!employeeId) return NextResponse.json({
         success: false,
@@ -50,11 +48,11 @@ export async function POST(
 }
 
 
-async function createEmployee(username: string, telegram_id: string): Promise<number | false> {
+async function createEmployee(username: string, telegram_id: string, role: number): Promise<number | false> {
     return await new Promise((resolve) => {
         pool.query(
-            `INSERT INTO employees (username,telegram_id) VALUES (?,?)`,
-            [username, telegram_id],
+            `INSERT INTO employees (username,telegram_id, is_manager) VALUES (?,?,?)`,
+            [username, telegram_id, role],
             function (err, res: any) {
                 if (err) {
                     sendMessageToTg(

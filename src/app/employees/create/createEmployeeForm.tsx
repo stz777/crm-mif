@@ -9,6 +9,7 @@ type FormValues = {
     phones: { phone: string }[];
     emails: { email: string }[];
     telegram_id: string;
+    role: string
 };
 
 export default function CreateEmployeeForm() {
@@ -40,14 +41,14 @@ export default function CreateEmployeeForm() {
 
             <FieldWrapper title="Имя сотрудника"
                 field={<>
-                    <input {...register("username", { required: true })} autoComplete="off" />
+                    <input {...register("username", { required: true })} autoComplete="off" className="form-control"/>
                 </>}
             />
 
             <FieldWrapper title="Телефоны"
                 field={<>
                     {phonesFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input {...register(`phones.${i}.phone`, { required: true })} autoComplete="off" />
+                        <input {...register(`phones.${i}.phone`, { required: true })} autoComplete="off" className="form-control"/>
                         {i > 0 && <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>}
                     </div>)}
                     {/* <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm mt-1">Добавить еще один телефон</div> */}
@@ -57,7 +58,7 @@ export default function CreateEmployeeForm() {
             <FieldWrapper title="Email"
                 field={<>
                     {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input {...register(`emails.${i}.email`, { required: true })} autoComplete="off" />
+                        <input {...register(`emails.${i}.email`, { required: true })} autoComplete="off" className="form-control"/>
                         {i > 0 && <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>}
                     </div>)}
                     {/* <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm mt-1">Добавить еще один email</div> */}
@@ -66,7 +67,19 @@ export default function CreateEmployeeForm() {
 
             <FieldWrapper title="Телеграм"
                 field={<>
-                    <input {...register("telegram_id", { required: true })} autoComplete="off" />
+                    <input {...register("telegram_id", { required: true })} autoComplete="off" className="form-control" />
+                </>}
+            />
+
+            <FieldWrapper title="Должность"
+                field={<>
+                    <select {...register("role", {required:true})} defaultValue="" className="form-select" aria-label="Default select example">
+                        <option value="" disabled>
+                            Выберите должность
+                        </option>
+                        <option value="0">Исполнитель</option>
+                        <option value="1">Менеджер</option>
+                    </select>
                 </>}
             />
 
