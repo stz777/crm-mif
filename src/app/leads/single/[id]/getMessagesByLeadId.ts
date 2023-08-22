@@ -8,7 +8,9 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
              FROM messages 
              LEFT JOIN (employees)
              ON (employees.id = messages.sender)
-             WHERE messages.essense = 'lead' AND messages.essense_id=?`,
+             WHERE messages.essense = 'lead' AND messages.essense_id=?
+             ORDER BY messages.id DESC
+             `,
             [leadId],
             function (err, result: any[]) {
                 if (err) {
@@ -65,6 +67,7 @@ export interface MessageInterface {
     id: number
     text: string
     username: string
+    created_date: string
     attachments?: Media[]
 }
 

@@ -8,7 +8,6 @@ export default function AttachmentsArea({ attachments }: { attachments?: Media[]
     if (!attachments) return null;
     return <>
         {attachments.map(attachment => <div>
-            {<pre>{JSON.stringify(attachment)}</pre>}
             <ImageWrapper url={`/images/${attachment.name}`} />
         </div>)}
     </>

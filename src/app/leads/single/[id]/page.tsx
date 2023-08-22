@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                 <tr><td>дедлайн</td><td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td></tr>
             </tbody>
         </table>
-        <div className='mb-4'><Chat messages={messages || []} essense_type="lead"  essense_id={lead.id}/></div>
         <MessageForm leadId={leadId} />
+        <div className='mb-4'><Chat messages={messages || []} essense_type="lead"  essense_id={lead.id}/></div>
     </>
 }
