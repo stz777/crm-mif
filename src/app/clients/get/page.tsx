@@ -20,7 +20,7 @@ export default async function Page() {
                     <td>{client.id}</td>
                     <td>{client.full_name}</td>
                     <td>
-                        <table className="table table-bordered">
+                        <table className="table">
                             <tbody>
                                 {client.meta.map(meta => <tr key={meta.id}>
                                     <td>
@@ -34,7 +34,6 @@ export default async function Page() {
                         </table>
                     </td>
                     <td>
-                        <div className="mb-2"><Link className="btn btn-outline-dark btn-sm" href={`/clients/edit/${client.id}`}>Редактировать</Link></div>
                         <div className="mb-2"><Link className="btn btn-outline-dark btn-sm" href={`/leads/create/${client.id}`}>Создать заказ</Link></div>
 
                     </td>

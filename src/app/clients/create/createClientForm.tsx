@@ -12,7 +12,7 @@ type FormValues = {
 };
 
 export default function CreateClientForm() {
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>();
+    const { register, handleSubmit, control, reset } = useForm<FormValues>();
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
@@ -26,18 +26,18 @@ export default function CreateClientForm() {
         name: "telegram",
     });
     return (
-        <form onSubmit={handleSubmit(e=>onSubmit(e,reset))}>
+        <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
 
             <FieldWrapper title="Имя клиента"
                 field={<>
-                    <input {...register("fio", { required: true })} placeholder="ФИО" />
+                    <input {...register("fio", { required: true })} placeholder="ФИО" autoComplete="off" />
                 </>}
             />
 
             <FieldWrapper title="Телефоны"
                 field={<>
                     {phonesFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите номер телефона" {...register(`phones.${i}.phone`, { required: true })} />
+                        <input placeholder="Введите номер телефона" {...register(`phones.${i}.phone`, { required: true })} autoComplete="off" />
                         <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
@@ -47,7 +47,7 @@ export default function CreateClientForm() {
             <FieldWrapper title="Email"
                 field={<>
                     {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите телеграм" {...register(`emails.${i}.email`, { required: true })} />
+                        <input placeholder="Введите телеграм" {...register(`emails.${i}.email`, { required: true })} autoComplete="off" />
                         <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
@@ -57,20 +57,20 @@ export default function CreateClientForm() {
             <FieldWrapper title="Телеграм"
                 field={<>
                     {telegramFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите email" {...register(`telegram.${i}.telegram`, { required: true })} />
+                        <input placeholder="Введите email" {...register(`telegram.${i}.telegram`, { required: true })} autoComplete="off" />
                         <div onClick={() => removeTelegram(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendTelegram({ telegram: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
                 </>}
             />
 
-            <input type="submit" />
+            <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );
 }
 
 
-const onSubmit = (data: any,resetForm:any) => {
+const onSubmit = (data: any, resetForm: any) => {
     fetch(
         "/api/clients/create",
         {
