@@ -10,7 +10,7 @@ export async function POST(
     const { essense, essense_id } = await request.json();
     if (essense === "lead") {
         const messages = await getMessagesByLeadId(essense_id);
-        if (messages && messages.length) {
+        if (messages) {
             return NextResponse.json({
                 success: true,
                 messages

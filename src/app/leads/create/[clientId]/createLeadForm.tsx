@@ -18,7 +18,7 @@ type FormValues = {
 export default function CreateLeadForm({ clientId }: { clientId: number }) {
     const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>({
         defaultValues: {
-            // title: "title",
+            title: "",
             client: clientId,
             // description: "description",
             // sum: 123,
@@ -45,16 +45,6 @@ export default function CreateLeadForm({ clientId }: { clientId: number }) {
                 </>}
             />
 
-            <FieldWrapper title="Заголовок"
-                field={<>
-                    <input {...register("title", { required: true })} autoComplete="off" />
-                </>}
-            />
-            {/* <FieldWrapper title="Id клиента"
-                field={<>
-                    <input {...register("client", { required: true })} placeholder="ID клиента" autoComplete="off" disabled />
-                </>}
-            /> */}
             <FieldWrapper title="Описание"
                 field={<>
                     <textarea {...register("description", { required: true })} autoComplete="off" />
@@ -74,6 +64,10 @@ export default function CreateLeadForm({ clientId }: { clientId: number }) {
 }
 
 const onSubmit = (data: any, resetForm: any) => {
+    if (!data.deadline) {
+        toast.error(`Нужно заполнить все поля`)
+        return;
+    }
     fetch(
         "/api/leads/create",
         {

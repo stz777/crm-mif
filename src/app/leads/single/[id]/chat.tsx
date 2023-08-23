@@ -29,24 +29,22 @@ export default function Chat(props: { messages: MessageInterface[], essense_type
                 }
             ).then((data: any) => {
                 if (data.success) {
-                    // console.log(data.messages);
-                    setStateMessages(data.messages);
+                    if(data.messages){
+                        setStateMessages(data.messages);
+                    }else{
+                        toast.error("Что-то пошло не так #dmcdsdf9");
+                    }
                 } else {
                     toast.error("Что-то пошло не так #cjcds4j");
                 }
             })
-                .catch(error => {
+                .catch(_ => {
                     toast.error("Что-то пошло не так #ncdsj4dn");
                 });
             setTimeout(() => {
                 updateChat();
             }, 2000);
-            // await updateChat();
         })()
-        // setInterval(() => {
-        //     console.log('update');
-        //     fetch()
-        // }, 2000)
     }, [props])
     return <>
         <div className="card">

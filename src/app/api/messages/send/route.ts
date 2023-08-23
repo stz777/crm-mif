@@ -40,9 +40,9 @@ export async function POST(
         });
     }
 
-
-    noticeEmployees(essense_id);
-
+    if (typeof request.headers.get("origin") === "string") {
+        noticeEmployees(essense_id, String(request.headers.get("origin")));
+    }
 
     for (let index = 0; index < items.length; index++) {
         const [name, value]: any = items[index]
@@ -173,16 +173,18 @@ async function saveImageToDB(imageName: string, messageId: number) {
 }
 
 
-async function noticeEmployees(leadId: number) {
+async function noticeEmployees(leadId: number, domain: string) {
     const employees = await getEmployeesByLeadId(leadId);
-    console.log('employees', employees);
     if (employees) {
         for (let index = 0; index < employees.length; index++) {
             const { user_id, tg_chat_id } = employees[index];
-            console.log('user_id', user_id);
             if (tg_chat_id) {
-                sendMessageToTg(
+                await sendMessageToTg(
                     `Пришло сообщение в чат по заказу #${leadId}`,
+                    String(tg_chat_id)
+                );
+                await sendMessageToTg(
+                    `${domain}/leads/single/${leadId}`,
                     String(tg_chat_id)
                 );
             }
