@@ -3,11 +3,34 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { LeadInterface, PaymentInterface } from "@/app/components/types/lead";
 import getExpensesByLeadId from "./getExpensesByLeadId";
 
-export async function getLeads(): Promise<LeadInterface[]> {
+interface SearchParametersInterface {
+    id?: number
+    is_archive?: "true" | boolean
+}
+
+export async function getLeads(searchParams
+    ?: SearchParametersInterface
+): Promise<LeadInterface[]> {
+
+    const whereArr: string[] = [];
+
+    if (searchParams?.id) {
+        whereArr.push(`id = ${searchParams.id}`)
+    }
+    if (searchParams?.is_archive) {
+        whereArr.push(`done_at IS NOT NULL`)
+    } else {
+        whereArr.push(`done_at IS NULL`)
+    }
+
+    const whereString = whereArr.length ? "WHERE " + whereArr.join(" AND ") : "";
+
+    const qs = `SELECT * FROM leads ${whereString}`;
+
     const leads: LeadInterface[] = await new Promise(r => {
         pool.query(
-            "SELECT * FROM leads",
-            function (err: any, res: LeadInterface[]) {
+            qs,
+            function (err: any, res: any) {
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(
@@ -30,7 +53,6 @@ export async function getLeads(): Promise<LeadInterface[]> {
     }
     return leads;
 }
-
 
 async function getPaymentsByLeadId(leadId: number): Promise<PaymentInterface[]> {
     return await new Promise(r => {

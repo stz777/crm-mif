@@ -16,16 +16,6 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
     return <>
         <h1>Заказы</h1>
 
-        <button onClick={async () => {
-            fetch("/api/leads/get")
-                .then(
-                    async r => {
-                        const data = await r.json();
-                        setLeads(data.leads);
-                    }
-                )
-        }} className="btn btn-outline-dark">обновить</button>
-
         {leads ? <table className="table table-bordered">
             <thead>
                 <tr>
