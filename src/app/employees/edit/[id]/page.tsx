@@ -1,0 +1,83 @@
+import { Employee, EmployeeMeta } from "@/app/components/types/employee";
+import EditEmployeeForm from "./editEmployeeForm";
+import { pool } from "@/app/db/connect";
+import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+
+export default async function Page({ params }: { params: { id: number } }) {
+    const { id } = params;
+    const employee = await getEmployeeById(id);
+    const enployeeMeta = await getEmployeeMeta(id);
+    return <>
+        <h1>Редактирование сотрудника</h1>
+        <EditEmployeeForm
+            employee={employee}
+            employeeMeta={enployeeMeta}
+        />
+    </>
+}
+
+async function getEmployeeById(id: number): Promise<Employee> { // TODO удалить функции дубли
+    const employees: Employee = await new Promise((resolve) => {
+        pool.query(
+            "SELECT id, username, telegram_id, tg_chat_id, is_manager, is_active FROM employees WHERE id= ?",
+            [id],
+            function (err: any, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#dmsn*sfl",
+                                error: err,
+                                values: {}
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                if (!res?.length) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#dmsDkKsfl",
+                                error: "Запросили сотрудника, которого нет в базе",
+                                values: {}
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                resolve(res.pop());
+            }
+        )
+    });
+
+    return employees;
+
+}
+
+
+
+async function getEmployeeMeta(employeeId: number): Promise<EmployeeMeta[]> {
+    const employees: EmployeeMeta[] = await new Promise((resolve, reject) => {
+        pool.query(
+            "SELECT * FROM employees_meta WHERE employee_id = ?",
+            [employeeId],
+            function (err: any, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#dnsad3J8",
+                                error: err,
+                                values: { employeeId }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                    reject(false);
+                }
+                if (res) {
+                    resolve(res);
+                }
+            }
+        )
+    });
+    return employees;
+}

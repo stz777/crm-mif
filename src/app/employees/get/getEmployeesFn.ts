@@ -5,7 +5,7 @@ import { pool } from "@/app/db/connect";
 export async function getEmployees(): Promise<Employee[]> {
     const employees: Employee[] = await new Promise((resolve) => {
         pool.getConnection(function (err, conn) {
-            pool.query("SELECT id, username, telegram_id, tg_chat_id, is_manager FROM employees",
+            pool.query("SELECT id, username, telegram_id, tg_chat_id, is_manager, is_active FROM employees WHERE is_active = 1",
                 function (err: any, res: Employee[]) {
                     if (err) {
                         sendMessageToTg(
