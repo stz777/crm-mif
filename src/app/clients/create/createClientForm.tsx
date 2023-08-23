@@ -47,7 +47,7 @@ export default function CreateClientForm() {
             <FieldWrapper title="Email"
                 field={<>
                     {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите телеграм" {...register(`emails.${i}.email`, { required: true })} autoComplete="off" />
+                        <input placeholder="Введите email" {...register(`emails.${i}.email`, { required: true })} autoComplete="off" />
                         <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
@@ -57,7 +57,7 @@ export default function CreateClientForm() {
             <FieldWrapper title="Телеграм"
                 field={<>
                     {telegramFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите email" {...register(`telegram.${i}.telegram`, { required: true })} autoComplete="off" />
+                        <input placeholder="Введите телеграм" {...register(`telegram.${i}.telegram`, { required: true })} autoComplete="off" />
                         <div onClick={() => removeTelegram(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendTelegram({ telegram: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>

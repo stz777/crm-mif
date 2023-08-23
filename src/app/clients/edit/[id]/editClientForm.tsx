@@ -3,6 +3,7 @@
 import FieldWrapper from "@/app/ui/form/fieldWrapper";
 import { useFieldArray, useForm } from "react-hook-form";
 import { ClientInterface } from "../../get/page";
+import { toast } from "react-toastify";
 
 type FormValues = {
     fio: string
@@ -58,7 +59,7 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
             <FieldWrapper title="Email"
                 field={<>
                     {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите телеграм" {...register(`emails.${i}.email`, { required: true })} />
+                        <input placeholder="Введите email" {...register(`emails.${i}.email`, { required: true })} />
                         <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
@@ -75,11 +76,10 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
                 </>}
             />
 
-            <input type="submit" />
+            <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );
 }
-
 
 const onSubmit = (data: any, clientId: number) => {
     fetch(
@@ -89,16 +89,45 @@ const onSubmit = (data: any, clientId: number) => {
             body: JSON.stringify(data)
         }
     ).then(
-        x => x.json()
-    )
-        .then(x => {
-            console.log('x', x);
-        })
+        response => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new Error(response.statusText);
+            }
+        }
+    ).then(data => {
+        if (data.success) {
+            toast.success("Данные клиента изменены");
+        } else {
+            toast.error("Что-то пошло не так");
+        }
+    })
+        .catch(error => {
+            toast.error("Что-то пошло не так");
+            const statusText = String(error);
+            fetch(
+                `/api/bugReport`,
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: {
+                            err: "#jdsjfdn4n*d",
+                            data: {
+                                statusText,
+                                values: data
+                            }
+                        }
+                    })
+                }
+            )
+                .then(x => x.json())
+                .then(x => {
+                    console.log(x);
+                })
+        });
+
 }
-
-
-// fetch("/api/clients/edit/18",
-//     {
-//         method: "POST",
-//         body:JSON.stringify(null)
-//     })

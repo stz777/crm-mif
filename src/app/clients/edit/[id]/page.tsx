@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: { id: number } }) {
     const client = await getClient(id)
 
     return <>
-        <h1>Редактирование клиента {id}</h1>
+        <h1>Редактирование клиента #{id}</h1>
         <EditClientForm clientData={client} />
     </>
 }
