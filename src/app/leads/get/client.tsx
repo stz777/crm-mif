@@ -51,8 +51,8 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
                     <td>{(() => {
-                        const date1 = dayjs(lead.deadline);
-                        const date2 = dayjs(lead.created_date);
+                        const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0);
+                        const date2 = dayjs(lead.created_date).set("hour", 0).set("minute", 0);
                         const diffInDays = date1.diff(date2, 'day');
                         const limit = 1;
                         if (lead.done_at) return <span className="badge text-bg-success">выполнено</span>
@@ -63,30 +63,27 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     <td>{lead.description}</td>{/*description*/}
 
                     {props.is_manager && <td>
-                        <table >
+                        <ul className="list-group">
                             {lead.expensesPerLead?.map(expense =>
-                                <tr key={expense.id}>
-                                    <td>{expense.sum}</td>
-                                    <td>{expense.comment}</td>
-                                </tr>)}
+                                <li key={expense.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>{expense.sum}</div>
+                                    <div>{expense.comment}</div>
+                                </li>)}
 
-                            <tr>
+                            <li className="list-group-item">
                                 {(() => {
                                     let totalSum = 0;
-                                    if (lead.payments?.length) {
-                                        totalSum = lead.payments
+                                    if (lead.expensesPerLead?.length) {
+                                        totalSum = lead.expensesPerLead
                                             .map(({ sum }) => sum)
                                             .reduce((a, b) => a + b);
                                     }
                                     return <>
-                                        <td className="fw-bold">Σ</td>
-                                        <td className="fw-bold">{totalSum}</td>
+                                        <div className="fw-bold">Σ {totalSum}</div>
                                     </>
-                                })()}</tr>
-                        </table>
-
+                                })()}</li>
+                        </ul>
                         <div className="mt-2"><AddExpense lead_id={lead.id} /></div>
-
                     </td>}{/*expenses list*/}
                     {props.is_manager && <td>
                         <ul className="list-group">
