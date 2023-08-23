@@ -19,9 +19,6 @@ export default function CreatePurschaseForm(props: { task_id: number }) {
     const { register, handleSubmit, formState: { errors }, control, reset } = useForm<Inputs>({
         defaultValues: {
             task_id: props.task_id,
-            comment: "Закупили листов",
-            sum: 2400,
-            material: 1,
         }
     });
     return (
