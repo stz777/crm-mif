@@ -8,6 +8,8 @@ export async function POST(
     const resquestData = await request.json();
     if (resquestData.login) {
         const tg_chat_id = await getUserByTg(resquestData.login);
+        console.log('tg_chat_id', tg_chat_id);
+
         if (typeof tg_chat_id === "number") {
             const randomNumber = getRandomNumber(1000, 9999);
             const updated = await insertCodeToDb(randomNumber, tg_chat_id);
