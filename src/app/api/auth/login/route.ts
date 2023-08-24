@@ -50,12 +50,14 @@ export async function POST(
 
 async function getUserByTg(tgUsername: string) {
     console.log(`SELECT * FROM employees WHERE telegram_id = ${tgUsername}`);
-    
+
     return await new Promise(resolve => {
         pool.query(
             "SELECT * FROM employees WHERE telegram_id = ?",
             [tgUsername],
             function (err, res: any) {
+                console.log({ err, res });
+
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(
