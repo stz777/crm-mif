@@ -18,10 +18,12 @@ export async function POST(
                 )
                 return NextResponse.json({
                     success: true,
+                    err: "#dmsdidnneb"
                 });
             } else {
                 return NextResponse.json({
                     success: false,
+                    err: "#sndjdgJnb"
                 });
             }
         } else {
@@ -34,11 +36,13 @@ export async function POST(
             )
             return NextResponse.json({
                 success: false,
+                error: "#dndmdjsU"
             });
         }
     }
     return NextResponse.json({
         success: false,
+        error: "#mnfdj8dhsK"
     });
 }
 
