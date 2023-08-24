@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import CreateClientForm from "./createClientForm";
 import { getUserByToken } from "@/app/components/getUserByToken";
 
-export default async function Page(req: Request, res: Response) {
+export default async function Page(req: any, res: Response) {
     const auth = cookies().get('auth');
     const user = await getUserByToken(String(auth?.value));
     if (!user) return null;

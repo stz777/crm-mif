@@ -4,6 +4,8 @@ import { pool } from "@/app/db/connect";
 import dayjs from "dayjs";
 import CreatePurschaseForm from "./createPurchaseForm";
 import { PurchaseInterface } from "@/app/components/types/purchase";
+import { getPurchaseTaskById } from "./getPurchaseTaskById";
+import { getPurchasesByTaskId } from "./getPurchasesByTaskId";
 
 export default async function Page({ params }: { params: { task_id: number } }) {
     const { task_id } = params;
@@ -54,52 +56,3 @@ export default async function Page({ params }: { params: { task_id: number } }) 
     </>
 }
 
-export async function getPurchaseTaskById(task_id: number): Promise<PurchaseTaskInterface> {
-    return await new Promise(r => {
-        pool.query(`SELECT 
-            * FROM 
-            purchasing_tasks WHERE id = ?`,
-            [task_id],
-            function (err: any, res: any) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#dmdk4ndnN",
-                                error: err,
-                                values: { task_id }
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-                r(res?.pop());
-            })
-    });
-}
-
-export async function getPurchasesByTaskId(task_id: number): Promise<PurchaseInterface[]> {
-    return await new Promise(r => {
-        pool.query(`SELECT expenses_per_purchase_task.*, materials.name as material_name
-        FROM expenses_per_purchase_task
-        INNER JOIN materials
-        ON materials.id = expenses_per_purchase_task.materials
-        WHERE expenses_per_purchase_task.purchase_task = ?
-        `,
-            // pool.query("SELECT * FROM expenses_per_purchase_task WHERE id = ?",
-            [task_id],
-            function (err: any, res: any) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#djsmcs4ms",
-                                error: err,
-                                values: { task_id }
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-                r(res ? res : []);
-            })
-    });
-}

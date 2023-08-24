@@ -1,4 +1,4 @@
-import { getLeads } from "@/app/leads/get/page";
+import { getLeads } from "@/app/leads/get/getLeadsFn";
 import { NextResponse } from "next/server";
 
 export async function GET(

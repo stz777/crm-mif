@@ -18,7 +18,7 @@ export function RightsManagement({ leadId }: { leadId: number }) {
         } else {
             setEmployees(null);
         }
-    }, [open])
+    }, [open, leadId])
 
     if (!open) return <button className="btn btn-sm btn-outline-dark" onClick={() => setOpen(true)}>Права</button>
 

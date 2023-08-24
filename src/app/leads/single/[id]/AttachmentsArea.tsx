@@ -7,7 +7,7 @@ import { useState } from 'react';
 export default function AttachmentsArea({ attachments }: { attachments?: Media[] }) {
     if (!attachments) return null;
     return <>
-        {attachments.map(attachment => <div>
+        {attachments.map(attachment => <div key={attachment.id}>
             <ImageWrapper url={`/images/${attachment.name}`} />
         </div>)}
     </>

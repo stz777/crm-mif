@@ -1,7 +1,7 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { pool } from "@/app/db/connect";
-import dayjs from "dayjs";
 import { NextResponse } from "next/server";
+import { createNewRole } from "./createNewRole";
 
 export async function POST(
     request: Request,
@@ -84,29 +84,6 @@ async function getCurrentRole(employeeId: number, leadId: number) {
     })
 }
 
-export async function createNewRole(employeeId: number, leadId: number, role: string) {
-    return await new Promise(resolve => {
-        pool.query(
-            `INSERT INTO leads_roles (user,lead_id,role) VALUES (?,?,?)`,
-            [employeeId, leadId, role],
-            function (err, res: any) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#n3nd9v8dj",
-                                error: err,
-                                values: { employeeId, leadId }
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-
-                resolve(res?.insertId);
-            }
-        );
-    })
-}
 
 async function deleteCurrentRole(employeeId: number, leadId: number) {
     return await new Promise(resolve => {
