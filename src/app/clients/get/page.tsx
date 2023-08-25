@@ -10,7 +10,7 @@ export default async function Page() {
             <thead>
                 <tr className="sticky-top">
                     <th>id</th>
-                    <th>ФИО</th>
+                    <th>Наименование</th>
                     <th>Контакты</th>
                     <th />
                 </tr>

@@ -42,7 +42,7 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
 
             <FieldWrapper title="Имя клиента"
                 field={<>
-                    <input {...register("fio", { required: true })} placeholder="ФИО" />
+                    <input {...register("fio", { required: true })} placeholder="Наименование" />
                 </>}
             />
 

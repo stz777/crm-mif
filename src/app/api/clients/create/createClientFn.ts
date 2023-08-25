@@ -23,7 +23,7 @@ export default async function createClientFn(fio: string): Promise<number> {
                         [
                             `Создан новый клиент`,
                             `id: ${res.insertId}`,
-                            `ФИО:  ${fio}`
+                            `Наименование:  ${fio}`
                         ].join("\n"),
                         "5050441344"
                     )
