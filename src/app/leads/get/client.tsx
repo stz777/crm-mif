@@ -20,11 +20,14 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             if (!mount) return;
             await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
             const response = await fetchLeads(props.searchParams);
-            if (JSON.stringify(props.leads) !== JSON.stringify(response.leads)) setLeads(response.leads);
+            if (JSON.stringify(leads) !== JSON.stringify(response.leads)) {
+                setLeads(response.leads);
+            }
             await refreshData();
         })();
         return () => { mount = false; }
-    }, [])
+    }, [leads])
+
     return <>
         <h1>Заказы</h1>
 
