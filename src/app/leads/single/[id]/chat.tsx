@@ -13,13 +13,13 @@ export default function Chat(props: { messages: MessageInterface[], essense_type
         (async function updateChat() {
             if (!mounted) return;
             const newMessages = await fetchGetMessages(props.essense_type, props.essense_id);
-            setStateMessages(newMessages);
+            if (JSON.stringify(stateMessages) !== JSON.stringify(newMessages)) setStateMessages(newMessages);
             setTimeout(() => {
                 updateChat();
             }, 2000);
         })()
         return () => { mounted = false; }
-    }, [props])
+    }, [props, stateMessages])
     return <>
         <div className="card">
             <div className="card-body">
