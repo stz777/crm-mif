@@ -53,8 +53,8 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                 {leads.map(lead => <tr key={lead.id}>
                     <td><Link href={`/leads/single/${lead.id}`} className="text-nowrap">Заказ #{lead.id}</Link></td> {/*lead id*/}
                     <td>{lead.client}</td>{/*client id*/}
-                    <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
+                    <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {
                         const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0);
                         const date2 = dayjs(lead.created_date).set("hour", 0).set("minute", 0);
@@ -66,7 +66,6 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                         return <>{diffInDays}</>
                     })()}</td>
                     <td>{lead.description}</td>{/*description*/}
-
                     {props.is_manager && <td>
                         <ul className="list-group">
                             {lead.expensesPerLead?.map(expense =>
