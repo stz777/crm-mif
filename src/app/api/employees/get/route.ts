@@ -1,13 +1,11 @@
 import { getEmployees } from "@/app/employees/get/getEmployeesFn";
 import { NextResponse } from "next/server";
 
-export async function GET(
-    // request: Request,
-    // { params }: { params: { leadId: number } }
+export async function POST(
+    request: any,
 ) {
-
-    const employees = await getEmployees();
-
+    const data = await request.json();
+    const employees = await getEmployees(data.searchParams);
     return NextResponse.json({
         success: true,
         employees,

@@ -3,16 +3,18 @@ import Link from "next/link";
 import { Employee } from "@/app/components/types/employee";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Filter from "./filter";
 
-export default function Client(props: { employees: Employee[] }) {
+export default function Client(props: { employees: Employee[], searchParams: { is_active: 1 | 0 } }) {
     const [employees, setEmployees] = useState(props.employees);
+    const { searchParams } = props;
 
     useEffect(() => {
         let mount = true;
         (async function refreshData() {
             if (!mount) return;
             await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
-            const response = await fetchGetEmployees();
+            const response = await fetchGetEmployees(searchParams);
             if (JSON.stringify(employees) !== JSON.stringify(response.eemployees)) setEmployees(response.employees);
             await refreshData();
         })();
@@ -21,6 +23,7 @@ export default function Client(props: { employees: Employee[] }) {
 
     return <>
         <h1>Сотрудники</h1>
+        <Filter searchParams={searchParams}/>
         <table className="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -50,11 +53,12 @@ export default function Client(props: { employees: Employee[] }) {
     </>
 }
 
-async function fetchGetEmployees() {
+async function fetchGetEmployees(searchParams: { is_active: 1 | 0 }) {
     return fetch(
         "/api/employees/get",
         {
-            method: "GET",
+            method: "POST",
+            body: JSON.stringify(searchParams)
         }
     ).then(
         response => {

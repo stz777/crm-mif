@@ -2,11 +2,17 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { Employee, EmployeeMeta } from "@/app/components/types/employee";
 import { pool } from "@/app/db/connect";
 
-export async function getEmployees(): Promise<Employee[]> {
+export async function getEmployees(searchParams?: { is_active: 1 | 0 }): Promise<Employee[]> {
+    let is_active = 1;
+    if (typeof searchParams?.is_active === "number") {
+        is_active = searchParams.is_active;
+    }
     const employees: Employee[] = await new Promise((resolve) => {
         pool.getConnection(function (err, conn) {
-            pool.query("SELECT id, username, telegram_id, tg_chat_id, is_manager, is_active FROM employees WHERE is_active = 1",
-                function (err: any, res: Employee[]) {
+            pool.query(
+                "SELECT id, username, telegram_id, tg_chat_id, is_manager, is_active FROM employees WHERE is_active = ?",
+                [is_active],
+                function (err: any, res: any) {
                     if (err) {
                         sendMessageToTg(
                             JSON.stringify(
