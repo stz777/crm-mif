@@ -4,10 +4,14 @@ import { pool } from "@/app/db/connect"
 export default async function getMessagesByLeadId(leadId: number): Promise<MessageInterface[] | false> {
     const messages: MessageInterface[] | false = await new Promise((resolve) => {
         pool.query(
-            `SELECT messages.id, messages.text, messages.text, messages.created_date, employees.username
-             FROM messages 
+            `SELECT 
+                messages.id, messages.text, messages.text, messages.created_date, employees.username, leads_roles.role
+             FROM 
+                messages 
              LEFT JOIN (employees)
              ON (employees.id = messages.sender)
+             LEFT JOIN (leads_roles)
+             ON (leads_roles.user = employees.id)
              WHERE messages.essense = 'lead' AND messages.essense_id=?
              ORDER BY messages.id DESC
              `,
@@ -69,6 +73,7 @@ export interface MessageInterface {
     username: string
     created_date: string
     attachments?: Media[]
+    role: string
 }
 
 export interface Media {
