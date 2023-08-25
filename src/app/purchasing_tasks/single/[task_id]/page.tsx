@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: { task_id: number } }) 
                                 <td className="text-nowrap">{dayjs(purchase.created_date).format("DD.MM.YYYY HH:mm")}</td>
                                 <td>{purchase.sum}</td>
                                 <td>{purchase.comment}</td>
-                                <td>{purchase.material_name} (#{purchase.materials})</td>
+                                <td>{purchase.material_name} (арт. {purchase.materials})</td>
                             </tr>)}
                         </tbody>
                     </table> : <>нет закупок</>}
