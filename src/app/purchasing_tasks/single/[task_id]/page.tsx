@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: { task_id: number } }) 
     return <Client combinedPurchaseTaskData={combinedPurchaseTaskData} />
 }
 
-async function getPurchaseTaskData(task_id: number) {
+export async function getPurchaseTaskData(task_id: number) {
     const task = await getPurchaseTaskById(task_id);
     const purchases = await getPurchasesByTaskId(task_id);
     return {

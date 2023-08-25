@@ -28,7 +28,7 @@ async function fetchClosePurchaseTask(purchaseTaskId: number) {
             }
         ).then(data => {
             if (data.success) {
-                toast.success("Сотрудник создан");
+                toast.success("Задача закрыта");
             } else {
                 toast.error("Что-то пошло не так");
             }

@@ -4,6 +4,8 @@ import { PurchaseTaskInterface } from "@/app/components/types/purchaseTask"
 import TaskCloser from "./taskCloser"
 import dayjs from "dayjs"
 import CreatePurschaseForm from "./createPurchaseForm"
+import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 
 export default function Client(props: {
     combinedPurchaseTaskData: {
@@ -12,14 +14,32 @@ export default function Client(props: {
     }
 }) {
 
-    const { task, purchases, } = props.combinedPurchaseTaskData;
+    const [combinedPurchaseTaskData, setCombinedPurchaseTaskData] = useState(props.combinedPurchaseTaskData)
+
+    useEffect(() => {
+        let mounted = true;
+        (async function refresh() {
+            if (!mounted) return;
+            await new Promise(r => setTimeout(() => {
+                r(1)
+            }, 2000));
+            const newTaskData = await fetchGetTaskData(task.id);
+            if (JSON.stringify(newTaskData) !== JSON.stringify(combinedPurchaseTaskData)) setCombinedPurchaseTaskData(newTaskData);
+            setTimeout(() => {
+                refresh();
+            }, 2000);
+        })()
+        return () => { mounted = false; }
+    }, []);
+
+    const { task, purchases, } = combinedPurchaseTaskData;
     const { id: task_id } = task;
 
     return <>
         <h1>Задача-закупка #{task_id}</h1>
-        <div className="mb-3">
+        {!task.done_at && <div className="mb-3">
             <TaskCloser task_id={task_id} />
-        </div>
+        </div>}
         <>
             <table className="table table-bordered w-auto">
                 <tbody>
@@ -61,4 +81,32 @@ export default function Client(props: {
     </>
 }
 
-// { task, purchases }
+async function fetchGetTaskData(task_id: number) {
+    return await fetch(
+        `/api/purchasing_tasks/get/${task_id}`,
+        {
+            method: "GET",
+        }
+    ).then(
+        response => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new Error(response.statusText);
+            }
+        }
+    ).then((data: any) => {
+        if (data.success) {
+            if (data.purchaseTaskData) {
+                return data.purchaseTaskData;
+            } else {
+                toast.error("Что-то пошло не так #cndsd3n");
+            }
+        } else {
+            toast.error("Что-то пошло не так #dmcds8s");
+        }
+    })
+        .catch(_ => {
+            toast.error("Что-то пошло не так #chd8sy3");
+        });
+}
