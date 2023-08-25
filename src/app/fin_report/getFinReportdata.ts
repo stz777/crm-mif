@@ -1,13 +1,15 @@
 import { sendMessageToTg } from "../api/bugReport/sendMessageToTg";
-import { ExpensesPerLeadInterface, PaymentInterface } from "../components/types/lead";
+import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../components/types/lead";
 import { pool } from "../db/connect";
 
 export default async function getFinReportdata() {
     const payments = await getPayments();
     const expensesPerLead = await getExpensesPerLead();
+    const expenses_per_purchase_task = await getExpensesPerPurchaseTask()
     return {
         payments,
-        expensesPerLead
+        expensesPerLead,
+        expenses_per_purchase_task
     };
 }
 
@@ -41,6 +43,26 @@ async function getExpensesPerLead(): Promise<ExpensesPerLeadInterface[]> {
                         JSON.stringify({
                             error: err,
                             code: "#d8djdn3n3"
+                        }, null, 2),
+                        "5050441344"
+                    )
+                }
+                resolve(res ? res : []);
+            }
+        )
+    })
+}
+
+async function getExpensesPerPurchaseTask(): Promise<ExpensesPePerPurchaseTaskInterface[]> {
+    return await new Promise(resolve => {
+        pool.query(
+            "SELECT * FROM expenses_per_purchase_task",
+            function (err: any, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify({
+                            error: err,
+                            code: "#dmsnanNjdu8"
                         }, null, 2),
                         "5050441344"
                     )

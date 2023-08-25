@@ -17,7 +17,6 @@ export default function Client(props: { reportData: any }) {
             await refresh();
         })();
         return () => { mount = false; }
-
     }, [props, reportData])
 
 
@@ -28,14 +27,23 @@ export default function Client(props: { reportData: any }) {
         totalPayments = 0;
     }
 
-    let totalExpenses;
+    let totalExpensesPerLeads;
     if (reportData?.expensesPerLead?.length) {
-        totalExpenses = reportData.expensesPerLead.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
+        totalExpensesPerLeads = reportData.expensesPerLead.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
     } else {
-        totalExpenses = 0;
+        totalExpensesPerLeads = 0;
     }
 
-    const profit = totalPayments - totalExpenses;
+    let totalExpensesPerPurchaseTaskInterface;
+    if (reportData?.expenses_per_purchase_task?.length) {
+        totalExpensesPerPurchaseTaskInterface = reportData.expenses_per_purchase_task.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
+    } else {
+        totalExpensesPerPurchaseTaskInterface = 0;
+    }
+
+    const balance = totalPayments - totalExpensesPerPurchaseTaskInterface;
+
+    const profit = totalPayments - totalExpensesPerLeads;
 
     return <>
         <h1>Отчет</h1>
@@ -45,17 +53,20 @@ export default function Client(props: { reportData: any }) {
                     <th>Доходы</th>
                     <th>Расходы</th>
                     <th>Прибыль</th>
+                    <th>Закупки</th>
+                    <th>Баланс</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>{totalPayments}</td>
-                    <td>{totalExpenses}</td>
+                    <td>{totalExpensesPerLeads}</td>
                     <td>{profit}</td>
+                    <td>{totalExpensesPerPurchaseTaskInterface}</td>
+                    <td>{balance}</td>
                 </tr>
             </tbody>
         </table>
-        {/* <pre>{JSON.stringify(reportData, null, 2)}</pre> */}
     </>
 }
 

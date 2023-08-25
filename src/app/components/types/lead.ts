@@ -24,3 +24,9 @@ export interface ExpensesPerLeadInterface {
     sum: number
     comment: string
 }
+
+export interface ExpensesPePerPurchaseTaskInterface {
+    id: number
+    sum: number
+    comment: string
+}
