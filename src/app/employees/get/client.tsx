@@ -17,7 +17,7 @@ export default function Client(props: { employees: Employee[] }) {
             await refreshData();
         })();
         return () => { mount = false; }
-    }, [])
+    }, [employees])
 
     return <>
         <h1>Сотрудники</h1>
