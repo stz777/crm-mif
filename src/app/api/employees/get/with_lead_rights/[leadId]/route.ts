@@ -24,7 +24,9 @@ async function getEmployeesByLeadId(leadId: number): Promise<Employee[] | false>
             `SELECT employees.id as user_id, leads_roles.role, employees.username
             FROM employees 
             LEFT JOIN (leads_roles)
-            ON (employees.id = leads_roles.user AND leads_roles.lead_id = ?)`,
+            ON (employees.id = leads_roles.user AND leads_roles.lead_id = ?)
+            WHERE employees.is_active = 1
+            `,
             [leadId],
             function (err, result: any[]) {
                 if (err) {
