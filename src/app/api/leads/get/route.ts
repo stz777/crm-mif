@@ -1,12 +1,12 @@
 import { getLeads } from "@/app/leads/get/getLeadsFn";
 import { NextResponse } from "next/server";
 
-export async function GET(
+export async function POST(
     request: Request,
-    { params }: { params: { id: number } }
 ) {
 
-    const leads = await getLeads();
+    const searchParams = await await request.json();
+    const leads = await getLeads(searchParams);
 
     return NextResponse.json({
         success: true,

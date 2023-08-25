@@ -18,6 +18,6 @@ export default async function Page(props: any) {
     const is_boss = [1, 2].includes(Number(user?.id));
     return <>
         <Filter searchParams={searchParams}/>
-        <Client leads={leads} is_manager={!!user?.is_manager} is_boss={is_boss} />
+        <Client leads={leads} is_manager={!!user?.is_manager} is_boss={is_boss} searchParams={searchParams}/>
     </>
 }

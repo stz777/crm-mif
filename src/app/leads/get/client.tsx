@@ -8,11 +8,23 @@ import { LeadInterface } from "@/app/components/types/lead";
 import { Add_Payment } from "./add_payment";
 import { FaCheck } from "react-icons/fa"
 import dayjs from 'dayjs'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddExpense } from "./addExpense";
+import { toast } from "react-toastify";
 
-export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean }) {
+export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean, searchParams: any }) {
     const [leads, setLeads] = useState(props.leads)
+    useEffect(() => {
+        let mount = true;
+        (async function refreshData() {
+            if (!mount) return;
+            await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
+            const response = await fetchLeads(props.searchParams);
+            if (JSON.stringify(props.leads) !== JSON.stringify(response.leads)) setLeads(response.leads);
+            await refreshData();
+        })();
+        return () => { mount = false; }
+    }, [])
     return <>
         <h1>Заказы</h1>
 
@@ -149,4 +161,56 @@ function CheckPaymentUI(props: { done: boolean }) {
     }}>
         {props.done && <FaCheck color="red" />}
     </div>
+}
+
+async function fetchLeads(searchParams: any) {
+    return fetch(
+        "/api/leads/get",
+        {
+            method: "POST",
+            body: JSON.stringify(searchParams)
+        }
+    ).then(
+        response => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new Error(response.statusText);
+            }
+        }
+    ).then(data => {
+        if (data.success) {
+            if (!data.leads) {
+                toast.error("Что-то пошло не так #dnajsd3J");
+            }
+            return data;
+        } else {
+            toast.error("Что-то пошло не так #mdnasdj3");
+        }
+    })
+        .catch(error => {
+            const statusText = String(error);
+            fetch(
+                `/api/bugReport`,
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: {
+                            err: "#dnsdcds8",
+                            data: {
+                                statusText,
+                                values: {}
+                            }
+                        }
+                    })
+                }
+            )
+                .then(x => x.json())
+                .then(x => {
+                    console.log(x);
+                })
+        })
 }
