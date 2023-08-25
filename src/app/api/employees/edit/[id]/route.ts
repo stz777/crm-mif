@@ -40,7 +40,10 @@ async function updateEmployeeMeta(employee: number, data_type: string, data: str
                         JSON.stringify(
                             {
                                 errorNo: "#dmdsm9NJhdyr",
-                                error: err,
+                                error: {
+                                    err,
+                                    'текст':"в бд у пользователя не созданы контакты"
+                                },
                                 values: { data, data_type, employee }
                             }, null, 2),
                         "5050441344"
