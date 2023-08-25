@@ -79,7 +79,7 @@ const onSubmit = (data: any, resetForm: any, close: any) => {
                     },
                     body: JSON.stringify({
                         text: {
-                            err: "#admck3jm",
+                            err: "#adcmck3jm",
                             data: {
                                 statusText,
                                 values: data

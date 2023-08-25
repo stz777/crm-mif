@@ -6,6 +6,7 @@ import CreatePurschaseForm from "./createPurchaseForm";
 import { PurchaseInterface } from "@/app/components/types/purchase";
 import { getPurchaseTaskById } from "./getPurchaseTaskById";
 import { getPurchasesByTaskId } from "./getPurchasesByTaskId";
+import TaskCloser from "./taskCloser";
 
 export default async function Page({ params }: { params: { task_id: number } }) {
     const { task_id } = params;
@@ -15,6 +16,10 @@ export default async function Page({ params }: { params: { task_id: number } }) 
 
     return <>
         <h1>Задача-закупка #{task_id}</h1>
+        <div>
+            <TaskCloser task_id={task_id} />
+            
+        </div>
         <>
             <table className="table table-bordered w-auto">
                 <tbody>
@@ -43,7 +48,7 @@ export default async function Page({ params }: { params: { task_id: number } }) 
                         <tbody>
                             {purchases.map(purchase => <tr key={purchase.id}>
                                 <td>{purchase.id}</td>
-                                <td className="text-nowrap">{dayjs(purchase.created_date).format("DD.MM.YYYY HH:mm")}</td>
+                                <td className="text-nowrap">{dayjs(purchase.created_date).format("DD.MM.YYYY")}</td>
                                 <td>{purchase.sum}</td>
                                 <td>{purchase.comment}</td>
                                 <td>{purchase.material_name} (арт. {purchase.materials})</td>
@@ -55,4 +60,5 @@ export default async function Page({ params }: { params: { task_id: number } }) 
         </>
     </>
 }
+
 
