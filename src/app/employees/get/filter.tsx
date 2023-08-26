@@ -46,7 +46,7 @@ export default function Filter(props: { searchParams: { is_active: number } }) {
                             />
                         </div>
                     </div>
-                    <button className="btn btn-sm btn-outline-dark mt-2">фильтр</button>
+                    <button className="btn btn-sm btn-outline-dark mt-2 me-2">фильтр</button>
                 </div>
             </div>
         </form>

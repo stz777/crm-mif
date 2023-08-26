@@ -50,7 +50,7 @@ export default function Filter(props: any) {
                             />
                         </div>
                     </div>
-                    <button className="btn btn-sm btn-outline-dark mt-2">фильтр</button>
+                    <button className="btn btn-sm btn-outline-dark mt-2 me-2">фильтр</button>
                     <div className="btn btn-sm btn-outline-dark mt-2"
                         onClick={() => {
                             const { origin, pathname } = window.location;
