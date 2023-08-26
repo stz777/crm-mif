@@ -63,7 +63,7 @@ function RightsForm({ role, employeeId, leadId }: { role: string | null, employe
         ['Нет прав', "no_rights"],
         ['Исполнитель', 'executor'],
         ['Контроллер', 'inspector'],
-        ['Так, посмотреть', 'viewer'],
+        ['Наблюдатель', 'viewer'],
     ];
 
     return <>
