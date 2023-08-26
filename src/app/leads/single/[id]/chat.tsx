@@ -6,7 +6,7 @@ import { MessageInterface } from "./getMessagesByLeadId";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 
-export default function Chat(props: { messages: MessageInterface[], essense_type: "lead" | "something_else", essense_id: number }) {
+export default function Chat(props: { messages: MessageInterface[], essense_type: "lead" | "purchase_task", essense_id: number }) {
     const [stateMessages, setStateMessages] = useState(props.messages);
     useEffect(() => {
         let mounted = true;

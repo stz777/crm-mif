@@ -2,6 +2,7 @@ import { getPurchaseTaskById } from "./getPurchaseTaskById";
 import { getPurchasesByTaskId } from "./getPurchasesByTaskId";
 import Client from "./client";
 import getMessagesByTaskId from "./getMessagesByTaskId";
+import Chat from "@/app/leads/single/[id]/chat";
 
 export default async function Page({ params }: { params: { task_id: number } }) {
     const { task_id } = params;
@@ -9,10 +10,9 @@ export default async function Page({ params }: { params: { task_id: number } }) 
 
     const messages = await getMessagesByTaskId(params.task_id);
 
-
     return <>
         <Client combinedPurchaseTaskData={combinedPurchaseTaskData} />
-        <pre>{JSON.stringify(messages, null, 2)}</pre>
+        <Chat messages={messages} essense_type="purchase_task" essense_id={task_id} />
     </>
 }
 
