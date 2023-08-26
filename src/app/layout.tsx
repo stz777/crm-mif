@@ -72,7 +72,7 @@ async function NavBar() {
       </div>
       <div className="me-2">
         {<Link href="/projects/create" className="btn btn-sm btn-outline-dark mb-2">Создать проект</Link>}<br />
-        {/* {<Link href="/suppliers/get" className="btn btn-sm btn-outline-dark ">Список поставщиков</Link>} */}
+        {<Link href="/projects/get" className="btn btn-sm btn-outline-dark ">Список проектов</Link>}
       </div>
     </div>
   </div>
