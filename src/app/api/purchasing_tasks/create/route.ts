@@ -1,14 +1,15 @@
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
+import { getUserByToken } from "@/app/components/getUserByToken";
+import { cookies } from "next/headers";
 
 export async function POST(
     request: Request,
 ) {
     const data = await request.json();
     const { title, comment, deadline } = data;
-    const success = await new Promise(resolve => {
-
+    const new_task_id:number = await new Promise(resolve => {
         pool.query(
             `INSERT INTO purchasing_tasks (title, comment, deadline) VALUES (?,?,?)`,
             [title, comment, deadline],
@@ -35,7 +36,24 @@ export async function POST(
         );
     });
 
-    if (success) {
+    console.log('new_task_id', new_task_id);
+
+
+    if(!new_task_id){
+
+    }
+
+    const auth = cookies().get('auth');
+    const user = await getUserByToken(String(auth?.value));
+
+    if (user) {
+        await setUserPermissionInTask(user.id, new_task_id, "inspector");
+        await setUserPermissionInTask(1, new_task_id, "inspector");
+    }
+
+
+
+    if (new_task_id) {
         return NextResponse.json({
             success: true,
         });
@@ -44,4 +62,31 @@ export async function POST(
             success: false,
         });
     }
+}
+
+
+async function setUserPermissionInTask(employeeId: number, task_id: number, role: "inspector" | "executor" | "viewer" | "no_rights") {
+
+    return await new Promise(resolve => {
+        pool.query(
+            `INSERT INTO purchasing_task_roles (user,task,role) VALUES (?,?,?)`,
+            [employeeId, task_id, role],
+            function (err, res: any) {
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#asdmN7sm4nsS",
+                                error: err,
+                                values: { employeeId, task_id }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+
+                resolve(res?.insertId);
+            }
+        );
+    })
+
 }
