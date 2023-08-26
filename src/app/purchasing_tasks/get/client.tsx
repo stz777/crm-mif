@@ -6,8 +6,9 @@ import Link from "next/link";
 import TaskCloser from "../single/[task_id]/taskCloser";
 import { RightsManagement } from "./righsManagement/rightsManagement";
 import { toast } from "react-toastify";
+import Filter from "./filter";
 
-export default function Client(props: { purchaseTasks: PurchaseTaskInterface[]; is_boss: boolean, searchParams: {} }) {
+export default function Client(props: { purchaseTasks: PurchaseTaskInterface[]; is_boss: boolean, searchParams: any }) {
     const [purchaseTasks, setPurchaseTasks] = useState(props.purchaseTasks);
     useEffect(() => {
         let mount = true;
@@ -22,6 +23,7 @@ export default function Client(props: { purchaseTasks: PurchaseTaskInterface[]; 
     }, [purchaseTasks])
     return <>
         <h1>Список задач-закупок</h1>
+        <Filter searchParams={props.searchParams}/>
         <table className="table table-bordered table-striped">
             <thead>
                 <tr>
