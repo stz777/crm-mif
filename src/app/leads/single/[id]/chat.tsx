@@ -20,13 +20,22 @@ export default function Chat(props: { messages: MessageInterface[], essense_type
         })()
         return () => { mounted = false; }
     }, [props, stateMessages])
+
+
     return <>
         <div className="card">
             <div className="card-body">
                 {stateMessages.map(message =>
                     <div key={message.id} className='border border-dsrk mb-5 p-1' style={{ maxWidth: "400px" }}>
-                        <div className="text-dark fw-bold">{message.username} ({roleTranslator[message.role] || JSON.stringify(message.role)})</div> {/*username*/}
-                        <div className="">{dayjs(message.created_date).format("DD.MM.YYYY HH.mm")}</div> {/*username*/}
+
+                        <div className="d-flex justify-content-between">
+                            <div className="text-dark fw-bold">
+                                {message.username} ({roleTranslator[message.role] || JSON.stringify(message.role)})
+                            </div> {/*username*/}
+                            <div className="ms-4 text-nowrap">{dayjs(message.created_date).format("DD.MM.YYYY HH.mm")}</div> {/*username*/}
+                        </div>
+
+
                         <pre
                             style={{
                                 fontSize: "inherit", marginBottom: "0"
@@ -77,4 +86,5 @@ async function fetchGetMessages(essense: string, essense_id: number) {
 export const roleTranslator: any = {
     inspector: "Контроллер",
     executor: "Исполнитель",
+    viewer: "Наблюдатель",
 }

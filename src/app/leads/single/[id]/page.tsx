@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: { id: number } }) {
         <table className='table bable-cordered w-auto'>
             <tbody>
                 <tr><td>номер</td><td>{lead.id}</td></tr>
-                <tr><td>заголовок</td><td>{lead.title}</td></tr>
+                {/* <tr><td>заголовок</td><td>{lead.title}</td></tr> */}
                 <tr><td>описание</td><td>{lead.description}</td></tr>
                 <tr><td>дата создания</td><td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td></tr>
                 <tr><td>дедлайн</td><td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td></tr>

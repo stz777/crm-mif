@@ -5,13 +5,13 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
     const messages: MessageInterface[] | false = await new Promise((resolve) => {
         pool.query(
             `SELECT 
-                messages.id, messages.text, messages.text, messages.created_date, employees.username, leads_roles.role
+                messages.id, messages.text, messages.text, messages.created_date, employees.username,employees.id as user_id, leads_roles.role
              FROM 
                 messages 
              LEFT JOIN (employees)
              ON (employees.id = messages.sender)
              LEFT JOIN (leads_roles)
-             ON (leads_roles.user = employees.id)
+             ON (leads_roles.user = employees.id AND leads_roles.lead_id = ${leadId})
              WHERE messages.essense = 'lead' AND messages.essense_id=?
              ORDER BY messages.id DESC
              `,
