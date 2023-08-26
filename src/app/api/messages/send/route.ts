@@ -183,7 +183,7 @@ async function noticeEmployees(essense: string, leadId: number, domain: string) 
             const { user_id, tg_chat_id } = employees[index];
             if (tg_chat_id) {
                 await sendMessageToTg(
-                    `Пришло сообщение в ${translator[essense].name} по заказу #${leadId}`,
+                    `Пришло сообщение в ${translator[essense].name}  #${leadId}`,
                     String(tg_chat_id)
                 );
                 await sendMessageToTg(
