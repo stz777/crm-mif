@@ -6,6 +6,8 @@ import dayjs from "dayjs"
 import CreatePurschaseForm from "./createPurchaseForm"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
+import Chat from "@/app/leads/single/[id]/chat"
+import MessageForm from "./messageForm"
 
 export default function Client(props: {
     combinedPurchaseTaskData: {
@@ -76,6 +78,8 @@ export default function Client(props: {
                         </tbody>
                     </table> : <>нет закупок</>}
                 </div>
+                <MessageForm task_id={task.id} />
+                {/* <Chat /> */}
             </div>
         </>
     </>

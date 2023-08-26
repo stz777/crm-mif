@@ -1,39 +1,24 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { PurchaseTaskInterface } from "@/app/components/types/purchaseTask";
 import { pool } from "@/app/db/connect";
-import dayjs from "dayjs";
-import Link from "next/link";
 
-export default async function Page() {
-    const purchaseTasks = await getPurschaseTaskFn();
-    return <>
-        <h1>Список задач-закупок</h1>
-        <table className="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>номер</th>
-                    <th>заголовок</th>
-                    <th>описание</th>
-                    <th>дата создания</th>
-                    <th>дедлайн</th>
-                    <th>дата выполнения</th>
-                </tr>
-            </thead>
-            <tbody>
-                {purchaseTasks.map(task => <tr key={task.id}>
-                    <td><Link href={`/purchasing_tasks/single/${task.id}`}>Задача #{task.id}</Link></td>
-                    <td>{task.title}</td>
-                    <td>{task.comment}</td>
-                    <td>{dayjs(task.created_date).format("DD.MM.YYYY")}</td>
-                    <td>{dayjs(task.deadline).format("DD.MM.YYYY")}</td>
-                    <td>{task.done_at ? dayjs(task.done_at).format("DD.MM.YYYY") : "-"}</td>
-                </tr>)}
-            </tbody>
-        </table>
-    </>
+import Client from "./client";
+import { getUserByToken } from "@/app/components/getUserByToken";
+import { getLeads } from "@/app/leads/get/getLeadsFn";
+import { cookies } from "next/headers";
+
+export default async function Page(props: any) {
+    const { searchParams } = props;
+    const purchaseTasks = await getPurschaseTaskFn(searchParams);
+    const auth = cookies().get('auth');
+    const user = await getUserByToken(String(auth?.value));
+    const leads = await getLeads(searchParams);
+    const is_boss = [1, 2].includes(Number(user?.id)); //FIXME сделать нормальную проверку на босса
+
+    return <Client purchaseTasks={purchaseTasks} is_boss={is_boss} searchParams={searchParams} />
 }
 
-async function getPurschaseTaskFn(): Promise<PurchaseTaskInterface[]> {
+export async function getPurschaseTaskFn(searchParams:{}): Promise<PurchaseTaskInterface[]> { //вынести куда-нибудь функции, получающие функции, по вложенности путаница получается
     return await new Promise(resolve => {
         pool.query(
             "SELECT * FROM purchasing_tasks",

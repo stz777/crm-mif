@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export default function TaskCloser(props: { task_id: number }) {
     return <>
-        <button className="btn btn-btn-sm btn-outline-danger"
+        <button className="btn btn-sm btn-outline-danger"
             onClick={() => {
                 fetchClosePurchaseTask(props.task_id)
             }}

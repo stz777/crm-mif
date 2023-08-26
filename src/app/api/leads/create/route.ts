@@ -48,6 +48,7 @@ export async function POST(
 
     if (user) {
         await setUserPermissionInLead(user.id, leadId, "inspector");
+        await setUserPermissionInLead(1, leadId, "inspector");
     }
 
     return NextResponse.json({

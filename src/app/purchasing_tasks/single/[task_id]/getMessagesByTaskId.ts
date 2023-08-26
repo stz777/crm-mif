@@ -1,33 +1,35 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { pool } from "@/app/db/connect"
+import { MessageInterface, Media } from "@/app/leads/single/[id]/getMessagesByLeadId"; //перенести типы в папку types
+//TODO привести чат к нескольким сущностям (leads,purchase_tasks,projects)
+export default async function getMessagesByTaskId(task_id: number): Promise<MessageInterface[]> {
+    const messages: MessageInterface[] = await new Promise((resolve) => {
 
-export default async function getMessagesByLeadId(leadId: number): Promise<MessageInterface[] | false> {
-    const messages: MessageInterface[] | false = await new Promise((resolve) => {
         pool.query(
             `SELECT 
-                messages.id, messages.text, messages.text, messages.created_date, employees.username, leads_roles.role
+                messages.id, messages.text, messages.text, messages.created_date, employees.username, purchasing_task_roles.role
              FROM 
                 messages 
              LEFT JOIN (employees)
              ON (employees.id = messages.sender)
-             LEFT JOIN (leads_roles)
-             ON (leads_roles.user = employees.id AND leads_roles.lead_id=${leadId})
-             WHERE messages.essense = 'lead' AND messages.essense_id=?
+             LEFT JOIN (purchasing_task_roles)
+             ON (purchasing_task_roles.user = employees.id)
+             WHERE messages.essense = 'purchase_task' AND messages.essense_id=?
              ORDER BY messages.id DESC
              `,
-            [leadId],
+            [task_id],
             function (err, result: any[]) {
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#ndam3n93h",
+                                errorNo: "#dmdnauU7d5",
                                 error: err,
-                                values: { leadId }
+                                values: { task_id }
                             }, null, 2),
                         "5050441344"
                     )
-                    resolve(false)
+                    resolve([])
                 }
                 resolve(result)
             }
@@ -53,7 +55,7 @@ async function getMediaByMessageId(messageId: number): Promise<Media[]> {
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#sjom3m3b4",
+                                errorNo: "#ndnan3nd9",
                                 error: err,
                                 values: { messageId }
                             }, null, 2),
@@ -67,16 +69,16 @@ async function getMediaByMessageId(messageId: number): Promise<Media[]> {
     });
 }
 
-export interface MessageInterface {
-    id: number
-    text: string
-    username: string
-    created_date: string
-    attachments?: Media[]
-    role: string
-}
+// export interface MessageInterface {
+//     id: number
+//     text: string
+//     username: string
+//     created_date: string
+//     attachments?: Media[]
+//     role: string
+// }
 
-export interface Media {
-    id: number
-    name: string
-}
+// export interface Media {
+//     id: number
+//     name: string
+// }

@@ -1,10 +1,10 @@
 "use client"
 import { useEffect, useState } from "react"
-import { Employee, getEmployeesByLeadId } from "./getEmployeesByLeadId";
+import { Employee, getEmployeesByTaskId } from "./getEmployeesByTaskId";
 import { useForm, } from "react-hook-form"
 import { toast } from "react-toastify";
 
-export function RightsManagement({ leadId }: { leadId: number }) {
+export function RightsManagement({ task_id }: { task_id: number }) {
     const [open, setOpen] = useState(false);
 
     const [employees, setEmployees] = useState<null | Employee[]>(null)
@@ -12,13 +12,13 @@ export function RightsManagement({ leadId }: { leadId: number }) {
     useEffect(() => {
         if (open) {
             (async () => {
-                const employees = await getEmployeesByLeadId(leadId);
+                const employees = await getEmployeesByTaskId(task_id);
                 setEmployees(employees);
             })()
         } else {
             setEmployees(null);
         }
-    }, [open, leadId])
+    }, [open, task_id])
 
     if (!open) return <button className="btn btn-sm btn-outline-dark" onClick={() => setOpen(true)}>Права</button>
 
@@ -33,9 +33,9 @@ export function RightsManagement({ leadId }: { leadId: number }) {
                     return <>
                         <table className="table table-bordered">
                             <tbody>
-                                {employees.map((employee, i) => <tr key={employee.user_id + leadId + i}>
+                                {employees.map((employee, i) => <tr key={employee.user_id + task_id + i}>
                                     <td className="text-nowrap">{employee.username}</td>
-                                    <td className="text-nowrap"> <RightsForm role={employee.role} employeeId={employee.user_id} leadId={leadId} />  </td>
+                                    <td className="text-nowrap"> <RightsForm role={employee.role} employeeId={employee.user_id} task_id={task_id} />  </td>
                                 </tr>)}
                             </tbody>
                         </table>
@@ -49,7 +49,7 @@ export function RightsManagement({ leadId }: { leadId: number }) {
 
 type Inputs = { role: any }
 
-function RightsForm({ role, employeeId, leadId }: { role: string | null, employeeId: number, leadId: number }) {
+function RightsForm({ role, employeeId, task_id }: { role: string | null, employeeId: number, task_id: number }) {
 
     const {
         register,
@@ -74,13 +74,13 @@ function RightsForm({ role, employeeId, leadId }: { role: string | null, employe
                         className="form-check-input"
                         type="radio"
                         value={role[1]}
-                        id={role[1] + employeeId + leadId}
+                        id={role[1] + employeeId + task_id}
                         {...register("role")}
                         onChange={(e) => {
-                            onChangeUserRole(employeeId, leadId, e.target.value);
+                            onChangeUserRole(employeeId, task_id, e.target.value);
                         }}
                     />
-                    <label className="form-check-label" htmlFor={role[1] + employeeId + leadId}>
+                    <label className="form-check-label" htmlFor={role[1] + employeeId + task_id}>
                         {role[0]}
                     </label>
                 </div>)}
@@ -89,12 +89,12 @@ function RightsForm({ role, employeeId, leadId }: { role: string | null, employe
     </>
 }
 
-function onChangeUserRole(employeeId: number, leadId: number, role: string) {
+function onChangeUserRole(employeeId: number, task_id: number, role: string) {
     fetch(
-        `/api/leads/update_employee_rights`,
+        `/api/purchasing_tasks/update_employee_rights`,
         {
             method: "POST",
-            body: JSON.stringify({ employeeId, role, leadId })
+            body: JSON.stringify({ employeeId, role, task_id })
         }
     ).then(
         response => {
@@ -108,7 +108,7 @@ function onChangeUserRole(employeeId: number, leadId: number, role: string) {
         if (data.success) {
             toast.success("Права пользователя обновлены");
         } else {
-            toast.error("Что-то пошло не так");
+            toast.error("Что-то пошло не так #dmNu7T");
         }
     })
         .catch(error => {
@@ -123,7 +123,7 @@ function onChangeUserRole(employeeId: number, leadId: number, role: string) {
                     },
                     body: JSON.stringify({
                         text: {
-                            err: "#msn4b7m4dj",
+                            err: "#dnbdusKj",
                             data: {
                                 statusText,
                                 values: { employeeId, role }
@@ -133,10 +133,5 @@ function onChangeUserRole(employeeId: number, leadId: number, role: string) {
                 }
             )
                 .then(x => x.json())
-                .then(x => {
-                    console.log(x);
-                })
-
         })
-
 }
