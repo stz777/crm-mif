@@ -55,7 +55,7 @@ export default function Client(props: { purchaseTasks: PurchaseTaskInterface[]; 
                     <td>
                         <div className="d-flex nowrap">
                             {(() => {
-                                if (task.done_at) return <>Заказ закрыт</>
+                                if (task.done_at) return <>Задача закрыта</>
                                 if (props.is_boss) return <TaskCloser task_id={task.id} />
                                 return <>В работе</>
                             })()}
