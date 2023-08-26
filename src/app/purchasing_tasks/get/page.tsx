@@ -9,16 +9,16 @@ import { cookies } from "next/headers";
 
 export default async function Page(props: any) {
     const { searchParams } = props;
-    const purchaseTasks = await getPurschaseTaskFn();
+    const purchaseTasks = await getPurschaseTaskFn(searchParams);
     const auth = cookies().get('auth');
     const user = await getUserByToken(String(auth?.value));
     const leads = await getLeads(searchParams);
     const is_boss = [1, 2].includes(Number(user?.id)); //FIXME сделать нормальную проверку на босса
 
-    return <Client purchaseTasks={purchaseTasks} is_boss={is_boss} />
+    return <Client purchaseTasks={purchaseTasks} is_boss={is_boss} searchParams={searchParams} />
 }
 
-async function getPurschaseTaskFn(): Promise<PurchaseTaskInterface[]> {
+export async function getPurschaseTaskFn(searchParams:{}): Promise<PurchaseTaskInterface[]> { //вынести куда-нибудь функции, получающие функции, по вложенности путаница получается
     return await new Promise(resolve => {
         pool.query(
             "SELECT * FROM purchasing_tasks",

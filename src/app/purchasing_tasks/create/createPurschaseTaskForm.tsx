@@ -16,7 +16,11 @@ type Inputs = {
 };
 
 export default function CreatePurschaseTaskForm() {
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<Inputs>();
+    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<Inputs>({
+        defaultValues: {
+            title: ""
+        }
+    });
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
             <FieldWrapper title="Дедлайн"
@@ -37,12 +41,12 @@ export default function CreatePurschaseTaskForm() {
                     />
                 </>}
             />
-            <FieldWrapper
+            {/* <FieldWrapper
                 title="Заголовок"
                 field={
                     <input {...register("title", { required: true })} autoComplete="off" />
                 }
-            />
+            /> */}
             <FieldWrapper
                 title="Описание"
                 field={
@@ -102,8 +106,5 @@ const onSubmit = (data: any, resetForm: any) => {
                 }
             )
                 .then(x => x.json())
-                .then(x => {
-                    console.log(x);
-                })
         })
 }

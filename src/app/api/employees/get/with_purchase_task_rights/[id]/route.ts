@@ -65,5 +65,5 @@ interface Employee {
     username: string
     telegram_id: string
     tg_chat_id: number
-    purchase_tasks?: any[]
+    purchase_tasks?: any[] // TODO проблема с неймингом, где-то purchase_task, где-то purchasing-task
 }
