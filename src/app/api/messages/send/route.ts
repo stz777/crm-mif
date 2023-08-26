@@ -8,7 +8,6 @@ import { getUserByToken } from "@/app/components/getUserByToken";
 import getEmployeesByLeadId from "@/app/leads/single/[id]/getEmployeesByLeadId";
 // import { getEmployeesByLeadId } from "@/app/leads/get/righsManagement/getEmployeesByLeadId";
 
-
 export async function POST(
     request: Request,
     { params }: { params: { id: number } }
@@ -41,7 +40,11 @@ export async function POST(
     }
 
     if (typeof request.headers.get("origin") === "string") {
-        noticeEmployees(essense_id, String(request.headers.get("origin")));
+        noticeEmployees(
+            essense,
+            essense_id,
+            String(request.headers.get("origin"))
+        );
     }
 
     for (let index = 0; index < items.length; index++) {
@@ -173,18 +176,18 @@ async function saveImageToDB(imageName: string, messageId: number) {
 }
 
 
-async function noticeEmployees(leadId: number, domain: string) {
+async function noticeEmployees(essense: string, leadId: number, domain: string) {
     const employees = await getEmployeesByLeadId(leadId);
     if (employees) {
         for (let index = 0; index < employees.length; index++) {
             const { user_id, tg_chat_id } = employees[index];
             if (tg_chat_id) {
                 await sendMessageToTg(
-                    `Пришло сообщение в чат по заказу #${leadId}`,
+                    `Пришло сообщение в ${translator[essense].name} по заказу #${leadId}`,
                     String(tg_chat_id)
                 );
                 await sendMessageToTg(
-                    `${domain}/leads/single/${leadId}`,
+                    `${domain}${translator[essense].path}${leadId}`,
                     String(tg_chat_id)
                 );
             }
@@ -193,4 +196,13 @@ async function noticeEmployees(leadId: number, domain: string) {
 }
 
 
-
+const translator: any = {
+    lead: {
+        name: "заказ",
+        path: "/leads/single/"
+    },
+    purchase_task: {
+        name: "задачу-закупку",
+        path: "/purchasing_tasks/single/"
+    },
+}
