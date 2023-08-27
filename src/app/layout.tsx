@@ -70,6 +70,10 @@ async function NavBar() {
         {<Link href="/materials/get" className="btn btn-sm btn-outline-dark mb-2">Материалы</Link>}<br />
         {/* {<Link href="/suppliers/get" className="btn btn-sm btn-outline-dark ">Список поставщиков</Link>} */}
       </div>
+      <div className="me-2">
+        {<Link href="/projects/create" className="btn btn-sm btn-outline-dark mb-2">Создать проект</Link>}<br />
+        {<Link href="/projects/get" className="btn btn-sm btn-outline-dark ">Список проектов</Link>}
+      </div>
     </div>
   </div>
 }

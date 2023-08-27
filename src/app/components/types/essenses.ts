@@ -1,0 +1,1 @@
+export type EssenseName = "lead" | "purchase_task" | "project";
