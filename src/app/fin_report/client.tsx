@@ -79,7 +79,7 @@ async function fetchGetReportData() {
         {
             method: "GET",
             headers: {
-                'Cache-Control': 'no-cache'
+                cache: 'no-store'
             }
         }
     ).then(
