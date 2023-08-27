@@ -6,17 +6,7 @@ export default async function getMessagesByTaskId(task_id: number): Promise<Mess
     const messages: MessageInterface[] = await new Promise((resolve) => {
 
         pool.query(
-            `SELECT 
-                messages.id, messages.text, messages.text, messages.created_date, employees.username, purchasing_task_roles.role
-             FROM 
-                messages 
-             LEFT JOIN (employees)
-             ON (employees.id = messages.sender)
-             LEFT JOIN (purchasing_task_roles)
-             ON (purchasing_task_roles.user = employees.id)
-             WHERE messages.essense = 'purchase_task' AND messages.essense_id=?
-             ORDER BY messages.id DESC
-             `,
+            `SELECT * FROM messages WHERE messages.essense = 'purchase_task' AND messages.essense_id=? ORDER BY messages.id DESC`,
             [task_id],
             function (err, result: any[]) {
                 if (err) {
@@ -40,6 +30,8 @@ export default async function getMessagesByTaskId(task_id: number): Promise<Mess
         for (let index = 0; index < messages.length; index++) {
             const message = messages[index];
             messages[index].attachments = await getMediaByMessageId(message.id)
+            messages[index].role = await getRole(message.essense_id, message.sender)
+            messages[index].username = await getUsername(message.sender)
         }
     }
     return messages;
@@ -69,16 +61,56 @@ async function getMediaByMessageId(messageId: number): Promise<Media[]> {
     });
 }
 
-// export interface MessageInterface {
-//     id: number
-//     text: string
-//     username: string
-//     created_date: string
-//     attachments?: Media[]
-//     role: string
-// }
 
-// export interface Media {
-//     id: number
-//     name: string
-// }
+
+async function getRole(task_id: number, user_id: number): Promise<string> {
+    return await new Promise((resolve) => {
+
+        pool.query(
+            `SELECT * FROM purchasing_task_roles WHERE task = ? AND user = ?`,
+            [task_id, user_id],
+            function (err, result: any[]) {
+
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#nkLiu8an3nd9",
+                                error: err,
+                                values: { user_id }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                    // resolve([])
+                }
+                resolve(result[0]?.role || "no_rights")
+            }
+        )
+    });
+}
+
+
+async function getUsername(user_id: number): Promise<string> {
+    return await new Promise((resolve) => {
+
+        pool.query(
+            `SELECT * FROM employees WHERE id = ?`,
+            [ user_id],
+            function (err, result: any[]) {
+
+                if (err) {
+                    sendMessageToTg(
+                        JSON.stringify(
+                            {
+                                errorNo: "#nkLmJh7an3nd9",
+                                error: err,
+                                values: { user_id }
+                            }, null, 2),
+                        "5050441344"
+                    )
+                }
+                resolve(result[0]?.username || "хз кто")
+            }
+        )
+    });
+}

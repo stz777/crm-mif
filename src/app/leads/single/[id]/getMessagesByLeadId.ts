@@ -74,6 +74,8 @@ export interface MessageInterface {
     created_date: string
     attachments?: Media[]
     role: string
+    essense_id: number
+    sender: number
 }
 
 export interface Media {

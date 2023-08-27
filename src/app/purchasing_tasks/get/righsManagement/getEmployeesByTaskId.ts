@@ -3,6 +3,9 @@ import { toast } from "react-toastify";
 export async function getEmployeesByTaskId(task_id: number): Promise<Employee[]> {
     return await fetch(
         `/api/employees/get/with_purchase_task_rights/${task_id}`,
+        {
+            method:"POST"
+        }
     ).then(
         response => {
             if (response.ok) {
