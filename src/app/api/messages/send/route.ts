@@ -64,6 +64,7 @@ export async function POST(
 
             const buffer = await value.arrayBuffer();
             const filePath = `${imagesFolder}/${filename}`;
+            console.log('filePath', filePath);
 
             fs.writeFileSync(filePath, Buffer.from(buffer));
 
