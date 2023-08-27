@@ -3,12 +3,9 @@ import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentIn
 import { pool } from "../db/connect";
 
 export default async function getFinReportdata() {
-    
     const payments = await getPayments();
     const expensesPerLead = await getExpensesPerLead();
     const expenses_per_purchase_task = await getExpensesPerPurchaseTask()
-    console.log('payments',payments);
-    
     return {
         payments,
         expensesPerLead,

@@ -3,7 +3,7 @@ import getFinReportdata from "@/app/fin_report/getFinReportdata";
 import { NextResponse } from "next/server";
 // import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 
-export async function GET(
+export async function POST(
     request: Request,
 ) {
 

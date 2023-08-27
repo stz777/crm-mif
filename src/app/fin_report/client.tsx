@@ -77,10 +77,7 @@ async function fetchGetReportData() {
     return fetch(
         "/api/report/get",
         {
-            method: "GET",
-            headers: {
-                cache: 'no-store'
-            }
+            method: "POST",
         }
     ).then(
         response => {
