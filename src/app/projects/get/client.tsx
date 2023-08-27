@@ -82,7 +82,7 @@ async function fetchProjects(searchParams: any) {
         "/api/projects/get",
         {
             method: "POST",
-            body: JSON.stringify(searchParams)
+            body: JSON.stringify({searchParams})
         }
     ).then(
         response => {

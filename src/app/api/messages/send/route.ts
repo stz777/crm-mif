@@ -205,4 +205,8 @@ const translator: any = {
         name: "задачу-закупку",
         path: "/purchasing_tasks/single/"
     },
+    project: {
+        name: "проект",
+        path: "/projects/single/"
+    },
 }
