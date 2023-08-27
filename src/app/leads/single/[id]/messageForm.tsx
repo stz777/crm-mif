@@ -73,6 +73,10 @@ export default function MessageForm({ leadId }: { leadId: number }) {
                                     />
                                 </ImageWrapper>
                             ))}
+                            {previewImages.length ? <div className="btn btn-sm btn-danger ms-2" onClick={() => {
+                                reset({ images: [] });
+                                setPreviewImages([]);
+                            }}>отмена</div> : null}
                         </div>
                     </div>
                 </form>
@@ -87,12 +91,12 @@ function ImageWrapper({ children, index }: any) {
     return <>
         <div
             className="position-relative"
-            // onMouseOver={() => {
-            //     setViewDel(true);
-            // }}
-            // onMouseLeave={() => {
-            //     setViewDel(false);
-            // }}
+        // onMouseOver={() => {
+        //     setViewDel(true);
+        // }}
+        // onMouseLeave={() => {
+        //     setViewDel(false);
+        // }}
         >
             {children}
             {/* {viewDel && <div

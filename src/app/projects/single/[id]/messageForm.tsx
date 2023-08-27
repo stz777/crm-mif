@@ -63,12 +63,17 @@ export default function MessageForm({ project_id }: { project_id: number }) {
                                         height={0}
                                         style={{
                                             height: "auto",
-                                            // marginBottom: 5,
                                             cursor: "pointer",
                                         }}
                                     />
                                 </ImageWrapper>
                             ))}
+                            <div>
+                            {previewImages.length ? <div className="btn btn-sm btn-danger ms-2" onClick={() => {
+                                reset({ images: [] });
+                                setPreviewImages([]);
+                            }}>отмена</div> : null}
+                            </div>
                         </div>
                     </div>
                 </form>

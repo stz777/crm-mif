@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
 
-export default function MessageForm({ task_id }: { task_id: number }) {
+export default function MessageForm({ task_id }: { task_id: number })  {
 
     const [previewImages, setPreviewImages] = useState([]);
     const {
@@ -73,6 +73,10 @@ export default function MessageForm({ task_id }: { task_id: number }) {
                                     />
                                 </ImageWrapper>
                             ))}
+                            {previewImages.length ? <div className="btn btn-sm btn-danger ms-2" onClick={() => {
+                                reset({ images: [] });
+                                setPreviewImages([]);
+                            }}>отмена</div> : null}
                         </div>
                     </div>
                 </form>
