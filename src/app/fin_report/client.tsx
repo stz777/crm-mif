@@ -78,6 +78,9 @@ async function fetchGetReportData() {
         "/api/report/get",
         {
             method: "GET",
+            headers: {
+                'Cache-Control': 'no-cache'
+            }
         }
     ).then(
         response => {
