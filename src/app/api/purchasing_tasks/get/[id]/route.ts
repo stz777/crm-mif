@@ -1,7 +1,7 @@
 import { getPurchaseTaskData } from "@/app/purchasing_tasks/single/[task_id]/page";
 import { NextResponse } from "next/server";
 
-export async function GET(
+export async function POST(
     request: Request,
     { params }: { params: { id: number } }
 ) {

@@ -89,7 +89,7 @@ async function fetchGetTaskData(task_id: number) {
     return await fetch(
         `/api/purchasing_tasks/get/${task_id}`,
         {
-            method: "GET",
+            method: "POST",
         }
     ).then(
         response => {

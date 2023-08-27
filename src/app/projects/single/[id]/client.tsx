@@ -56,7 +56,7 @@ async function fetchProject(project_id: number) {
     return await fetch(
         `/api/projects/get/${project_id}`,
         {
-            method: "GET",
+            method: "POST",
         }
     ).then(
         response => {

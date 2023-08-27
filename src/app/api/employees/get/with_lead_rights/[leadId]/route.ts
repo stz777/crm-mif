@@ -2,7 +2,7 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 
-export async function GET(
+export async function POST(
     request: Request,
     { params }: { params: { leadId: number } }
 ) {
