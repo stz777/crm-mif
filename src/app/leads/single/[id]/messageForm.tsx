@@ -13,7 +13,6 @@ export default function MessageForm({ leadId }: { leadId: number }) {
         handleSubmit,
         formState: { errors },
         reset,
-        getValues
 
     } = useForm<Inputs>({
         defaultValues: {
@@ -81,13 +80,6 @@ export default function MessageForm({ leadId }: { leadId: number }) {
                                 reset({ images: [] });
                                 setPreviewImages([]);
                             }}>отмена</div> : null}
-                            <div onClick={() => {
-                                console.log(
-                                    getValues()
-                                );
-                            }}>
-                                getValues
-                            </div>
                         </div>
                     </div>
                 </form>
