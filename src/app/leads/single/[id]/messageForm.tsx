@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
-
+ 
 export default function MessageForm({ leadId }: { leadId: number }) {
 
     const [previewImages, setPreviewImages] = useState([]);

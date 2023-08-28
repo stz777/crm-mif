@@ -4,24 +4,26 @@ import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
-
-export default function MessageForm({ task_id }: { task_id: number }) {
+ 
+export default function MessageForm({ leadId }: { leadId: number }) {
 
     const [previewImages, setPreviewImages] = useState([]);
     const {
         register,
         handleSubmit,
         formState: { errors },
-        reset
+        reset,
+        setValue
 
     } = useForm<Inputs>({
         defaultValues: {
-            essense: "purchase_task",
-            essense_id: task_id
+            essense: "lead",
+            essense_id: leadId
         }
     })
 
     const handleImageChange = async (e: any) => {
+        setValue("images",e.target.value.files)
         const files = e.target.files;
         const newImages: any = Array.from(previewImages);
         for (let i = 0; i < files.length; i++) {
@@ -44,19 +46,23 @@ export default function MessageForm({ task_id }: { task_id: number }) {
         sendMessage(data);
         reset();
     }
-
+    // essense
+    // essense_id
     return (
         <div className="card" >
             <div className="card-body bg-secondary">
                 <form className="">
                     <div className="d-flex align-items-end" style={{ maxWidth: "500px" }}>
                         <textarea {...register("text", { required: true })} placeholder="Введите сообщение" className="form-control" />
+
                         <FaChevronCircleRight onClick={handleSubmit(onSubmit)} size={25} className="ms-2" />
                     </div>
                     <input {...register("essense", { required: true })} className="d-none" />
                     <input {...register("essense_id", { required: true })} className="d-none" />
                     <div className=" mt-3">
-                        <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
+                        <input type="file" multiple {...register("images"/* , { required: true } */)}
+                            // onChange={handleImageChange}
+                        />
                         <div className="d-flex">
                             {previewImages.map((image, index) => (
                                 <ImageWrapper key={index} index={index}>
@@ -160,7 +166,7 @@ async function sendMessage(data: any) {
                     },
                     body: JSON.stringify({
                         text: {
-                            err: "#dmansdasIi",
+                            err: "#admcMck3jm",
                             data: {
                                 statusText,
                                 values: data
