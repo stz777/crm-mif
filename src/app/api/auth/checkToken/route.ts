@@ -29,7 +29,7 @@ export async function POST(
 async function checkTokenIsValid(token: string) {
     return await new Promise(resolve => {
         pool.query(
-            "SELECT * FROM employees WHERE token = ?",
+            "SELECT * FROM employees WHERE token = ? AND is_active = 1",
             [token],
             function (err, res: any) {
                 if (err) {

@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: { id: number } }) {
     if (!user.is_manager) return redirect("/");
 
     const { id } = params;
-    const client = await getClient(id)
+    const client = await getClient(id);
     return <>
         <h1>Редактирование клиента #{id}</h1>
         <EditClientForm clientData={client} />

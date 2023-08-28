@@ -7,11 +7,17 @@ import { getUserByToken } from "@/app/components/getUserByToken";
 export async function POST(
     request: Request,
 ) {
+
+    const auth = cookies().get('auth');
+    if (!auth?.value) return new Response("Кто ты", { status: 401, });;
+    const user = await getUserByToken(auth?.value);
+    if (!user) return new Response("Кто ты", { status: 401, });;
+    if (!user.is_manager) return new Response("Кто ты", { status: 401, });;
+
+
     const { title, comment, deadline } = await request.json();
     const newProjectId = await createProjectFn(title, comment, deadline)
 
-    const auth = cookies().get('auth');
-    const user = await getUserByToken(String(auth?.value));
 
 
     if (!newProjectId) {

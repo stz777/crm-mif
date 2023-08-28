@@ -53,7 +53,7 @@ async function getUserByTg(tgUsername: string) {
 
     return await new Promise(resolve => {
         pool.query(
-            "SELECT * FROM employees WHERE telegram_id = ?",
+            "SELECT * FROM employees WHERE telegram_id = ? AND is_active = 1",
             [tgUsername],
             function (err, res: any) {
                 console.log({ err, res });

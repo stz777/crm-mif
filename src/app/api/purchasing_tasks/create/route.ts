@@ -7,6 +7,14 @@ import { cookies } from "next/headers";
 export async function POST(
     request: Request,
 ) {
+
+    const auth = cookies().get('auth');
+    if (!auth?.value) return new Response("Кто ты", { status: 401, });;
+    const user = await getUserByToken(auth?.value);
+    if (!user) return new Response("Кто ты", { status: 401, });;
+    if (!user.is_manager) return new Response("Кто ты", { status: 401, });;
+
+
     const data = await request.json();
     const { title, comment, deadline } = data;
     const new_task_id:number = await new Promise(resolve => {
@@ -43,8 +51,6 @@ export async function POST(
 
     }
 
-    const auth = cookies().get('auth');
-    const user = await getUserByToken(String(auth?.value));
 
     if (user) {
         await setUserPermissionInTask(user.id, new_task_id, "inspector");

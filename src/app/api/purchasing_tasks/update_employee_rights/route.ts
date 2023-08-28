@@ -2,11 +2,21 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import { createNewRole } from "./createNewRole";
+import { getUserByToken } from "@/app/components/getUserByToken";
+import { cookies } from "next/headers";
 
 export async function POST(
     request: Request,
     { params }: { params: { employeeId: number } }
 ) {
+
+    const auth = cookies().get('auth');
+    if (!auth?.value) return new Response("Кто ты", { status: 401, });;
+    const user = await getUserByToken(auth?.value);
+    if (!user) return new Response("Кто ты", { status: 401, });;
+    if (!user.is_boss) return new Response("Кто ты", { status: 401, });;
+
+    
     const { employeeId, role, task_id } = await request.json();
     
     const currentRole = await getCurrentRole(employeeId, task_id);

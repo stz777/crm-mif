@@ -36,7 +36,7 @@ export async function POST(
 async function getUserByCode(code: string) {
     return await new Promise(resolve => {
         pool.query(
-            "SELECT * FROM employees WHERE password = ?",
+            "SELECT * FROM employees WHERE password = ? WHERE is_active = 1",
             [code],
             function (err, res: any) {
                 if (err) {

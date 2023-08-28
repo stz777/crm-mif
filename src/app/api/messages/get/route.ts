@@ -1,13 +1,22 @@
 // import { getLeads } from "@/app/leads/get/page";
+import { getUserByToken } from "@/app/components/getUserByToken";
 import getMessages from "@/app/db/messages/getMessages";
 import getMessagesByLeadId from "@/app/leads/single/[id]/getMessagesByLeadId";
 import getMessagesByTaskId from "@/app/purchasing_tasks/single/[task_id]/getMessagesByTaskId";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(
     request: Request,
     // { params }: { params: { id: number } }
 ) {
+
+    const auth = cookies().get('auth');
+    if (!auth?.value) return new Response("Кто ты", { status: 401, });;
+    const user = await getUserByToken(auth?.value);
+    if (!user) return new Response("Кто ты", { status: 401, });;
+    // if (!user.is_manager) return new Response("Кто ты", { status: 401, });;
+
 
     const { essense, essense_id } = await request.json();
     if (essense === "lead") {

@@ -2,11 +2,18 @@ import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import createEmployeeMetaFn from "./createEmployeeMetaFn";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
+import { getUserByToken } from "@/app/components/getUserByToken";
+import { cookies } from "next/headers";
 
 export async function POST(
     request: Request,
     { params }: { params: { id: number } }
 ) {
+    const auth = cookies().get('auth');
+    if (!auth?.value) return new Response("Кто ты", { status: 401, });;
+    const user = await getUserByToken(auth?.value);
+    if (!user) return new Response("Кто ты", { status: 401, });;
+    if (!user.is_boss) return new Response("Кто ты", { status: 401, });;
 
     const data = await request.json();
     const { username, emails, phones, telegram_id, role } = data;
