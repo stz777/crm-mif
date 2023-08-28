@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
@@ -13,7 +13,6 @@ export default function MessageForm({ leadId }: { leadId: number }) {
         handleSubmit,
         formState: { errors },
         reset,
-        setValue
 
     } = useForm<Inputs>({
         defaultValues: {
@@ -22,15 +21,7 @@ export default function MessageForm({ leadId }: { leadId: number }) {
         }
     })
 
-    // useEffect({
-    //     register({ name: 'images' }) // still have validation for required
-    // }, [register])
-
-    const handleImageChange = (e: any) => {
-        setValue('images', e.target.value.files); // you get all the files object here
-    }
-
-    const handleImageChange2 = async (e: any) => {
+    const handleImageChange = async (e: any) => {
         const files = e.target.files;
         const newImages: any = Array.from(previewImages);
         for (let i = 0; i < files.length; i++) {
@@ -67,9 +58,7 @@ export default function MessageForm({ leadId }: { leadId: number }) {
                     <input {...register("essense", { required: true })} className="d-none" />
                     <input {...register("essense_id", { required: true })} className="d-none" />
                     <div className=" mt-3">
-                        <input type="file" multiple {...register("images"/* , { required: true } */)}
-                        onChange={handleImageChange}
-                        />
+                        <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
                         <div className="d-flex">
                             {previewImages.map((image, index) => (
                                 <ImageWrapper key={index} index={index}>
