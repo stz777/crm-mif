@@ -48,5 +48,6 @@ interface Employee {
     username: string
     telegram_id: string
     tg_chat_id: number
+    role: string;
     leads?: any[]
 }

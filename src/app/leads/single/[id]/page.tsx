@@ -7,6 +7,8 @@ import Chat from './chat';
 import { getUserByToken } from '@/app/components/getUserByToken';
 import { cookies } from 'next/headers';
 import { getRoleByLeadId } from '../../get/getLeadsFn';
+import getEmployeesByLeadId from './getEmployeesByLeadId';
+import roleTranslator from '@/app/components/translate/roleTranslator';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
@@ -25,6 +27,8 @@ export default async function Page({ params }: { params: { id: number } }) {
 
     if (!lead) return notFound();
 
+    const employees = await getEmployeesByLeadId(lead.id);
+
     const messages = await getMessagesByLeadId(lead.id);
 
     return <>
@@ -35,6 +39,20 @@ export default async function Page({ params }: { params: { id: number } }) {
                 <tr><td>описание</td><td>{lead.description}</td></tr>
                 <tr><td>дата создания</td><td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td></tr>
                 <tr><td>дедлайн</td><td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td></tr>
+                <tr><td>ответстенные</td>
+                    {!employees ? null : <table className='table'>
+                        <tbody>
+                            {employees.map(employee => <tr>
+                                <td>{employee.username}</td>
+                                <td>{roleTranslator[employee.role]}</td>
+                            </tr>)}
+                        </tbody>
+                    </table>}
+
+                    {/* <td>
+                        <pre>{JSON.stringify(employees, null, 2)}</pre>
+                    </td> */}
+                </tr>
             </tbody>
         </table>
         <MessageForm leadId={leadId} />
