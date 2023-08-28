@@ -84,7 +84,7 @@ async function insertCodeToDb(code: number, tg_chat_id: number) {
     return await new Promise(resolve => {
         pool.query(
             "UPDATE employees SET password = ? WHERE tg_chat_id = ?",
-            [code, tg_chat_id],
+            [String(code), String(tg_chat_id)],
             function (err, res: any) {
                 if (err) {
                     sendMessageToTg(
