@@ -3,8 +3,17 @@ import { getPurchasesByTaskId } from "./getPurchasesByTaskId";
 import Client from "./client";
 import getMessagesByTaskId from "./getMessagesByTaskId";
 import Chat from "@/app/leads/single/[id]/chat";
+import { getUserByToken } from "@/app/components/getUserByToken";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { task_id: number } }) {
+    const auth = cookies().get('auth');
+    if (!auth?.value) return redirect("/");
+    const user = await getUserByToken(auth?.value);
+    if (!user) return redirect("/");
+    if (!user.is_manager) return redirect("/");
+
     const { task_id } = params;
     const combinedPurchaseTaskData = await getPurchaseTaskData(task_id);
 
