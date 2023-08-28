@@ -15,14 +15,12 @@ export default async function Page(props: any) {
     if (!auth?.value) return redirect("/");
     const user = await getUserByToken(auth?.value);
     if (!user) return redirect("/");
-    if (!user.is_manager) return redirect("/");
 
     const { searchParams } = props;
     const { lead_id } = searchParams
     const leads = await getLeads(searchParams);
-    const is_boss = [1, 2].includes(Number(user?.id)); //FIXME сделать нормальную проверку на босса
     return <>
         <Filter searchParams={searchParams}/>
-        <Client leads={leads} is_manager={!!user?.is_manager} is_boss={is_boss} searchParams={searchParams}/>
+        <Client leads={leads} is_manager={!!user?.is_manager} is_boss={!!user.is_boss} searchParams={searchParams}/>
     </>
 }

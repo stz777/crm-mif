@@ -6,14 +6,20 @@ import dayjs from 'dayjs';
 import Chat from './chat';
 import { getUserByToken } from '@/app/components/getUserByToken';
 import { cookies } from 'next/headers';
+import { getRoleByLeadId } from '../../get/getLeadsFn';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
     if (!auth?.value) return redirect("/");
     const user = await getUserByToken(auth?.value);
     if (!user) return redirect("/");
-    if (!user.is_manager) return redirect("/");
-    
+
+    const role = await getRoleByLeadId(params.id);
+
+    if (!role) {
+        return redirect("/");
+    }
+
     const { id: leadId } = params;
     const lead = await getLead(leadId);
 
@@ -32,6 +38,6 @@ export default async function Page({ params }: { params: { id: number } }) {
             </tbody>
         </table>
         <MessageForm leadId={leadId} />
-        <div className='mb-4'><Chat messages={messages || []} essense_type="lead"  essense_id={lead.id}/></div>
+        <div className='mb-4'><Chat messages={messages || []} essense_type="lead" essense_id={lead.id} /></div>
     </>
 }
