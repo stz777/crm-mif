@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
  
-export default function MessageForm({ leadId }: { leadId: number }) {
+export default function MessageForm({ task_id }: { task_id: number }) {
 
     const [previewImages, setPreviewImages] = useState([]);
     const {
@@ -18,7 +18,7 @@ export default function MessageForm({ leadId }: { leadId: number }) {
     } = useForm<Inputs>({
         defaultValues: {
             essense: "lead",
-            essense_id: leadId
+            essense_id: task_id
         }
     })
 
