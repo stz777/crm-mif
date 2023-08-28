@@ -7,7 +7,7 @@ import LogoutBTN from "./api/auth/logout/logoutBTN";
 import { cookies } from 'next/headers'
 import getBasePermissions from "./components/permissions/getBasePermissions";
 import { getUserByToken } from "./components/getUserByToken";
-
+ 
 export default function RootLayout({
   children,
 }: {
@@ -20,7 +20,7 @@ export default function RootLayout({
           <div className="container mt-2">
             <div className="d-flex">
               <NavBar />
-              <div><LogoutBTN /></div>
+              
             </div>
           </div>
         </header>
@@ -74,6 +74,7 @@ async function NavBar() {
         {<Link href="/projects/create" className="btn btn-sm btn-outline-dark mb-2">Создать проект</Link>}<br />
         {<Link href="/projects/get" className="btn btn-sm btn-outline-dark ">Список проектов</Link>}
       </div>
+      <div><LogoutBTN /></div>
     </div>
   </div>
 }
