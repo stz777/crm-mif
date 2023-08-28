@@ -42,7 +42,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                 <tr><td>ответстенные</td>
                     {!employees ? null : <table className='table'>
                         <tbody>
-                            {employees.map(employee => <tr>
+                            {employees.map(employee => <tr key={employee.id}>
                                 <td>{employee.username}</td>
                                 <td>{roleTranslator[employee.role]}</td>
                             </tr>)}
