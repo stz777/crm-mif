@@ -15,8 +15,7 @@ export default async function Page(props: any) {
 
     const { searchParams } = props;
     const purchaseTasks = await getPurschaseTaskFn(searchParams);
-    const is_boss = [1, 2].includes(Number(user?.id)); //FIXME сделать нормальную проверку на босса
-    return <Client purchaseTasks={purchaseTasks} is_boss={is_boss} searchParams={searchParams} />
+    return <Client purchaseTasks={purchaseTasks} is_boss={!!user.is_boss} searchParams={searchParams} />
 }
 
 export async function getPurschaseTaskFn(searchParams: any): Promise<PurchaseTaskInterface[]> { //вынести куда-нибудь функции, получающие функции, по вложенности путаница получается
