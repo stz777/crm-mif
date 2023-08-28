@@ -2,8 +2,17 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { ClientInterface } from "@/app/clients/get/page";
 import { pool } from "@/app/db/connect";
 import CreateLeadForm from "./createLeadForm";
+import { getUserByToken } from "@/app/components/getUserByToken";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { clientId: number } }) {
+    const auth = cookies().get('auth');
+    if (!auth?.value) return redirect("/");
+    const user = await getUserByToken(auth?.value);
+    if (!user) return redirect("/");
+    if (!user.is_manager) return redirect("/");
+
     const [client] = await getClient(params.clientId);
     return <>
         <h1>Создать заказ</h1>
