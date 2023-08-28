@@ -2,24 +2,28 @@
 import Image from "next/image"
 import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { FaChevronCircleRight } from "react-icons/fa"
+import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
-
+ 
 export default function MessageForm({ project_id }: { project_id: number }) {
 
     const [previewImages, setPreviewImages] = useState([]);
     const {
         register,
         handleSubmit,
-        reset
+        formState: { errors },
+        reset,
+        setValue
+
     } = useForm<Inputs>({
         defaultValues: {
-            essense: "project",
+            essense: "lead",
             essense_id: project_id
         }
     })
 
     const handleImageChange = async (e: any) => {
+        setValue("images",e.target.value.files)
         const files = e.target.files;
         const newImages: any = Array.from(previewImages);
         for (let i = 0; i < files.length; i++) {
@@ -38,22 +42,27 @@ export default function MessageForm({ project_id }: { project_id: number }) {
     };
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
+        // reset();
         sendMessage(data);
         reset();
     }
-
+    // essense
+    // essense_id
     return (
         <div className="card" >
             <div className="card-body bg-secondary">
                 <form className="">
                     <div className="d-flex align-items-end" style={{ maxWidth: "500px" }}>
                         <textarea {...register("text", { required: true })} placeholder="Введите сообщение" className="form-control" />
+
                         <FaChevronCircleRight onClick={handleSubmit(onSubmit)} size={25} className="ms-2" />
                     </div>
                     <input {...register("essense", { required: true })} className="d-none" />
                     <input {...register("essense_id", { required: true })} className="d-none" />
                     <div className=" mt-3">
-                        <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
+                        <input type="file" multiple {...register("images"/* , { required: true } */)}
+                            // onChange={handleImageChange}
+                        />
                         <div className="d-flex">
                             {previewImages.map((image, index) => (
                                 <ImageWrapper key={index} index={index}>
@@ -65,17 +74,16 @@ export default function MessageForm({ project_id }: { project_id: number }) {
                                         height={0}
                                         style={{
                                             height: "auto",
+                                            // marginBottom: 5,
                                             cursor: "pointer",
                                         }}
                                     />
                                 </ImageWrapper>
                             ))}
-                            <div>
-                                {previewImages.length ? <div className="btn btn-sm btn-danger ms-2" onClick={() => {
-                                    reset({ images: [] });
-                                    setPreviewImages([]);
-                                }}>отмена</div> : null}
-                            </div>
+                            {previewImages.length ? <div className="btn btn-sm btn-danger ms-2" onClick={() => {
+                                reset({ images: [] });
+                                setPreviewImages([]);
+                            }}>отмена</div> : null}
                         </div>
                     </div>
                 </form>
@@ -83,6 +91,7 @@ export default function MessageForm({ project_id }: { project_id: number }) {
         </div>
     )
 }
+
 
 function ImageWrapper({ children, index }: any) {
     // const [viewDel, setViewDel] = useState(false);
@@ -108,6 +117,7 @@ function ImageWrapper({ children, index }: any) {
             </div>} */}
         </div></>
 }
+
 
 async function sendMessage(data: any) {
     // console.log(data);
@@ -156,7 +166,7 @@ async function sendMessage(data: any) {
                     },
                     body: JSON.stringify({
                         text: {
-                            err: "#dasjfhjH",
+                            err: "#admcMck3jm",
                             data: {
                                 statusText,
                                 values: data
