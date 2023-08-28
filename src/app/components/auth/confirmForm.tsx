@@ -30,10 +30,10 @@ export default function ConfirmForm() {
                     throw new Error(response.statusText);
                 }
             }
-        ).then(data => {
+        ).then(data => {// , { sameSite:'strict' }
             if (data.success) {
-                document.cookie = `auth=${data.token}; expires=Tue, 19 Jan 2038 03:14:07 GMT`;
-                toast.success("Вы успешно авторизировались");
+                document.cookie = `auth=${data.token}; expires=Tue, 19 Jan 2038 03:14:07 GMT; SameSite=Strict;`;
+                toast.success("Вы успешно авторизировались;");
             } else {
                 toast.error("Что-то пошло не так");
             }
