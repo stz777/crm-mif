@@ -58,7 +58,9 @@ export default function MessageForm({ leadId }: { leadId: number }) {
                     <input {...register("essense", { required: true })} className="d-none" />
                     <input {...register("essense_id", { required: true })} className="d-none" />
                     <div className=" mt-3">
-                        <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
+                        <input type="file" multiple {...register("images"/* , { required: true } */)}
+                            // onChange={handleImageChange}
+                        />
                         <div className="d-flex">
                             {previewImages.map((image, index) => (
                                 <ImageWrapper key={index} index={index}>
