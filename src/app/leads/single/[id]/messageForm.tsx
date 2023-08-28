@@ -13,6 +13,7 @@ export default function MessageForm({ leadId }: { leadId: number }) {
         handleSubmit,
         formState: { errors },
         reset,
+        setValue
 
     } = useForm<Inputs>({
         defaultValues: {
@@ -22,6 +23,7 @@ export default function MessageForm({ leadId }: { leadId: number }) {
     })
 
     const handleImageChange = async (e: any) => {
+        setValue("images",e.target.value.files)
         const files = e.target.files;
         const newImages: any = Array.from(previewImages);
         for (let i = 0; i < files.length; i++) {
