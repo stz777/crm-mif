@@ -54,7 +54,8 @@ export async function POST(
     for (let index = 0; index < items.length; index++) {
         const [name, value]: any = items[index]
         if (value instanceof File && name === "images") {
-
+            console.log('image');
+            
             let filename = slugify(value.name.toLocaleLowerCase().replace(/[^ a-zA-Zа-яА-Я0-9-.]/igm, ""));
 
             const imageIsExists = await checkImageIsExists(filename);
