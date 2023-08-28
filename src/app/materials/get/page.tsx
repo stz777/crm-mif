@@ -1,9 +1,17 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+import { getUserByToken } from "@/app/components/getUserByToken";
 import { MaterialInterface } from "@/app/components/types/material";
 import { pool } from "@/app/db/connect";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
+    const auth = cookies().get('auth');
+    if (!auth?.value) return redirect("/");
+    const user = await getUserByToken(auth?.value);
+    if (!user) return redirect("/");
+    if (!user.is_manager) return redirect("/");
     const materials = await getMaterials();
     return <>
         <h1>Материалы</h1>
