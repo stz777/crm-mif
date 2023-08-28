@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 
 export async function getEmployeesByProjectId(project_id: number): Promise<Employee[]> {
     return await fetch(
-        `/api/employees/get/with_project_rights/${project_id}`,
+        `/api/employees/get/with_project_rights/${project_id}`, { method: "POST", }
     ).then(
         response => {
             if (response.ok) {
