@@ -62,6 +62,8 @@ export async function POST(
 
 
 async function getCurrentRole(employeeId: number, project_id: number) {
+    console.log(`SELECT * FROM projects_roles WHERE user = ${employeeId} AND project = ${project_id}`);
+    
     return await new Promise(resolve => {
         pool.query(
             `SELECT * FROM projects_roles WHERE user = ? AND project = ?`,
