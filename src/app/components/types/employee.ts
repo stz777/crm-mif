@@ -7,6 +7,7 @@ export interface Employee {
     leads?: any[]
     is_manager: boolean | 1 | 0
     is_active: boolean | 1 | 0
+    is_boss: boolean | 1 | 0
 }
 
 export interface EmployeeMeta {

@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
 
-export default function MessageForm({ task_id }: { task_id: number })  {
+export default function MessageForm({ task_id }: { task_id: number }) {
 
     const [previewImages, setPreviewImages] = useState([]);
     const {
@@ -53,7 +53,8 @@ export default function MessageForm({ task_id }: { task_id: number })  {
                         <textarea {...register("text", { required: true })} placeholder="Введите сообщение" className="form-control" />
                         <FaChevronCircleRight onClick={handleSubmit(onSubmit)} size={25} className="ms-2" />
                     </div>
-
+                    <input {...register("essense", { required: true })} className="d-none" />
+                    <input {...register("essense_id", { required: true })} className="d-none" />
                     <div className=" mt-3">
                         <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
                         <div className="d-flex">

@@ -7,7 +7,7 @@ import LogoutBTN from "./api/auth/logout/logoutBTN";
 import { cookies } from 'next/headers'
 import getBasePermissions from "./components/permissions/getBasePermissions";
 import { getUserByToken } from "./components/getUserByToken";
- 
+
 export default function RootLayout({
   children,
 }: {
@@ -20,7 +20,6 @@ export default function RootLayout({
           <div className="container mt-2">
             <div className="d-flex">
               <NavBar />
-              
             </div>
           </div>
         </header>
@@ -45,33 +44,33 @@ async function NavBar() {
   return <div className="">
     <div className="d-flex">
       <div className="me-2">
-        {basePermissions.createEmployees && <><Link href="/employees/create" className="btn btn-sm btn-outline-dark mb-2">Создать сотрудника</Link><br /></>}
-        {basePermissions.viewEmployees && <Link href="/employees/get" className="btn btn-sm btn-outline-dark">Список сотрудников</Link>}
+        {!user.is_boss ? null : <><Link href="/employees/create" className="btn btn-sm btn-outline-dark mb-2">Создать сотрудника</Link><br /></>}
+        {!user.is_boss ? null : <Link href="/employees/get" className="btn btn-sm btn-outline-dark">Список сотрудников</Link>}
       </div>
       <div className="me-2">
-        {basePermissions.createClient && <><Link href="/clients/create" className="btn btn-sm btn-outline-dark mb-2">Создать клиента</Link><br /></>}
-        {basePermissions.createClient && <Link href="/clients/get" className="btn btn-sm btn-outline-dark">Список клиентов</Link>}
+        {!user.is_manager ? null : <><Link href="/clients/create" className="btn btn-sm btn-outline-dark mb-2">Создать клиента</Link><br /></>}
+        {!user.is_manager ? null : <Link href="/clients/get" className="btn btn-sm btn-outline-dark">Список клиентов</Link>}
       </div>
       <div className="me-2">
         <Link href="/leads/get" className="btn btn-sm btn-outline-dark">Список заказов</Link>
       </div>
       <div className="me-2">
-        {basePermissions.viewFinReport && <Link href="/fin_report" className="btn btn-sm btn-outline-dark">Отчет</Link>}
+        {!user.is_boss ? null : basePermissions.viewFinReport && <Link href="/fin_report" className="btn btn-sm btn-outline-dark">Отчет</Link>}
       </div>
       <div className="me-2">
-        {<Link href="/purchasing_tasks/create" className="btn btn-sm btn-outline-dark mb-2">Создать задачу-закупку</Link>}<br />
-        {<Link href="/purchasing_tasks/get" className="btn btn-sm btn-outline-dark ">Список задач-закупок</Link>}
+        {!user.is_manager ? null : <Link href="/purchasing_tasks/create" className="btn btn-sm btn-outline-dark mb-2">Создать задачу-закупку</Link>}<br />
+        {!user.is_manager ? null : <Link href="/purchasing_tasks/get" className="btn btn-sm btn-outline-dark ">Список задач-закупок</Link>}
       </div>
       <div className="me-2">
-        {<Link href="/suppliers/create" className="btn btn-sm btn-outline-dark mb-2">Создать поставщика</Link>}<br />
-        {<Link href="/suppliers/get" className="btn btn-sm btn-outline-dark ">Список поставщиков</Link>}
+        {!user.is_manager ? null : <Link href="/suppliers/create" className="btn btn-sm btn-outline-dark mb-2">Создать поставщика</Link>}<br />
+        {!user.is_manager ? null : <Link href="/suppliers/get" className="btn btn-sm btn-outline-dark ">Список поставщиков</Link>}
       </div>
       <div className="me-2">
-        {<Link href="/materials/get" className="btn btn-sm btn-outline-dark mb-2">Материалы</Link>}<br />
+        {!user.is_manager ? null : <Link href="/materials/get" className="btn btn-sm btn-outline-dark mb-2">Материалы</Link>}<br />
       </div>
       <div className="me-2">
-        {<Link href="/projects/create" className="btn btn-sm btn-outline-dark mb-2">Создать проект</Link>}<br />
-        {<Link href="/projects/get" className="btn btn-sm btn-outline-dark ">Список проектов</Link>}
+        {!user.is_manager ? null : <Link href="/projects/create" className="btn btn-sm btn-outline-dark mb-2">Создать проект</Link>}<br />
+        {!user.is_manager ? null : <Link href="/projects/get" className="btn btn-sm btn-outline-dark ">Список проектов</Link>}
       </div>
       <div><LogoutBTN /></div>
     </div>

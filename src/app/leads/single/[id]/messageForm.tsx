@@ -12,7 +12,8 @@ export default function MessageForm({ leadId }: { leadId: number }) {
         register,
         handleSubmit,
         formState: { errors },
-        reset
+        reset,
+        getValues
 
     } = useForm<Inputs>({
         defaultValues: {
@@ -44,16 +45,19 @@ export default function MessageForm({ leadId }: { leadId: number }) {
         sendMessage(data);
         reset();
     }
-
+    // essense
+    // essense_id
     return (
         <div className="card" >
             <div className="card-body bg-secondary">
                 <form className="">
                     <div className="d-flex align-items-end" style={{ maxWidth: "500px" }}>
                         <textarea {...register("text", { required: true })} placeholder="Введите сообщение" className="form-control" />
+
                         <FaChevronCircleRight onClick={handleSubmit(onSubmit)} size={25} className="ms-2" />
                     </div>
-
+                    <input {...register("essense", { required: true })} className="d-none" />
+                    <input {...register("essense_id", { required: true })} className="d-none" />
                     <div className=" mt-3">
                         <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
                         <div className="d-flex">
@@ -77,6 +81,13 @@ export default function MessageForm({ leadId }: { leadId: number }) {
                                 reset({ images: [] });
                                 setPreviewImages([]);
                             }}>отмена</div> : null}
+                            <div onClick={() => {
+                                console.log(
+                                    getValues()
+                                );
+                            }}>
+                                getValues
+                            </div>
                         </div>
                     </div>
                 </form>

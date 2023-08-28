@@ -50,6 +50,8 @@ export default function MessageForm({ project_id }: { project_id: number }) {
                         <textarea {...register("text", { required: true })} placeholder="Введите сообщение" className="form-control" />
                         <FaChevronCircleRight onClick={handleSubmit(onSubmit)} size={25} className="ms-2" />
                     </div>
+                    <input {...register("essense", { required: true })} className="d-none" />
+                    <input {...register("essense_id", { required: true })} className="d-none" />
                     <div className=" mt-3">
                         <input type="file" multiple {...register("images"/* , { required: true } */)} onChange={handleImageChange} />
                         <div className="d-flex">
@@ -69,10 +71,10 @@ export default function MessageForm({ project_id }: { project_id: number }) {
                                 </ImageWrapper>
                             ))}
                             <div>
-                            {previewImages.length ? <div className="btn btn-sm btn-danger ms-2" onClick={() => {
-                                reset({ images: [] });
-                                setPreviewImages([]);
-                            }}>отмена</div> : null}
+                                {previewImages.length ? <div className="btn btn-sm btn-danger ms-2" onClick={() => {
+                                    reset({ images: [] });
+                                    setPreviewImages([]);
+                                }}>отмена</div> : null}
                             </div>
                         </div>
                     </div>
