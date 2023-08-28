@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
+import getEployeeByID from "@/app/db/employees/getEployeeById";
 
 
 export async function POST(
@@ -38,10 +39,17 @@ export async function POST(
                     )
                 }
                 if (res.insertId) {
-                    sendMessageToTg(
-                        `Создан заказ #${res.insertId}`,
-                        "5050441344"
-                    )
+                    (async () => {
+                        sendMessageToTg(
+                            `Создан заказ #${res.insertId}`,
+                            "5050441344"
+                        )
+                        const boss = await getEployeeByID(1)
+                        sendMessageToTg(
+                            `Создан заказ #${res.insertId}`,
+                            String(boss.tg_chat_id)
+                        )
+                    })()
                 }
                 resolve(Number(res?.insertId));
             }

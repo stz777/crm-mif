@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
+import getEployeeByID from "@/app/db/employees/getEployeeById";
 
 export async function POST(
     request: Request,
@@ -59,14 +60,18 @@ async function createProjectFn(title: string, comment: string, deadline: string)
                     r(0)
                 }
                 if (res) {
-                    sendMessageToTg(
-                        [
-                            `Создан новый проект`,
-                            `id: ${res.insertId}`,
-                            `Наименование:  ${title}`
-                        ].join("\n"),
-                        "5050441344"
-                    )
+                    (async () => {
+                        const boss = await getEployeeByID(1);
+                        sendMessageToTg(
+                            [
+                                `Создан новый проект`,
+                                `id: ${res.insertId}`,
+                                `Наименование:  ${title}`
+                            ].join("\n"),
+                            String(boss.tg_chat_id)
+
+                        )
+                    })()
                     r(res.insertId);
                 }
             })

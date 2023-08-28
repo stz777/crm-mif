@@ -4,6 +4,7 @@ import createEmployeeMetaFn from "./createEmployeeMetaFn";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import getEployeeByID from "@/app/db/employees/getEployeeById";
 
 export async function POST(
     request: Request,
@@ -41,13 +42,18 @@ export async function POST(
         [
             "Создан новый сотрудник",
             employee.username
-            // errorNo: "#dmsn3m9c83",
-            // error: err,
-            // values: { username }
         ].join("\n"),
         "5050441344"
     )
 
+    const boss = await getEployeeByID(1)
+    sendMessageToTg(
+        [
+            "Создан новый сотрудник",
+            employee.username
+        ].join("\n"),
+        String(boss.tg_chat_id)
+    )
     return NextResponse.json({
         success: true,
     });
