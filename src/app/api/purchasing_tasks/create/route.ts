@@ -17,7 +17,7 @@ export async function POST(
 
     const data = await request.json();
     const { title, comment, deadline } = data;
-    const new_task_id:number = await new Promise(resolve => {
+    const new_task_id: number = await new Promise(resolve => {
         pool.query(
             `INSERT INTO purchasing_tasks (title, comment, deadline) VALUES (?,?,?)`,
             [title, comment, deadline],
@@ -47,14 +47,14 @@ export async function POST(
     console.log('new_task_id', new_task_id);
 
 
-    if(!new_task_id){
+    if (!new_task_id) {
 
     }
 
 
     if (user) {
         await setUserPermissionInTask(user.id, new_task_id, "inspector");
-        await setUserPermissionInTask(1, new_task_id, "inspector");
+        if (user.id !== 1) await setUserPermissionInTask(1, new_task_id, "inspector");
     }
 
 

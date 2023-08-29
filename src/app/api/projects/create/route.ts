@@ -31,7 +31,7 @@ export async function POST(
 
     if (user) {
         await setUserPermissionInProject(user.id, newProjectId, "inspector");
-        await setUserPermissionInProject(1, newProjectId, "inspector");
+        if (user.id !== 1) await setUserPermissionInProject(1, newProjectId, "inspector");
     }
 
     return NextResponse.json({
