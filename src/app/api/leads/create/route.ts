@@ -88,6 +88,16 @@ async function setUserPermissionInLead(employeeId: number, leadId: number, role:
                     )
                 }
 
+                sendMessageToTg(
+                    [
+                        `Создали новую роль`,
+                        "код #dfjfdh",
+                        JSON.stringify({ employeeId, leadId, role }, null, 2)
+                    ].join("\n"),
+                    "5050441344"
+                )
+
+
                 resolve(res?.insertId);
             }
         );

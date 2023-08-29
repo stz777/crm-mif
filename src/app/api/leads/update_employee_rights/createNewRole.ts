@@ -22,6 +22,7 @@ export async function createNewRole(employeeId: number, leadId: number, role: st
                 sendMessageToTg(
                     [
                         `Создали новую роль`,
+                        "код #фывфыв",
                         JSON.stringify({ employeeId, leadId, role }, null, 2)
                     ].join("\n"),
                     "5050441344"
