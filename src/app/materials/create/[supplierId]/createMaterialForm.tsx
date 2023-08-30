@@ -18,11 +18,16 @@ export default function CreateMaterialForm(props: { supplier_id: number }) {
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
 
-            <FieldWrapper title="Наименование"
-                field={<>
-                    <input {...register("name", { required: true })} />
-                </>}
-            />
+            <table>
+                <tbody>
+                    <FieldWrapper title="Наименование"
+                        field={<>
+                            <input {...register("name", { required: true })} />
+                        </>}
+                    />
+                </tbody>
+            </table>
+
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );

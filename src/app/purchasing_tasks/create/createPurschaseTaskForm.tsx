@@ -23,7 +23,10 @@ export default function CreatePurschaseTaskForm() {
     });
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
-            <FieldWrapper title="Дедлайн"
+          
+            <table>
+                <tbody>
+                <FieldWrapper title="Дедлайн"
                 field={<>
                     <Controller
                         control={control}
@@ -53,6 +56,9 @@ export default function CreatePurschaseTaskForm() {
                     <textarea  {...register("comment", { required: true })} autoComplete="off" />
                 }
             />
+                </tbody>
+            </table>
+            
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );

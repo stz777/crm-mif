@@ -38,54 +38,59 @@ export default function EditEmployeeForm(props: {
 
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
+           
+            <table>
+                <tbody>
+                    <FieldWrapper title="Имя сотрудника"
+                        field={<>
+                            <input {...register("username", { required: true })} autoComplete="off" className="form-control" />
+                        </>}
+                    />
 
-            <FieldWrapper title="Имя сотрудника"
-                field={<>
-                    <input {...register("username", { required: true })} autoComplete="off" className="form-control" />
-                </>}
-            />
+                    <FieldWrapper title="Телефоны"
+                        field={<>
+                            <input {...register("phone", { required: true })} autoComplete="off" className="form-control" />
+                        </>}
+                    />
 
-            <FieldWrapper title="Телефоны"
-                field={<>
-                    <input {...register("phone", { required: true })} autoComplete="off" className="form-control" />
-                </>}
-            />
+                    <FieldWrapper title="Email"
+                        field={<>
+                            <input {...register("email", { required: true })} autoComplete="off" className="form-control" />
+                        </>}
+                    />
 
-            <FieldWrapper title="Email"
-                field={<>
-                    <input {...register("email", { required: true })} autoComplete="off" className="form-control" />
-                </>}
-            />
+                    <FieldWrapper title="Телеграм"
+                        field={<>
+                            <input {...register("telegram_id", { required: true })} autoComplete="off" className="form-control" />
+                        </>}
+                    />
 
-            <FieldWrapper title="Телеграм"
-                field={<>
-                    <input {...register("telegram_id", { required: true })} autoComplete="off" className="form-control" />
-                </>}
-            />
+                    <FieldWrapper title="Должность"
+                        field={<>
+                            <select {...register("role", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                                <option value="" disabled>
+                                    Выберите должность
+                                </option>
+                                <option value="0">Исполнитель</option>
+                                <option value="1">Менеджер</option>
+                            </select>
+                        </>}
+                    />
 
-            <FieldWrapper title="Должность"
-                field={<>
-                    <select {...register("role", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
-                        <option value="" disabled>
-                            Выберите должность
-                        </option>
-                        <option value="0">Исполнитель</option>
-                        <option value="1">Менеджер</option>
-                    </select>
-                </>}
-            />
+                    <FieldWrapper title="Действующий"
+                        field={<>
+                            <select {...register("is_active", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                                <option value="" disabled>
+                                    Выберите статус
+                                </option>
+                                <option value="1">Действующий</option>
+                                <option value="0">Уволен</option>
+                            </select>
+                        </>}
+                    />
+                </tbody>
+            </table>
 
-            <FieldWrapper title="Действующий"
-                field={<>
-                    <select {...register("is_active", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
-                        <option value="" disabled>
-                            Выберите статус
-                        </option>
-                        <option value="1">Действующий</option>
-                        <option value="0">Уволен</option>
-                    </select>
-                </>}
-            />
 
             {/* <pre>{JSON.stringify({
                 employee: props.employee,

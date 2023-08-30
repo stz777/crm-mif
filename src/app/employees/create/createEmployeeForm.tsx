@@ -38,50 +38,55 @@ export default function CreateEmployeeForm() {
 
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
+           
+            <table>
+                <tbody>
+                    <FieldWrapper title="Имя сотрудника"
+                        field={<>
+                            <input {...register("username", { required: true })} autoComplete="off" className="form-control" />
+                        </>}
+                    />
 
-            <FieldWrapper title="Имя сотрудника"
-                field={<>
-                    <input {...register("username", { required: true })} autoComplete="off" className="form-control" />
-                </>}
-            />
+                    <FieldWrapper title="Телефоны"
+                        field={<>
+                            {phonesFields.map(({ id }, i) => <div key={id} className="d-flex">
+                                <input {...register(`phones.${i}.phone`, { required: true })} autoComplete="off" className="form-control" />
+                                {i > 0 && <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>}
+                            </div>)}
+                            {/* <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm mt-1">Добавить еще один телефон</div> */}
+                        </>}
+                    />
 
-            <FieldWrapper title="Телефоны"
-                field={<>
-                    {phonesFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input {...register(`phones.${i}.phone`, { required: true })} autoComplete="off" className="form-control" />
-                        {i > 0 && <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>}
-                    </div>)}
-                    {/* <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm mt-1">Добавить еще один телефон</div> */}
-                </>}
-            />
+                    <FieldWrapper title="Email"
+                        field={<>
+                            {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
+                                <input {...register(`emails.${i}.email`, { required: true })} autoComplete="off" className="form-control" />
+                                {i > 0 && <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>}
+                            </div>)}
+                            {/* <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm mt-1">Добавить еще один email</div> */}
+                        </>}
+                    />
 
-            <FieldWrapper title="Email"
-                field={<>
-                    {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input {...register(`emails.${i}.email`, { required: true })} autoComplete="off" className="form-control" />
-                        {i > 0 && <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>}
-                    </div>)}
-                    {/* <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm mt-1">Добавить еще один email</div> */}
-                </>}
-            />
+                    <FieldWrapper title="Телеграм"
+                        field={<>
+                            <input {...register("telegram_id", { required: true })} autoComplete="off" className="form-control" />
+                        </>}
+                    />
 
-            <FieldWrapper title="Телеграм"
-                field={<>
-                    <input {...register("telegram_id", { required: true })} autoComplete="off" className="form-control" />
-                </>}
-            />
+                    <FieldWrapper title="Должность"
+                        field={<>
+                            <select {...register("role", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                                <option value="" disabled>
+                                    Выберите должность
+                                </option>
+                                <option value="0">Исполнитель</option>
+                                <option value="1">Менеджер</option>
+                            </select>
+                        </>}
+                    />
+                </tbody>
+            </table>
 
-            <FieldWrapper title="Должность"
-                field={<>
-                    <select {...register("role", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
-                        <option value="" disabled>
-                            Выберите должность
-                        </option>
-                        <option value="0">Исполнитель</option>
-                        <option value="1">Менеджер</option>
-                    </select>
-                </>}
-            />
 
             <button className="btn btn-sm btn-dark">Сохранить</button>
 

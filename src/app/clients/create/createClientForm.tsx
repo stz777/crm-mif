@@ -28,48 +28,53 @@ export default function CreateClientForm() {
     });
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
+            
+            <table>
+                <tbody>
 
-            <FieldWrapper title="Имя клиента"
-                field={<>
-                    <input {...register("fio", { required: true })} placeholder="ФИО" autoComplete="off" />
-                </>}
-            />
+                    <FieldWrapper title="Имя клиента"
+                        field={<>
+                            <input {...register("fio", { required: true })} placeholder="ФИО" autoComplete="off" />
+                        </>}
+                    />
 
-            <FieldWrapper title="Телефоны"
-                field={<>
-                    {phonesFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите номер телефона" {...register(`phones.${i}.phone`, { required: true })} autoComplete="off" />
-                        <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
-                    </div>)}
-                    <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
-                </>}
-            />
+                    <FieldWrapper title="Телефоны"
+                        field={<>
+                            {phonesFields.map(({ id }, i) => <div key={id} className="d-flex">
+                                <input placeholder="Введите номер телефона" {...register(`phones.${i}.phone`, { required: true })} autoComplete="off" />
+                                <div onClick={() => removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
+                            </div>)}
+                            <div onClick={() => appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                        </>}
+                    />
 
-            <FieldWrapper title="Email"
-                field={<>
-                    {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите email" {...register(`emails.${i}.email`, { required: true })} autoComplete="off" />
-                        <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
-                    </div>)}
-                    <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
-                </>}
-            />
+                    <FieldWrapper title="Email"
+                        field={<>
+                            {emailFields.map(({ id }, i) => <div key={id} className="d-flex">
+                                <input placeholder="Введите email" {...register(`emails.${i}.email`, { required: true })} autoComplete="off" />
+                                <div onClick={() => removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
+                            </div>)}
+                            <div onClick={() => appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                        </>}
+                    />
 
-            <FieldWrapper title="Телеграм"
-                field={<>
-                    {telegramFields.map(({ id }, i) => <div key={id} className="d-flex">
-                        <input placeholder="Введите телеграм" {...register(`telegram.${i}.telegram`, { required: true })} autoComplete="off" />
-                        <div onClick={() => removeTelegram(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
-                    </div>)}
-                    <div onClick={() => appendTelegram({ telegram: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
-                </>}
-            />
+                    <FieldWrapper title="Телеграм"
+                        field={<>
+                            {telegramFields.map(({ id }, i) => <div key={id} className="d-flex">
+                                <input placeholder="Введите телеграм" {...register(`telegram.${i}.telegram`, { required: true })} autoComplete="off" />
+                                <div onClick={() => removeTelegram(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
+                            </div>)}
+                            <div onClick={() => appendTelegram({ telegram: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                        </>}
+                    />
 
-            <FieldWrapper title="Адрес"
-                field={<>
-                    <textarea {...register("address", { required: true })} placeholder="Адрес" autoComplete="off" />
-                </>}
-            />
+                    <FieldWrapper title="Адрес"
+                        field={<>
+                            <textarea {...register("address", { required: true })} placeholder="Адрес" autoComplete="off" />
+                        </>}
+                    />
+                </tbody>
+            </table>
 
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>

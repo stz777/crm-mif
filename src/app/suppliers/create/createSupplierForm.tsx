@@ -13,8 +13,9 @@ export default function CreateSupplierForm() {
     const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>();
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
-
-            <FieldWrapper title="Наименование"
+            <table>
+                <tbody>
+                <FieldWrapper title="Наименование"
                 field={<>
                     <input {...register("name", { required: true })} />
                 </>}
@@ -24,6 +25,9 @@ export default function CreateSupplierForm() {
                     <textarea {...register("contacts", { required: true })} />
                 </>}
             />
+                </tbody>
+            </table>
+            
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );

@@ -41,8 +41,10 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
     });
     return (
         <form onSubmit={handleSubmit(data => onSubmit(data, props.clientData.id))}>
-
-            <FieldWrapper title="Имя клиента"
+            
+            <table>
+                <tbody>
+                <FieldWrapper title="Имя клиента"
                 field={<>
                     <input {...register("fio", { required: true })} placeholder="Наименование" />
                 </>}
@@ -83,6 +85,9 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
                     <textarea {...register("address", { required: true })} placeholder="Адрес" autoComplete="off" />
                 </>}
             />
+                </tbody>
+            </table>
+            
 
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
