@@ -21,7 +21,7 @@ export async function POST(
 
     pool.query(
         `INSERT INTO payments (lead_id, sum, done_by) VALUES (?,?,?)`,
-        [lead_id, sum, 2],
+        [lead_id, sum, user.id],
         function (err, res) {
             if (err) {
                 sendMessageToTg(

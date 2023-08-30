@@ -15,7 +15,7 @@ export async function POST(
 
 
     const { lead_id, sum, comment } = await request.json();
-    const inserted = await insertExpense(lead_id, sum, comment, 2);
+    const inserted = await insertExpense(lead_id, sum, comment, user.id);
 
     if (inserted) {
         return NextResponse.json({
