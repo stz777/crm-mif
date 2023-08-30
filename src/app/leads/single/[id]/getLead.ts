@@ -4,7 +4,7 @@ import { pool } from "@/app/db/connect"
 export default async function getLead(leadId: number): Promise<Lead | false> {
     return new Promise((resolve) => {
         pool.query(
-            "SELECT * FROM leads WHERE id = ?",
+            "SELECT * FROM leads WHERE id = ? ORDER BY id DESC",
             [leadId],
             function (err, result: any[]) {
                 if (err) {

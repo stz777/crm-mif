@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { id: number } }) {
 async function getClient(clientId: number): Promise<ClientInterface> {
     const clients: ClientInterface[] = await new Promise(r => {
         pool.query(
-            `SELECT * FROM clients WHERE id = ${clientId}`,
+            `SELECT * FROM clients WHERE id = ${clientId}  ORDER BY id DESC`,
             function (err: any, res: ClientInterface[]) {
                 if (err) {
                     sendMessageToTg(

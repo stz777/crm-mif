@@ -62,7 +62,7 @@ export default async function Page() {
 
 async function getClients(): Promise<ClientInterface[]> {
     const clients: ClientInterface[] = await new Promise(r => {
-        pool.query("SELECT * FROM clients", function (err: any, res: ClientInterface[]) {
+        pool.query("SELECT * FROM clients ORDER BY id DESC", function (err: any, res: ClientInterface[]) {
             if (err) {
                 sendMessageToTg(
                     JSON.stringify(

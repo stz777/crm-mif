@@ -28,7 +28,7 @@ export async function getLeads(
 
     const whereString = whereArr.length ? "WHERE " + whereArr.join(" AND ") : "";
 
-    const qs = `SELECT * FROM leads ${whereString}`;
+    const qs = `SELECT * FROM leads ${whereString}  ORDER BY id DESC `;
 
     const leads: LeadInterface[] = await new Promise(r => {
         pool.query(

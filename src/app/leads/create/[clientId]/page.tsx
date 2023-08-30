@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { clientId: number } })
 async function getClient(clientId: number): Promise<ClientInterface[]> {
     return await new Promise(r => {
         pool.query(
-            "SELECT * FROM clients WHERE id = ?",
+            "SELECT * FROM clients WHERE id = ?  ORDER BY id DESC",
             [clientId],
             function (err: any, res: any) {
                 if (err) {
