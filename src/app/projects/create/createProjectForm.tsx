@@ -20,7 +20,10 @@ export default function CreateEmployeeForm() {
     const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>();
     return (
         <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
-            <FieldWrapper title="Название проекта"
+             
+             <table>
+                <tbody>
+                <FieldWrapper title="Название проекта"
                 field={<>
                     <input {...register("title", { required: true })} autoComplete="off" className="form-control" />
                 </>}
@@ -48,6 +51,9 @@ export default function CreateEmployeeForm() {
                     />
                 </>}
             />
+                </tbody>
+            </table>
+           
             <button className="btn btn-sm btn-dark">Сохранить</button>
         </form>
     );
