@@ -7,7 +7,7 @@ export default async function SideMenu() {
     const auth = cookies().get('auth');
     if (!auth?.value) return;
     const user = await getUserByToken(auth?.value);
-    if (!user) return <>no user</>
+    if (!user) return null;
     return <div className="">
         <ul className="list-group">
             {!user.is_boss ? null :
