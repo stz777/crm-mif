@@ -23,7 +23,7 @@ export default function Client(props: { employees: Employee[], searchParams: { i
 
     return <>
         <h1>Сотрудники</h1>
-        <Filter searchParams={searchParams}/>
+        <div className="mb-3"><Filter searchParams={searchParams} /></div>
         <table className="table table-bordered table-striped">
             <thead>
                 <tr>

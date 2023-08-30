@@ -1,14 +1,11 @@
 import Link from "next/link";
 import LogoutBTN from "../api/auth/logout/logoutBTN";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { getUserByToken } from "../components/getUserByToken";
 
 export default async function SideMenu() {
-    // const 
-    // console.log('user', user);
     const auth = cookies().get('auth');
-    if (!auth?.value) return;//redirect("/");
+    if (!auth?.value) return;
     const user = await getUserByToken(auth?.value);
     if (!user) return <>no user</>
     return <div className="">
@@ -43,7 +40,7 @@ export default async function SideMenu() {
 
             {!user.is_manager ? null : <li><Link href="/projects/get" className="list-group-item text-nowrap">Список проектов</Link></li>}
 
-            <LogoutBTN />
         </ul>
+            <div className="mt-5"><LogoutBTN /></div>
     </div>
 } 
