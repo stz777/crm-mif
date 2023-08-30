@@ -7,6 +7,7 @@ import LogoutBTN from "./api/auth/logout/logoutBTN";
 import { cookies } from 'next/headers'
 import getBasePermissions from "./components/permissions/getBasePermissions";
 import { getUserByToken } from "./components/getUserByToken";
+import SideMenu from "./side_menu/side_menu";
 
 export default function RootLayout({
   children,
@@ -17,14 +18,10 @@ export default function RootLayout({
     <html lang="ru">
       <body>
         <header>
-          <div className="container mt-2">
-            <div className="d-flex">
-              <NavBar />
-            </div>
-          </div>
         </header>
-        <div className="container mt-3">
-          {children}
+        <div className="d-flex">
+          <div className="pe-3 position-sticky sticky-top"><SideMenu /></div>
+          <div my-3>{children}</div>
         </div>
         <ToastContainer />
       </body>
@@ -42,7 +39,7 @@ async function NavBar() {
   const basePermissions = await getBasePermissions(user.id, !!user.is_manager)
 
   return <div className="">
-    <div className="d-flex">
+    <div className="">
       <div className="me-2">
         {!user.is_boss ? null : <><Link href="/employees/create" className="btn btn-sm btn-outline-dark mb-2">Создать сотрудника</Link><br /></>}
         {!user.is_boss ? null : <Link href="/employees/get" className="btn btn-sm btn-outline-dark">Список сотрудников</Link>}
@@ -72,7 +69,7 @@ async function NavBar() {
         {!user.is_manager ? null : <Link href="/projects/create" className="btn btn-sm btn-outline-dark mb-2">Создать проект</Link>}<br />
         {!user.is_manager ? null : <Link href="/projects/get" className="btn btn-sm btn-outline-dark ">Список проектов</Link>}
       </div>
-      <div><LogoutBTN /></div>
+      <div className="mt-3"><LogoutBTN /></div>
     </div>
   </div>
 }

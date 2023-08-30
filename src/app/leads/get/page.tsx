@@ -20,7 +20,8 @@ export default async function Page(props: any) {
     const { lead_id } = searchParams
     const leads = await getLeads(searchParams);
     return <>
-        <Filter searchParams={searchParams}/>
-        <Client leads={leads} is_manager={!!user?.is_manager} is_boss={!!user.is_boss} searchParams={searchParams}/>
+        <h1>Заказы</h1>
+        <Filter searchParams={searchParams} />
+        <Client leads={leads} is_manager={!!user?.is_manager} is_boss={!!user.is_boss} searchParams={searchParams} />
     </>
 }

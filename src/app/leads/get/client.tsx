@@ -29,7 +29,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
     }, [leads])
 
     return <>
-        <h1>Заказы</h1>
+        
 
         {leads ? <table className="table table-bordered">
             <thead>
@@ -201,12 +201,13 @@ async function fetchLeads(searchParams: any) {
                     },
                     body: JSON.stringify({
                         text: {
-                            err: "#dnsdcds8",
+                            err: "#dniUcds8",
                             data: {
                                 statusText,
+                                error,
                                 values: {}
                             }
-                        }
+                        } 
                     })
                 }
             )

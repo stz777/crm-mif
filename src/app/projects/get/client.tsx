@@ -25,7 +25,7 @@ export default function Client(props: { projects: ProjectInterface[], is_manager
     }, [projects])
 
     return <>
-        <h1>Проекты</h1>
+       
 
         {projects ? <table className="table table-bordered">
             <thead>
@@ -113,7 +113,7 @@ async function fetchProjects(searchParams: any) {
                     },
                     body: JSON.stringify({
                         text: {
-                            err: "#dnsdcds8",
+                            err: "#dnsdncds8",
                             data: {
                                 statusText,
                                 values: {}

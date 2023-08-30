@@ -14,10 +14,11 @@ export default async function Page(props: any) {
     const user = await getUserByToken(auth?.value);
     if (!user) return redirect("/");
     if (!user.is_manager) return redirect("/");
-    
+
     const { searchParams } = props;
     const projects = await getProjectsFn(searchParams);
     return <>
+        <h1>Проекты</h1>
         <Filter searchParams={searchParams} />
         <Client projects={projects} is_manager={!!user?.is_manager} is_boss={!!user.is_boss} searchParams={searchParams} />
     </>
