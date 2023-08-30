@@ -4,13 +4,12 @@ import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 import getEployeeByID from "@/app/db/employees/getEployeeById";
 
-export default async function createClientFn(fio: string): Promise<number> {
+export default async function createClientFn(fio: string, address: string): Promise<number> {
     const boss = await getEployeeByID(1)
-    
     return await new Promise(r => {
         pool.query(
-            `INSERT INTO clients (full_name) VALUES (?)`,
-            [fio],
+            `INSERT INTO clients (full_name, address) VALUES (?,?)`,
+            [fio, address],
             function (err, res: any) {
                 if (err) {
                     sendMessageToTg(
