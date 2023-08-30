@@ -8,7 +8,7 @@ export default async function SideMenu() {
     // const 
     // console.log('user', user);
     const auth = cookies().get('auth');
-    if (!auth?.value) return redirect("/");
+    if (!auth?.value) return;//redirect("/");
     const user = await getUserByToken(auth?.value);
     if (!user) return <>no user</>
     return <div className="">
