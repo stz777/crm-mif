@@ -13,7 +13,7 @@ export async function POST(req: any, res: any) {
 
     const data = await req.json();
 
-    const newClientId: number = await createClientFn(data.fio);
+    const newClientId: number = await createClientFn(data.fio, data.address);
 
     const phones = data.phones;
     const emails = data.emails;

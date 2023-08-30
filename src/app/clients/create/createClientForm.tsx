@@ -9,6 +9,7 @@ type FormValues = {
     phones: { phone: string }[];
     emails: { email: string }[];
     telegram: { telegram: string }[];
+    address: string;
 };
 
 export default function CreateClientForm() {
@@ -61,6 +62,12 @@ export default function CreateClientForm() {
                         <div onClick={() => removeTelegram(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendTelegram({ telegram: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                </>}
+            />
+
+            <FieldWrapper title="Адрес"
+                field={<>
+                    <textarea {...register("address", { required: true })} placeholder="Адрес" autoComplete="off" />
                 </>}
             />
 

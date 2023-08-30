@@ -79,8 +79,8 @@ export async function POST(
 
 async function updateClient(clientData: any, clientId: number) {
     await new Promise(r => {
-        pool.query(`UPDATE clients SET full_name = ? WHERE id = ?`,
-            [clientData.fio, clientId],
+        pool.query(`UPDATE clients SET full_name = ?, address=? WHERE id = ?`,
+            [clientData.fio, clientData.address, clientId],
             function (err, res) {
                 if (err) {
                     sendMessageToTg(

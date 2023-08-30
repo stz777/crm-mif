@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 type FormValues = {
     fio: string
+    address: string
     phones: { phone: string }[];
     emails: { email: string }[];
     telegram: { telegram: string }[];
@@ -18,6 +19,7 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
         {
             defaultValues: {
                 fio: props.clientData.full_name,
+                address: props.clientData.address,
                 phones: props.clientData.meta.filter(item => item.data_type === "phone").map(item => ({ phone: item.data })),
                 telegram: props.clientData.meta.filter(item => item.data_type === "telegram").map(item => ({ telegram: item.data })),
                 emails: props.clientData.meta.filter(item => item.data_type === "email").map(item => ({ email: item.data })),
@@ -73,6 +75,12 @@ export default function EditClientForm(props: { clientData: ClientInterface }) {
                         <div onClick={() => removeTelegram(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                     </div>)}
                     <div onClick={() => appendTelegram({ telegram: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                </>}
+            />
+
+            <FieldWrapper title="Адрес"
+                field={<>
+                    <textarea {...register("address", { required: true })} placeholder="Адрес" autoComplete="off" />
                 </>}
             />
 

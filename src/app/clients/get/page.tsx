@@ -13,6 +13,10 @@ export default async function Page() {
     if (!user.is_manager) return redirect("/");
 
     const clients = await getClients();
+
+    console.log('clients', clients);
+
+
     return <>
         <h1>Клиенты</h1>
         <table className="table table-bordered table-striped w-auto">
@@ -20,6 +24,7 @@ export default async function Page() {
                 <tr className="sticky-top">
                     <th>id</th>
                     <th>Наименование</th>
+                    <th>Адрес</th>
                     <th>Контакты</th>
                     <th />
                 </tr>
@@ -28,6 +33,7 @@ export default async function Page() {
                 {clients.map((client, i) => <tr key={client.id}>
                     <td>{client.id}</td>
                     <td>{client.full_name}</td>
+                    <td>{client.address}</td>
                     <td>
                         <table className="table">
                             <tbody>
@@ -107,6 +113,7 @@ async function getClientMeta(clientId: number): Promise<ClientMetaInterface[]> {
 export interface ClientInterface {
     id: number
     full_name: string
+    address: string
     meta: ClientMetaInterface[]
 }
 
