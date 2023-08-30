@@ -41,6 +41,6 @@ export default async function SideMenu() {
             {!user.is_manager ? null : <li><Link href="/projects/get" className="list-group-item text-nowrap">Список проектов</Link></li>}
 
         </ul>
-            <div className="mt-5"><LogoutBTN /></div>
+        <div className="mt-3"><LogoutBTN /></div>
     </div>
 } 
