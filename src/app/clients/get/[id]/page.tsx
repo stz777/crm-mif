@@ -9,7 +9,7 @@ export default async function Page(props: { params: { id: number } }) {
 
     const leads = await getLeads({ client: props.params.id })
 
-    if(!client) return <>тут никого нет</>
+    if (!client) return <>тут никого нет</>
 
     return <>
         <h1>Клиент #{client?.id}</h1>
@@ -22,7 +22,7 @@ export default async function Page(props: { params: { id: number } }) {
                     <td>
                         <table>
                             <tbody>
-                                {meta.map(item => <tr>
+                                {meta.map((item, i) => <tr key={i}>
                                     <td className="pe-2">{item.data_type}:</td>
                                     <td>{item.data}</td>
                                 </tr>)}
