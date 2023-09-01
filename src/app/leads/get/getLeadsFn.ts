@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 
 interface SearchParametersInterface {
     id?: number
+    client?: number
     is_archive?: "true" | boolean
 }
 
@@ -19,6 +20,9 @@ export async function getLeads(
 
     if (searchParams?.id) {
         whereArr.push(`id = ${searchParams.id}`)
+    }
+    if (searchParams?.client) {
+        whereArr.push(`client = ${searchParams.client}`)
     }
     if (searchParams?.is_archive) {
         whereArr.push(`done_at IS NOT NULL`)
@@ -53,7 +57,7 @@ export async function getLeads(
     for (let index = 0; index < leads.length; index++) {
         const { id: leadId } = leads[index];
         const role = await getRoleByLeadId(leadId);
-        
+
         if (role) {
             output.push({
                 ...leads[index],
@@ -92,7 +96,7 @@ export async function getRoleByLeadId(lead_id: number): Promise<string | null> {
     const user = await getUserByToken(String(auth?.value));
     if (!user) return null;
 
-    if(user.is_boss) return "boss";
+    if (user.is_boss) return "boss";
 
     return await new Promise(resolve => {
         pool.query(

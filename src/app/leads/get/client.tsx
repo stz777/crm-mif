@@ -52,7 +52,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
                     <td><Link href={`/leads/single/${lead.id}`} className="text-nowrap">Заказ #{lead.id}</Link></td> {/*lead id*/}
-                    <td>{lead.client}</td>{/*client id*/}
+                    <td className="text-nowrap">{!props.is_manager ? null :<Link href={`/clients/get/${lead.client}`}>Клиент {lead.client}</Link>}</td>{/*client id*/}
                     <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {

@@ -1,4 +1,3 @@
-import { ClientInterface } from "@/app/clients/get/page";
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import createClientMetaFn from "../../create/createClientMetaFn";

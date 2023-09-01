@@ -31,7 +31,7 @@ export default async function Page() {
             </thead>
             <tbody>
                 {clients.map((client, i) => <tr key={client.id}>
-                    <td>{client.id}</td>
+                    <td><Link href={`/clients/get/${client.id}`}>Клиент #{client.id}</Link></td>
                     <td>{client.full_name}</td>
                     <td>{client.address}</td>
                     <td>
