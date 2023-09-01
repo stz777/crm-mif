@@ -9,6 +9,8 @@ export default async function Page(props: { params: { id: number } }) {
 
     const leads = await getLeads({ client: props.params.id })
 
+    if(!client) return <>тут никого нет</>
+
     return <>
         <h1>Клиент #{client?.id}</h1>
         <table className="table">
