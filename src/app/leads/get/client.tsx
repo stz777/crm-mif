@@ -29,7 +29,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
     }, [leads])
 
     return <>
-        
+
 
         {leads ? <table className="table table-bordered">
             <thead>
@@ -52,14 +52,15 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
                     <td><Link href={`/leads/single/${lead.id}`} className="text-nowrap">Заказ #{lead.id}</Link></td> {/*lead id*/}
-                    <td className="text-nowrap">{!props.is_manager ? null :<Link href={`/clients/get/${lead.client}`}>Клиент {lead.client}</Link>}</td>{/*client id*/}
+                    <td className="text-nowrap">{!props.is_manager ? null : <Link href={`/clients/get/${lead.client}`}>Клиент {lead.client}</Link>}</td>{/*client id*/}
                     <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {
                         const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0);
-                        const date2 = dayjs(lead.created_date).set("hour", 0).set("minute", 0);
+                        const date2 = dayjs().set("hour", 0).set("minute", 0);
                         const diffInDays = date1.diff(date2, 'day');
                         const limit = 1;
+
                         if (lead.done_at) return <span className="badge text-bg-success">выполнено</span>
                         if (diffInDays <= limit) return <span className="badge text-bg-danger">срочно</span>
                         if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
@@ -207,7 +208,7 @@ async function fetchLeads(searchParams: any) {
                                 error,
                                 values: {}
                             }
-                        } 
+                        }
                     })
                 }
             )
