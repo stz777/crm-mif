@@ -36,6 +36,8 @@ export default async function Page(props: { params: { id: number } }) {
                     <td>
                         {(() => {
                             if (!leads.length) return 0;
+                            console.log('leads', leads);
+
                             const payments = leads
                                 .filter(lead => lead.payments?.length)
                                 .map(({ payments }) => {
