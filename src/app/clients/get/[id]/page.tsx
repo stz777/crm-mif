@@ -36,26 +36,17 @@ export default async function Page(props: { params: { id: number } }) {
                     <td>
                         {(() => {
                             if (!leads.length) return 0;
-                            console.log('leads', leads);
-
-                            // if( !leads.find(lead.payments) )
-
                             const payments = leads
-                                .filter(lead => {
-                                    if(!lead.payments) return false;
-                                    if(!lead.payments.length) return false;
-                                    return true;
-                                    // return lead.payments.length;
-                                })
+                                .filter(lead => lead.payments?.length)
                                 .map(({ payments }) => {
                                     if (!payments) return 0;
                                     if (!payments.length) return 0;
-                                    console.log('payments', payments);
-
                                     return payments.map(({ sum }) => sum).reduce((a, b) => a + b);
                                 })
-                                .reduce((a, b) => a + b);
-                            return payments;
+
+                            if (!payments?.length) return 0;
+
+                            return payments.reduce((a, b) => a + b);
                         })()}
                     </td>
                 </tr>
