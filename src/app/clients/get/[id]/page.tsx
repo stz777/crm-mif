@@ -38,8 +38,17 @@ export default async function Page(props: { params: { id: number } }) {
                             if (!leads.length) return 0;
                             console.log('leads', leads);
 
+                            // if( !leads.find(lead.payments) )
+
                             const payments = leads
-                                .filter(lead => lead.payments?.length)
+                                .filter(lead => {
+                                    console.log(
+
+                                        'lead.payments', lead.payments
+                                    );
+
+                                    return lead.payments?.length;
+                                })
                                 .map(({ payments }) => {
                                     if (!payments) return 0;
                                     if (!payments.length) return 0;
