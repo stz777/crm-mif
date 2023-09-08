@@ -42,12 +42,10 @@ export default async function Page(props: { params: { id: number } }) {
 
                             const payments = leads
                                 .filter(lead => {
-                                    console.log(
-
-                                        'lead.payments', lead.payments
-                                    );
-
-                                    return lead.payments?.length;
+                                    if(!lead.payments) return false;
+                                    if(!lead.payments.length) return false;
+                                    return true;
+                                    // return lead.payments.length;
                                 })
                                 .map(({ payments }) => {
                                     if (!payments) return 0;
