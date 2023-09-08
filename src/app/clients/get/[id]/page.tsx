@@ -41,6 +41,8 @@ export default async function Page(props: { params: { id: number } }) {
                                 .map(({ payments }) => {
                                     if (!payments) return 0;
                                     if (!payments.length) return 0;
+                                    console.log('payments', payments);
+
                                     return payments.map(({ sum }) => sum).reduce((a, b) => a + b);
                                 })
                                 .reduce((a, b) => a + b);
