@@ -17,7 +17,7 @@ export default function MessageForm({ task_id }: { task_id: number }) {
 
     } = useForm<Inputs>({
         defaultValues: {
-            essense: "lead",
+            essense: "purchase_task",
             essense_id: task_id
         }
     })

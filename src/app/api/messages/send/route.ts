@@ -7,6 +7,7 @@ import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
 import getEmployeesByLeadId from "@/app/leads/single/[id]/getEmployeesByLeadId";
 import getEmployeesByProjectId from "@/app/db/employees/getEmployeesByProjectId";
+import getEmployeesByPurchaseTask from "@/app/db/employees/getEmployeesByPurchaseTask";
 
 export async function POST(
     request: Request,
@@ -187,6 +188,9 @@ async function noticeEmployees(essense: string, essense_id: number, username: st
     }
     if (essense === "project") {
         employees = await getEmployeesByProjectId(essense_id);
+    }
+    if (essense === "purchase_task") {
+        employees = await getEmployeesByPurchaseTask(essense_id);
     }
 
     if (!employees) {
