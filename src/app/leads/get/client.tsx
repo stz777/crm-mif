@@ -40,10 +40,11 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     <th>дедлайн</th>
                     <th>срочность</th>
                     <th>описание</th>
-                    {props.is_manager && <th>Расходы</th>}
+                    {props.is_manager && <th>расходы</th>}
                     {props.is_manager && <th>оплаты</th>}
                     <th>оплата</th>
                     <th>аванс</th>
+                    {props.is_manager && <th>выполнен, ожидает оплаты</th>}
                     {props.is_manager && <th>сумма заказа</th>}
                     <th>дата факт. выполнения</th>
                     <th></th>
@@ -138,6 +139,74 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             return <CheckPaymentUI done={предоплатаПроведена} />
                         })()}
                     </td>{/*внесена предоплата*/}
+                    {props.is_manager && <td>
+                        {/* ждет оплату */}
+                        {(() => {
+                            if (lead.done_at) return "-";
+
+
+                            if(lead.wait_pay) return  <CheckPaymentUI done={true} />
+
+
+                            return <button className="btn btn-sm btn-outline-dark text-nowrap"
+                                onClick={() => {
+                                    fetch(
+                                        "/api/leads/set_wait_pay",
+                                        {
+                                            method: "POST",
+                                            body: JSON.stringify({
+                                                lead_id: lead.id
+                                            })
+                                        }
+                                    ).then(
+                                        response => {
+                                            if (response.ok) {
+                                                return response.json()
+                                            } else {
+                                                throw new Error(response.statusText);
+                                            }
+                                        }
+                                    ).then(data => {
+                                        if (data.success) {
+                                            if (!data.leads) {
+                                                toast.error("Что-то пошло не так #errncd7d");
+                                            }
+                                            return data;
+                                        } else {
+                                            toast.error("Что-то пошло не так #errncx8");
+                                        }
+                                    })
+                                        .catch(error => {
+                                            const statusText = String(error);
+                                            fetch(
+                                                `/api/bugReport`,
+                                                {
+                                                    method: "POST",
+                                                    headers: {
+                                                        'Content-Type': 'application/json'
+                                                    },
+                                                    body: JSON.stringify({
+                                                        text: {
+                                                            err: "#errjdn7",
+                                                            data: {
+                                                                statusText,
+                                                                error,
+                                                                values: {}
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                            )
+                                                .then(x => x.json())
+                                                .then(x => {
+                                                    console.log(x);
+                                                })
+                                        })
+
+                                }}
+                            >отметить</button>
+                        })()}
+                    </td>}
                     {props.is_manager && <td>{lead.sum}</td>}{/*сумма заказа*/}
                     <td>
                         <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "-"}</span>

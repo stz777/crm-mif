@@ -8,6 +8,7 @@ export interface LeadInterface {
     sum: number
     payments?: PaymentInterface[]
     expensesPerLead?: ExpensesPerLeadInterface[]
+    wait_pay: boolean | 0 | 1
 }
 
 export interface PaymentInterface {
