@@ -4,21 +4,20 @@ import { pool } from "@/app/db/connect"
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import Filter from "./filter";
+import { getClients } from "./getClients";
+import { ClientsSearchInterface } from "@/app/components/types/clients";
 
-export default async function Page() {
+export default async function Page(props: { searchParams: ClientsSearchInterface }) {
     const auth = cookies().get('auth');
     if (!auth?.value) return redirect("/");
     const user = await getUserByToken(auth?.value);
     if (!user) return redirect("/");
     if (!user.is_manager) return redirect("/");
-
-    const clients = await getClients();
-
-    console.log('clients', clients);
-
-
+    const clients = await getClients(props.searchParams);
     return <>
         <h1>Клиенты</h1>
+        <Filter searchParams={props.searchParams} />
         <table className="table table-bordered table-striped w-auto">
             <thead>
                 <tr className="sticky-top">
@@ -37,7 +36,7 @@ export default async function Page() {
                     <td>
                         <table className="table">
                             <tbody>
-                                {client.meta.map(meta => <tr key={meta.id}>
+                                {client.meta.map((meta) => <tr key={meta.id}>
                                     <td>
                                         {meta.data_type}
                                     </td>
@@ -56,70 +55,4 @@ export default async function Page() {
             </tbody>
         </table>
     </>
-}
-
-
-
-async function getClients(): Promise<ClientInterface[]> {
-    const clients: ClientInterface[] = await new Promise(r => {
-        pool.query("SELECT * FROM clients ORDER BY id DESC", function (err: any, res: ClientInterface[]) {
-            if (err) {
-                sendMessageToTg(
-                    JSON.stringify(
-                        {
-                            errorNo: "#mdsasd34nd",
-                            error: err,
-                            values: {}
-                        }, null, 2),
-                    "5050441344"
-                )
-            }
-            r(res);
-        })
-    });
-
-    for (let index = 0; index < clients.length; index++) {
-        const client = clients[index];
-        clients[index].meta = await getClientMeta(client.id);
-    }
-
-    return clients;
-}
-
-
-
-async function getClientMeta(clientId: number): Promise<ClientMetaInterface[]> {
-    return await new Promise(r => {
-        pool.query(`SELECT * FROM clients_meta WHERE client = ${clientId}`, function (err: any, res: any) {
-            if (err) {
-                sendMessageToTg(
-                    JSON.stringify(
-                        {
-                            errorNo: "#msk3ng0c",
-                            error: err,
-                            values: { clientId }
-                        }, null, 2),
-                    "5050441344"
-                )
-            }
-            r(res);
-        })
-    });
-
-
-}
-
-
-export interface ClientInterface {
-    id: number
-    full_name: string
-    address: string
-    meta: ClientMetaInterface[]
-}
-
-export interface ClientMetaInterface {
-    id: number
-    client: number
-    data_type: string
-    data: string
 }
