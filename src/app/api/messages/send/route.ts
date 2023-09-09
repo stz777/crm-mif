@@ -6,18 +6,16 @@ import fs from "fs"
 import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
 import getEmployeesByLeadId from "@/app/leads/single/[id]/getEmployeesByLeadId";
-// import { getEmployeesByLeadId } from "@/app/leads/get/righsManagement/getEmployeesByLeadId";
+import getEmployeesByProjectId from "@/app/db/employees/getEmployeesByProjectId";
 
 export async function POST(
     request: Request,
     { params }: { params: { id: number } }
 ) {
-        const auth = cookies().get('auth');
+    const auth = cookies().get('auth');
     if (!auth?.value) return new Response("Кто ты", { status: 401, });;
     const user = await getUserByToken(auth?.value);
     if (!user) return new Response("Кто ты", { status: 401, });;
-    // if (!user.is_manager) return new Response("Кто ты", { status: 401, });;
-
 
     const imagesFolder: string = String(process.env.IMAGES_FOLDER);
 
@@ -47,6 +45,7 @@ export async function POST(
         noticeEmployees(
             essense,
             essense_id,
+            user.username,
             String(request.headers.get("origin"))
         );
     }
@@ -54,8 +53,7 @@ export async function POST(
     for (let index = 0; index < items.length; index++) {
         const [name, value]: any = items[index]
         if (value instanceof File && name === "images") {
-            console.log('image');
-            
+
             let filename = slugify(value.name.toLocaleLowerCase().replace(/[^ a-zA-Zа-яА-Я0-9-.]/igm, ""));
 
             const imageIsExists = await checkImageIsExists(filename);
@@ -182,18 +180,32 @@ async function saveImageToDB(imageName: string, messageId: number) {
 }
 
 
-async function noticeEmployees(essense: string, leadId: number, domain: string) {
-    const employees = await getEmployeesByLeadId(leadId);
+async function noticeEmployees(essense: string, essense_id: number, username: string, domain: string) {
+    let employees;
+    if (essense === "lead") {
+        employees = await getEmployeesByLeadId(essense_id);
+    }
+    if (essense === "project") {
+        employees = await getEmployeesByProjectId(essense_id);
+    }
+
+    if (!employees) {
+        await sendMessageToTg(
+            `Ошибка #err_dksj877`,
+            "5050441344"
+        );
+    }
+
     if (employees) {
         for (let index = 0; index < employees.length; index++) {
             const { user_id, tg_chat_id } = employees[index];
             if (tg_chat_id) {
                 await sendMessageToTg(
-                    `Пришло сообщение в ${translator[essense].name}  #${leadId}`,
+                    `Пришло сообщение в ${translator[essense].name} #${essense_id} от ${username}`,
                     String(tg_chat_id)
                 );
                 await sendMessageToTg(
-                    `${domain}${translator[essense].path}${leadId}`,
+                    `${domain}${translator[essense].path}${essense_id}`,
                     String(tg_chat_id)
                 );
             }
