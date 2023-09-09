@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import CreateClientForm from "./createClientForm";
+import CreateClientForm from "./createClientForm/createClientForm";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { redirect } from "next/navigation";
 
