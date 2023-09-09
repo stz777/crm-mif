@@ -2,8 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../components/types/lead";
+import dayjs from "dayjs";
+import { ReportSearchInterface } from "./page";
 
-export default function Client(props: { reportData: any }) {
+export default function Client(props: {
+    reportData: {
+        payments: PaymentInterface[]
+        expensesPerLead: ExpensesPerLeadInterface[]
+        expenses_per_purchase_task: ExpensesPePerPurchaseTaskInterface[]
+    },
+    searchParams: ReportSearchInterface
+
+}) {
 
     const [reportData, setReportData] = useState(props.reportData)
 
@@ -12,13 +23,12 @@ export default function Client(props: { reportData: any }) {
         (async function refresh() {
             if (!mount) return;
             await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
-            const response = await fetchGetReportData();
+            const response = await fetchGetReportData(props.searchParams);
             if (JSON.stringify(reportData) !== JSON.stringify(response.reportData)) setReportData(response.reportData)
             await refresh();
         })();
         return () => { mount = false; }
     }, [props, reportData])
-
 
     let totalPayments;
     if (reportData?.payments?.length) {
@@ -40,44 +50,78 @@ export default function Client(props: { reportData: any }) {
     } else {
         totalExpensesPerPurchaseTaskInterface = 0;
     }
-
-    const balance = totalPayments - totalExpensesPerPurchaseTaskInterface;
-
-    const profit = totalPayments - totalExpensesPerLeads;
+    const total_balance = totalPayments - totalExpensesPerPurchaseTaskInterface;
+    const total_profit = totalPayments - totalExpensesPerLeads;
 
     return <>
         <h1>Отчет</h1>
-        <table className="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Доходы</th>
-                    <th>Расходы</th>
-                    <th>Прибыль</th>
-                    <th>Закупки</th>
-                    <th>Баланс</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{totalPayments}</td>
-                    <td>{totalExpensesPerLeads}</td>
-                    <td>{profit}</td>
-                    <td>{totalExpensesPerPurchaseTaskInterface}</td>
-                    <td>{balance}</td>
-                </tr>
-            </tbody>
-        </table>
+        {(() => {
+            const monthes = Array.from({ length: 12 }, (_, i) => i + 1);
+            return <table className="table table-bordered table-striped" >
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>доходы</th>
+                        <th>расходы</th>
+                        <th>прибыль</th>
+                        <th>закупки</th>
+                        <th>баланс</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {monthes.map(month => {
+
+                        const paymentsPerMonth = reportData.payments
+                            .filter(payment => dayjs(payment.created_date).format("M") === String(month))
+                            .map(payment => payment.sum);
+                        const paymentsPerMonthSum = (paymentsPerMonth?.length) ? paymentsPerMonth.reduce((a, b) => a + b) : 0;
+
+                        const expensesPerLeadsPerMonth = reportData.expensesPerLead
+                            .filter(expense => dayjs(expense.created_date).format("M") === String(month))
+                            .map(expense => expense.sum);
+                        const expensesPerLeadsPerMonthSum = (expensesPerLeadsPerMonth?.length) ? expensesPerLeadsPerMonth.reduce((a, b) => a + b) : 0;
+
+                        const totalExpensesPerPurchaseTaskPerMonth = reportData.expenses_per_purchase_task
+                            .filter(expense => dayjs(expense.created_date).format("M") === String(month))
+                            .map(expense => expense.sum);
+                        const totalExpensesPerPurchaseTaskPerMonthSum = (totalExpensesPerPurchaseTaskPerMonth?.length) ? totalExpensesPerPurchaseTaskPerMonth.reduce((a, b) => a + b) : 0;
+                        const profit = paymentsPerMonthSum - expensesPerLeadsPerMonthSum;
+                        const balance = paymentsPerMonthSum - totalExpensesPerPurchaseTaskPerMonthSum;
+
+                        return <tr key={month}>
+                            <td>{months[month - 1]}</td>
+                            <td>{paymentsPerMonthSum}</td>
+                            <td>{expensesPerLeadsPerMonthSum}</td>
+                            <td>{profit}</td>
+                            <td>{totalExpensesPerPurchaseTaskPerMonthSum}</td>
+                            <td>{balance}</td>
+                        </tr>
+                    })}
+                    <tr>
+                        <th>Общее</th>
+                        <td>{totalPayments}</td>
+                        <td>{totalExpensesPerLeads}</td>
+                        <td>{total_profit}</td>
+                        <td>{totalExpensesPerPurchaseTaskInterface}</td>
+                        <td>{total_balance}</td>
+                    </tr>
+                </tbody>
+            </table>
+        })()}
     </>
 }
 
 
 
 
-async function fetchGetReportData() {
+async function fetchGetReportData(searchParams: ReportSearchInterface) {
     return fetch(
         "/api/report/get",
         {
             method: "POST",
+            body: JSON.stringify({
+                searchParams
+            })
         }
     ).then(
         response => {
@@ -123,3 +167,19 @@ async function fetchGetReportData() {
                 })
         })
 }
+
+
+const months = [
+    "январь",
+    "февраль",
+    "март",
+    "апрель",
+    "май",
+    "июнь",
+    "июль",
+    "август",
+    "сентябрь",
+    "октябрь",
+    "ноябрь",
+    "декабрь"
+];

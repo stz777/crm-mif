@@ -23,10 +23,12 @@ export interface ExpensesPerLeadInterface {
     id: number
     sum: number
     comment: string
+    created_date: string
 }
 
 export interface ExpensesPePerPurchaseTaskInterface {
     id: number
     sum: number
     comment: string
+    created_date: string
 }
