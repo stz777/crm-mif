@@ -5,7 +5,6 @@ import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
 import getEployeeByID from "@/app/db/employees/getEployeeById";
 
-
 export async function POST(
     request: Request,
     { params }: { params: { id: number } }
@@ -17,12 +16,23 @@ export async function POST(
     if (!user) return new Response("Кто ты", { status: 401, });;
     if (!user.is_manager) return new Response("Кто ты", { status: 401, });;
 
-
     const { client, description, title, deadline, sum } = await request.json();
 
+    const leadId: number = await createLead({ client, description, title, deadline, sum });
+    if (!leadId) { return NextResponse.json({ success: false }); }
+    if (user) {
+        await setUserPermissionInLead(user.id, leadId, "inspector");
+        if (user.id !== 1) await setUserPermissionInLead(1, leadId, "inspector");
+    }
+    return NextResponse.json({
+        success: true
+    });
+}
 
 
-    const leadId: number = await new Promise(resolve => {
+export async function createLead(props: { client: number, description: string, title: string, deadline: string, sum: string }): Promise<number> {
+    const { client, description, title, deadline, sum } = props;
+    return await new Promise(resolve => {
         pool.query(
             `INSERT INTO leads (client, description, title, deadline, sum) VALUES (?,?,?,?,?)`,
             [client, description, title, deadline, sum],
@@ -55,18 +65,6 @@ export async function POST(
             }
         );
     })
-
-    if (!leadId) { return NextResponse.json({ success: false }); }
-
-    if (user) {
-        await setUserPermissionInLead(user.id, leadId, "inspector");
-        if (user.id !== 1) await setUserPermissionInLead(1, leadId, "inspector");
-    }
-
-    return NextResponse.json({
-        success: true
-    });
-
 }
 
 async function setUserPermissionInLead(employeeId: number, leadId: number, role: "inspector" | "executor" | "viewer" | "no_rights") {

@@ -1,9 +1,9 @@
 "use client"
 
-import FieldWrapper from "@/app/ui/form/fieldWrapper";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import ClientFields from "./clientFields";
+import LeadFields from "./leadFields";
 
 type FormValues = {
     fio: string
@@ -41,8 +41,15 @@ export default function CreateClientForm() {
                 telegramFields={telegramFields}
                 removeTelegram={removeTelegram}
                 appendTelegram={appendTelegram}
-
             />
+            <div className="m-2 p-2 border">
+                <h4>Заказ</h4>
+                <LeadFields
+                    control={control}
+                    register={register}
+                />
+            </div>
+
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );
@@ -52,7 +59,6 @@ export default function CreateClientForm() {
 const onSubmit = (data: any, resetForm: any) => {
     console.log('data', data);
     if (!data?.phones?.length) { toast.error('Нужно заполнить поле "телефон"') }
-    // return;
     fetch(
         "/api/clients/create",
         {
@@ -70,6 +76,7 @@ const onSubmit = (data: any, resetForm: any) => {
     ).then(data => {
         if (data.success) {
             toast.success("Клиент создан");
+            resetForm()
         } else {
             toast.error("Что-то пошло не так");
         }

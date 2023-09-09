@@ -1,10 +1,10 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
-import { ClientInterface } from "@/app/clients/get/page";
 import { pool } from "@/app/db/connect";
 import CreateLeadForm from "./createLeadForm";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { ClientInterface } from "@/app/components/types/clients";
 
 export default async function Page({ params }: { params: { clientId: number } }) {
     const auth = cookies().get('auth');
@@ -17,7 +17,6 @@ export default async function Page({ params }: { params: { clientId: number } })
     return <>
         <h1>Создать заказ</h1>
         <div className="mb-3">Клиент: <strong>{client.full_name}</strong></div>
-        {/* {JSON.stringify({ params })} */}
         <CreateLeadForm clientId={params.clientId} />
     </>
 }
