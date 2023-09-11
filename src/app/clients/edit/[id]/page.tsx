@@ -1,10 +1,10 @@
 import { pool } from "@/app/db/connect";
-import { ClientInterface, ClientMetaInterface } from "../../get/page";
 import EditClientForm from "./editClientForm";
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { ClientInterface, ClientMetaInterface } from "@/app/components/types/clients";
 
 export default async function Page({ params }: { params: { id: number } }) {
 

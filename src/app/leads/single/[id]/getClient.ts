@@ -1,5 +1,5 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
-import { ClientInterface } from "@/app/clients/get/page"
+import { ClientInterface } from "@/app/components/types/clients"
 import { pool } from "@/app/db/connect"
 
 export default async function getClient(clientId: number): Promise<ClientInterface | null> {
