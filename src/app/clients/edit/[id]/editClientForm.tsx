@@ -1,8 +1,8 @@
 "use client"
 
+import { ClientInterface } from "@/app/components/types/clients";
 import FieldWrapper from "@/app/ui/form/fieldWrapper";
 import { useFieldArray, useForm } from "react-hook-form";
-import { ClientInterface } from "../../get/page";
 import { toast } from "react-toastify";
 
 type FormValues = {
