@@ -28,8 +28,6 @@ export async function POST(
     const essense = items.find((item: any) => item[0] === "essense")[1];
     const essense_id = items.find((item: any) => item[0] === "essense_id")[1];
 
-
-
     if (!user) return NextResponse.json({
         success: false,
     });
@@ -42,14 +40,12 @@ export async function POST(
         });
     }
 
-    if (typeof request.headers.get("origin") === "string") {
-        noticeEmployees(
-            essense,
-            essense_id,
-            user.username,
-            String(request.headers.get("origin"))
-        );
-    }
+    noticeEmployees(
+        essense,
+        essense_id,
+        user.username,
+        `${process.env.SERVER}`
+    );
 
     for (let index = 0; index < items.length; index++) {
         const [name, value]: any = items[index]
