@@ -1,10 +1,10 @@
 "use client"
 import Image from "next/image"
-import { useState } from "react"
+import React, { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FaChevronCircleRight, FaTrash } from "react-icons/fa"
 import { toast } from "react-toastify"
- 
+
 export default function MessageForm({ project_id }: { project_id: number }) {
 
     const [previewImages, setPreviewImages] = useState([]);
@@ -23,7 +23,7 @@ export default function MessageForm({ project_id }: { project_id: number }) {
     })
 
     const handleImageChange = async (e: any) => {
-        setValue("images",e.target.value.files)
+        setValue("images", e.target.value.files)
         const files = e.target.files;
         const newImages: any = Array.from(previewImages);
         for (let i = 0; i < files.length; i++) {
@@ -61,7 +61,7 @@ export default function MessageForm({ project_id }: { project_id: number }) {
                     <input {...register("essense_id", { required: true })} className="d-none" />
                     <div className=" mt-3">
                         <input type="file" multiple {...register("images"/* , { required: true } */)}
-                            // onChange={handleImageChange}
+                        // onChange={handleImageChange}
                         />
                         <div className="d-flex">
                             {previewImages.map((image, index) => (
