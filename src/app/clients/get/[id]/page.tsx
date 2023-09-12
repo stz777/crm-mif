@@ -1,15 +1,15 @@
 import getClentMeta from "@/app/db/clients/getClentMeta";
-import { getLeads } from "@/app/leads/get/getLeadsFn";
 import getClient from "@/app/leads/single/[id]/getClient"
 import dayjs from "dayjs";
 import Link from "next/link";
+import { getLeadsPerClientId } from "./getLeadsPerClientId";
 
 export default async function Page(props: { params: { id: number } }) {
 
     const client = await getClient(props.params.id);
     const meta = await getClentMeta(props.params.id);
 
-    const leads = await getLeads({ client: props.params.id })
+    const leads = await getLeadsPerClientId(props.params.id)
 
     if (!client) return <>тут никого нет</>
 
