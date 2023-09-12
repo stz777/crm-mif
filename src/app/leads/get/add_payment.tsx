@@ -61,7 +61,7 @@ const onSubmit: SubmitHandler<Inputs> = (data, resetForm: any) => {
     ).then(data => {
         if (data.success) {
             toast.success("Платеж проведен");
-            // resetForm();
+            resetForm();
         } else {
             toast.error("Что-то пошло не так");
         }

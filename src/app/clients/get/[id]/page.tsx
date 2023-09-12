@@ -2,14 +2,14 @@ import getClentMeta from "@/app/db/clients/getClentMeta";
 import getClient from "@/app/leads/single/[id]/getClient"
 import dayjs from "dayjs";
 import Link from "next/link";
-import { getLeadsPerClientId } from "./getLeadsPerClientId";
+import { getLeadsByClientId } from "./getLeadsByClientId";
 
 export default async function Page(props: { params: { id: number } }) {
 
     const client = await getClient(props.params.id);
     const meta = await getClentMeta(props.params.id);
 
-    const leads = await getLeadsPerClientId(props.params.id)
+    const leads = await getLeadsByClientId(props.params.id)
 
     if (!client) return <>тут никого нет</>
 
@@ -87,7 +87,6 @@ export default async function Page(props: { params: { id: number } }) {
                         <td>{lead.description}</td>{/*description*/}
                         <td>{(() => {
                             const payments = lead.payments;
-                            console.log('payments', payments?.length);
                             if (!payments?.length) return 0;
                             const sum = payments.map(({ sum }) => sum).reduce((a, b) => a + b);
                             return sum;
