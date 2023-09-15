@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { createNewRole } from "./createNewRole";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 import getCurrentRole from "./getCurrentRole";
+import createNewRole from "./createNewRole";
+import deleteCurrentRole from "./deleteCurrentRole";
+import updateCurrentRole from "./updateCurrentRole";
 
 export async function POST(
     request: Request,
@@ -19,6 +21,8 @@ export async function POST(
 
     const currentRole = await getCurrentRole(employeeId, leadId);
 
+
+    
     if (!currentRole) { //В бд не задана роль
 
         if (role === "no_rights") { // прислали отмену роли
@@ -65,15 +69,5 @@ export async function POST(
         }
 
     }
-}
-
-
-
-function deleteCurrentRole(employeeId: any, leadId: any) {
-    throw new Error("Function not implemented.");
-}
-
-function updateCurrentRole(employeeId: any, leadId: any, role: any) {
-    throw new Error("Function not implemented.");
 }
 

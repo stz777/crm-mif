@@ -4,6 +4,7 @@ import createClientMetaFn from './createClientMetaFn';
 import { getUserByToken } from '@/app/components/getUserByToken';
 import { cookies } from 'next/headers';
 import { createLead } from '../../leads/create/route';
+import createNewRole from '../../leads/update_employee_rights/createNewRole';
 
 export async function POST(req: any, res: any) {
     const auth = cookies().get('auth');
@@ -54,11 +55,14 @@ export async function POST(req: any, res: any) {
         title: "", deadline: data.deadline, sum: data.sum
     })
 
+    const newRoleId = await createNewRole(user.id, leadId, "inspector");
+
     return NextResponse.json({
         success: true,
         newClientId,
         leadId,
         data,
-        phones
+        phones,
+        newRoleId
     });
 }

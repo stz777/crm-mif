@@ -1,7 +1,7 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 
-export async function createNewRole(employeeId: number, leadId: number, role: string) {
+export default async function createNewRole(employeeId: number, leadId: number, role: string) {
     return await new Promise(resolve => {
         pool.query(
             `INSERT INTO leads_roles (user,lead_id,role) VALUES (?,?,?)`,
