@@ -168,9 +168,9 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                         }
                                     ).then(data => {
                                         if (data.success) {
-                                            if (!data.leads) {
-                                                toast.error("Что-то пошло не так #errncd7d");
-                                            }
+                                            // if (!data.leads) {
+                                            //     toast.error("Что-то пошло не так #errncd7d");
+                                            // }
                                             return data;
                                         } else {
                                             toast.error("Что-то пошло не так #errncx8");
