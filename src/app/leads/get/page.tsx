@@ -17,7 +17,6 @@ export default async function Page(props: any) {
     if (!user) return redirect("/");
 
     const { searchParams } = props;
-    const { lead_id } = searchParams
     const leads = await getLeads(searchParams);
     return <>
         <h1>Заказы</h1>

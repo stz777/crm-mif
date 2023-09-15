@@ -15,12 +15,21 @@ export async function getLeads(
     searchParams
         ?: SearchParametersInterface
 ): Promise<LeadInterface[]> {
+    const auth = cookies().get('auth');
+    if (!auth?.value) return [];
+    const user = await getUserByToken(auth?.value);
+    if (!user) return [];
 
     const whereArr: string[] = [];
 
+    const ids: string[] = [];
+
     if (searchParams?.id) {
-        whereArr.push(`id = ${searchParams.id}`)
+        ids.push(`id = ${searchParams.id}`)
     }
+
+    whereArr.push(...ids);
+
     if (searchParams?.client) {
         whereArr.push(`client = ${searchParams.client}`)
     }
