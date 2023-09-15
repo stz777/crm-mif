@@ -1,7 +1,5 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
-import { getUserByToken } from "@/app/components/getUserByToken";
-import { cookies } from "next/headers";
 import getEployeeByID from "@/app/db/employees/getEployeeById";
 
 export default async function createClientFn(fio: string, address: string): Promise<number> {
