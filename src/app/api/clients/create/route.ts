@@ -49,13 +49,19 @@ export async function POST(req: any, res: any) {
         })
     }
 
-    const leadId = await createLead({
-        client: newClientId,
-        description: data.description,
-        title: "", deadline: data.deadline, sum: data.sum
-    })
 
-    const newRoleId = await createNewRole(user.id, leadId, "inspector");
+    let leadId = null;;
+    let newRoleId = null;;
+
+    if (data.description && data.deadline && data.sum) {
+        leadId = await createLead({
+            client: newClientId,
+            description: data.description,
+            title: "", deadline: data.deadline, sum: data.sum
+        })
+
+        newRoleId = await createNewRole(user.id, leadId, "inspector");
+    }
 
     return NextResponse.json({
         success: true,

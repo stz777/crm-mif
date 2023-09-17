@@ -32,13 +32,13 @@ export default function LeadFields(props: {
 
         <FieldWrapper title="Описание"
             field={<>
-                <textarea {...register("description", { required: true })} autoComplete="off" />
+                <textarea {...register("description")} autoComplete="off" />
             </>}
         />
 
         <FieldWrapper title="Сумма заказа"
             field={<>
-                <input type="number" {...register("sum", { required: true })} autoComplete="off" />
+                <input type="number" {...register("sum")} autoComplete="off" />
             </>}
         />
     </>
