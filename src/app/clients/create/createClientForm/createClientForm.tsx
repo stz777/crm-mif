@@ -4,6 +4,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import ClientFields from "./clientFields";
 import LeadFields from "./leadFields";
+import FieldWrapper from "@/app/ui/form/fieldWrapper";
 
 type FormValues = {
     fio: string
@@ -11,6 +12,8 @@ type FormValues = {
     emails: { email: string }[];
     telegram: { telegram: string }[];
     address: string;
+    payment: number;
+    image: any;
 };
 
 export default function CreateClientForm() {
@@ -49,6 +52,20 @@ export default function CreateClientForm() {
                     register={register}
                 />
             </div>
+            <div className="m-2 p-2 border">
+                <h4>Оплата</h4>
+                <FieldWrapper title="Сумма"
+                    field={<>
+                        <input type="number"{...register("payment")} autoComplete="off" />
+                    </>}
+                />
+                <FieldWrapper title="Изображение"
+                    field={<>
+                        <input type="file" {...register("image"/* , { required: true } */)}
+                        />
+                    </>}
+                />
+            </div>
 
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
@@ -57,13 +74,58 @@ export default function CreateClientForm() {
 
 
 const onSubmit = (data: any, resetForm: any) => {
-    console.log('data', data);
-    if (!data?.phones?.length) { toast.error('Нужно заполнить поле "телефон"') }
+
+    const formdata = new FormData();
+
+    for (const key in data) {
+        const element = data[key];
+        if (key === "phones") {
+            formdata.append("phones", JSON.stringify(element));
+            continue;
+        }
+        if (key === "emails") {
+            formdata.append("emails", JSON.stringify(element));
+            continue;
+        }
+        if (key === "telegram") {
+            formdata.append("telegram", JSON.stringify(element));
+            continue;
+        }
+
+        if (key === "image") {
+            for (let i = 0; i < element.length; i++) {
+                formdata.append('images', element[i]);
+            }
+            continue;
+        }
+
+        formdata.append(key, element);
+    }
+
+    if (!data?.phones?.length) {
+        toast.error('Нужно заполнить поле "телефон"');
+        return;
+    }
+
+    if (data.payment && !data.image) {
+        toast.error('Прикрепите изображение к платежу');
+        return;
+    }
+
+    if (
+        (data.payment || data.description || data.sum)
+        &&
+        !(data.payment && data.description && data.sum)
+    ) {
+        toast.error('Чтобы создать заказ, нужно заполить все поля');
+        return;
+    }
+
     fetch(
         "/api/clients/create",
         {
             method: "POST",
-            body: JSON.stringify(data)
+            body: formdata
         }
     ).then(
         response => {
