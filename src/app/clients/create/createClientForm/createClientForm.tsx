@@ -107,17 +107,21 @@ const onSubmit = (data: any, resetForm: any) => {
         return;
     }
 
-    if (data.payment && !data.image) {
-        toast.error('Прикрепите изображение к платежу');
+    if (
+        (data.deadline || data.description || data.sum)
+        &&
+        !(data.deadline && data.description && data.sum)
+    ) {
+        toast.error('Чтобы создать заказ, нужно заполнить все поля');
         return;
     }
 
     if (
-        (data.payment || data.description || data.sum)
+        (data.payment || data.image.length)
         &&
-        !(data.payment && data.description && data.sum)
+        !(data.payment && data.image.length)
     ) {
-        toast.error('Чтобы создать заказ, нужно заполить все поля');
+        toast.error('Прикрепите изображение к платежу');
         return;
     }
 
