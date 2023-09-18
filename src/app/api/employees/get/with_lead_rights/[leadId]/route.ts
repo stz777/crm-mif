@@ -12,12 +12,18 @@ export async function POST(
     if (!auth?.value) return new Response("Кто ты", { status: 401, });;
     const user = await getUserByToken(auth?.value);
     if (!user) return new Response("Кто ты", { status: 401, });;
-    if (!user.is_boss) return new Response("Кто ты", { status: 401, });;
+    if (!user.is_manager) return new Response("Кто ты", { status: 401, });;
 
-    
     const { leadId } = params;
 
-    const data = await getEmployeesByLeadId(leadId);
+    const data = await getEmployeesByLeadId(leadId, Boolean(user.is_boss));
+
+    if (!data) {
+        return NextResponse.json({
+            success: false,
+            error: "#fnf8fg"
+        });
+    }
 
     return NextResponse.json({
         success: true,
@@ -26,15 +32,29 @@ export async function POST(
     });
 }
 
-async function getEmployeesByLeadId(leadId: number): Promise<Employee[] | false> {
+async function getEmployeesByLeadId(leadId: number, view_all: boolean): Promise<Employee[] | false> {
+
+    const whereArr = [];
+
+    whereArr.push("employees.is_active = 1");
+
+    if (!view_all) {
+        whereArr.push("employees.is_manager = 0");
+    }
+
+    const whereString = whereArr.join(" AND ");
+
+    const qs = `SELECT employees.id as user_id, leads_roles.role, employees.username
+    FROM employees 
+    LEFT JOIN (leads_roles)
+    ON (employees.id = leads_roles.user AND leads_roles.lead_id = ?)
+    WHERE ${whereString}
+    `;
+
+
     return new Promise((resolve) => {
         pool.query(
-            `SELECT employees.id as user_id, leads_roles.role, employees.username
-            FROM employees 
-            LEFT JOIN (leads_roles)
-            ON (employees.id = leads_roles.user AND leads_roles.lead_id = ?)
-            WHERE employees.is_active = 1
-            `,
+            qs,
             [leadId],
             function (err, result: any[]) {
                 if (err) {
@@ -49,7 +69,7 @@ async function getEmployeesByLeadId(leadId: number): Promise<Employee[] | false>
                     )
                     resolve(false)
                 }
-                if (!result.length) {
+                if (!result?.length) {
                     sendMessageToTg(
                         JSON.stringify(
                             {

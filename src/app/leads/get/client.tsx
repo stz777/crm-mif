@@ -218,7 +218,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                 if (props.is_boss) return <CloseLead leadId={lead.id} />
                                 return <>В работе</>
                             })()}
-                            {props.is_boss && <div className="ms-2"><RightsManagement leadId={lead.id} /></div>}
+                            {props.is_manager && <div className="ms-2"><RightsManagement leadId={lead.id} is_boss={props.is_boss} /></div>}
                         </div>
                     </td>
                 </tr>)}

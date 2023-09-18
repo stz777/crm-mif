@@ -4,7 +4,7 @@ import { Employee, getEmployeesByLeadId } from "./getEmployeesByLeadId";
 import { useForm, } from "react-hook-form"
 import { toast } from "react-toastify";
 
-export function RightsManagement({ leadId }: { leadId: number }) {
+export function RightsManagement({ leadId, is_boss }: { leadId: number, is_boss: boolean }) {
     const [open, setOpen] = useState(false);
 
     const [employees, setEmployees] = useState<null | Employee[]>(null)
@@ -35,7 +35,7 @@ export function RightsManagement({ leadId }: { leadId: number }) {
                             <tbody>
                                 {employees.map((employee, i) => <tr key={employee.user_id + leadId + i}>
                                     <td className="text-nowrap">{employee.username}</td>
-                                    <td className="text-nowrap"> <RightsForm role={employee.role} employeeId={employee.user_id} leadId={leadId} />  </td>
+                                    <td className="text-nowrap"> <RightsForm role={employee.role} employeeId={employee.user_id} leadId={leadId} is_boss={is_boss} />  </td>
                                 </tr>)}
                             </tbody>
                         </table>
@@ -49,7 +49,7 @@ export function RightsManagement({ leadId }: { leadId: number }) {
 
 type Inputs = { role: any }
 
-function RightsForm({ role, employeeId, leadId }: { role: string | null, employeeId: number, leadId: number }) {
+function RightsForm({ role, employeeId, leadId, is_boss }: { role: string | null, employeeId: number, leadId: number, is_boss: boolean }) {
 
     const {
         register,
@@ -62,9 +62,12 @@ function RightsForm({ role, employeeId, leadId }: { role: string | null, employe
     const roles = [
         ['Нет прав', "no_rights"],
         ['Исполнитель', 'executor'],
-        ['Контроллер', 'inspector'],
-        ['Наблюдатель', 'viewer'],
+
     ];
+    if (Boolean(is_boss)) {
+        roles.push(...[['Контроллер', 'inspector'],
+        ['Наблюдатель', 'viewer'],])
+    }
 
     return <>
         <form>
