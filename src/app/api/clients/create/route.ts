@@ -75,7 +75,7 @@ export async function POST(req: Request, res: any) {
             paymentId = await insertPayment(leadId, Number(data.get("payment")), user.id);
         }
 
-        const messageId = await saveMessage(`Оплата по заказу: ${data.get("payment")}`, "lead", leadId, user.id);
+        const messageId = await saveMessage(`Оплата по заказу: ${data.get("payment")}₽`, "lead", leadId, user.id);
 
 
         for (let index = 0; index < items.length; index++) {

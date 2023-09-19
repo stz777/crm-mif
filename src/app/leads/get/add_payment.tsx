@@ -1,5 +1,6 @@
 "use client"
 
+import FieldWrapper from "@/app/ui/form/fieldWrapper"
 import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { toast } from "react-toastify"
@@ -23,32 +24,74 @@ export function Add_Payment(props: { lead_id: number }) {
             </div>
             <div className="card-body">
                 <form onSubmit={handleSubmit((e: any) => onSubmit(e, reset))} className="mb-2">
-                    <input {...register("sum")} type="number" className="form-control" />
+                    <FieldWrapper
+                        title="Сумма"
+                        field={<>
+                            <input {...register("sum", { required: true })} type="number" className="form-control" />
+                        </>}
+                    />
+                    <FieldWrapper
+                        title="Изображение"
+                        field={<>
+                            <input type="file" {...register("image"/* , { required: true } */)}
+                            />
+                        </>}
+                    />
                     <div className="d-flex mt-2">
-                        <button className="btn btn-sm btn-outline-dark me-2">Провести</button>
-                        <button
-                            className="btn btn-sm btn-outline-danger"
-                            onClick={() => {
-                                setIsOpen(false);
-                            }}>отмена</button>
+                        <div>
+                            <button className="btn btn-sm btn-outline-dark me-2">Провести</button>
+                        </div>
+                        <div>
+                            <button
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={() => {
+                                    setIsOpen(false);
+                                }}>отмена</button>
+                        </div>
                     </div>
                 </form>
             </div>
-        </div> : <button
+        </div > : <button
             className="btn btn-sm btn-outline-dark text-nowrap"
             onClick={() => {
                 setIsOpen(true);
-            }}>Добавить оплату</button>}
+            }}>Добавить оплату</button>
+        }
 
     </>
 }
 
-const onSubmit: SubmitHandler<Inputs> = (data, resetForm: any) => {
+const onSubmit: SubmitHandler<Inputs> = (data: any, resetForm: any) => {
+    const formdata = new FormData();
+    formdata.append("lead_id", data.lead_id);
+    formdata.append("sum", data.sum);
+    console.log('image', data.image);
+    console.log('data', data);
+
+    if (
+        !(data.sum && (data.image?.length))
+    ) {
+        toast.error('Некорректно заполнена форма');
+        return;
+    }
+
+    for (const key in data) {
+        const element = data[key];
+        if (key === "image") {
+            for (let i = 0; i < element.length; i++) {
+                formdata.append('image', element[i]);
+            }
+            continue;
+        }
+
+    }
+    formdata
     fetch(
         "/api/payments/create",
         {
             method: "POST",
-            body: JSON.stringify(data)
+            body: formdata
+            // body: JSON.stringify(data)
         }
     ).then(
         response => {
