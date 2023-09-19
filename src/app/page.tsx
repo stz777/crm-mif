@@ -1,10 +1,15 @@
-// import StartAuth from "./components/auth/startAuth";
+import bg from "../../public/mp_background.jpg"
 
 export default function Home() {
   return (
     <main>
-      {/* Здравствуйте */}
-      {/* <StartAuth /> */}
+      <div
+        className="manamana"
+        style={{
+          background: `url(${bg.src})`,
+          height: "100%"
+        }}
+      ></div>
     </main>
   )
 }
