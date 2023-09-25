@@ -1,31 +1,31 @@
 import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
+import { Employee } from "@/app/components/types/employee";
 
 export async function POST(
     request: Request,
 ) {
     const resquestData = await request.json();
     if (resquestData.login) {
-        const tg_chat_id = await getUserByTg(resquestData.login);
-        console.log('tg_chat_id', tg_chat_id);
+        const employee = await getUserByTg(resquestData.login);
 
-        if (typeof tg_chat_id === "number") {
+        if (employee) {
             const randomNumber = getRandomNumber(1000, 9999);
-            const updated = await insertCodeToDb(randomNumber, tg_chat_id);
+            const updated = await insertCodeToDb(randomNumber, employee.tg_chat_id);
             if (updated) {
                 sendMessageToTg(
                     `Код доступа ${randomNumber}`,
-                    String(tg_chat_id)
+                    String(employee.tg_chat_id)
                 )
                 return NextResponse.json({
                     success: true,
-                    err: "#dmsdidnneb"
+                    error: "#dmsdidnneb"
                 });
             } else {
                 return NextResponse.json({
                     success: false,
-                    err: "#sndjdgJnb"
+                    error: "#sndjdgJnb"
                 });
             }
         } else {
@@ -48,16 +48,12 @@ export async function POST(
     });
 }
 
-async function getUserByTg(tgUsername: string) {
-    console.log(`SELECT * FROM employees WHERE telegram_id = ${tgUsername}`);
-
+async function getUserByTg(tgUsername: string): Promise<Employee | null> {
     return await new Promise(resolve => {
         pool.query(
             "SELECT * FROM employees WHERE telegram_id = ? AND is_active = 1",
             [tgUsername],
             function (err, res: any) {
-                console.log({ err, res });
-
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(
@@ -69,9 +65,9 @@ async function getUserByTg(tgUsername: string) {
                         "5050441344"
                     )
                 }
-                const tg_chat_id = res?.pop()?.tg_chat_id;
-                if (tg_chat_id) {
-                    resolve(Number(tg_chat_id))
+                const employee = res?.pop();
+                if (employee) {
+                    resolve(employee)
                 } else {
                     resolve(null)
                 }

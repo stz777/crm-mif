@@ -34,7 +34,7 @@ export default function AuthForm() {
             if (data.success) {
                 setAuthStep(2);
             } else {
-                toast.error("Что-то пошло не так");
+                toast.error("Что-то пошло не так " + data.error);
             }
         })
             .catch(error => {
