@@ -1,7 +1,24 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
+import { getUserByToken } from "@/app/components/getUserByToken";
 import { pool } from "@/app/db/connect"
+import { cookies } from "next/headers";
 
 export default async function getMessagesByLeadId(leadId: number): Promise<MessageInterface[] | false> {
+
+    const auth = cookies().get('auth');
+
+    const employee = await getUserByToken(String(auth?.value));
+
+    const whereArr = [];
+    whereArr.push(`messages.essense = 'lead'`)
+    whereArr.push(`messages.essense_id=${leadId}`)
+
+    if (!employee?.is_manager) {
+        whereArr.push(`text NOT LIKE 'Оплата по заказу:%'`)
+    }
+
+    const whereString = ` WHERE ${whereArr.join(" AND ")}`;
+
     const messages: MessageInterface[] | false = await new Promise((resolve) => {
         pool.query(
             `SELECT 
@@ -12,10 +29,9 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
              ON (employees.id = messages.sender)
              LEFT JOIN (leads_roles)
              ON (leads_roles.user = employees.id AND leads_roles.lead_id=${leadId})
-             WHERE messages.essense = 'lead' AND messages.essense_id=?
+             ${whereString}
              ORDER BY messages.id DESC
              `,
-            [leadId],
             function (err, result: any[]) {
                 if (err) {
                     sendMessageToTg(
@@ -29,7 +45,7 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
                     )
                     resolve(false)
                 }
-                resolve(result)
+                resolve(result || [])
             }
         )
     });
