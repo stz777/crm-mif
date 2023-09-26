@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main>
       <div
-        className="manamana"
+        className=""
         style={{
           background: `url(${bg.src})`,
           height: "100%"
