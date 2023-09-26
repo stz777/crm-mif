@@ -21,7 +21,6 @@ export default async function getChats(token: string, user_id: string): Promise<
             return null;
         });
     return data;
-    console.log('data', data.chats[0]);
 }
 
 interface AvitoChatInterface {
