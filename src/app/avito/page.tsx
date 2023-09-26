@@ -19,12 +19,9 @@ export default async function Page() {
     const combinedChats: CombinedChatInterface[] = [];
 
     for (let index = 0; index < chats.length; index++) {
-        const { id: chatId } = chats[index];
+        const chat = chats[index];
+        const { id: chatId } = chat;
 
-        if(index===0){
-            console.log();
-            
-        }
 
         const newChat: any = {};
         newChat.chat_id = chatId;
@@ -34,6 +31,8 @@ export default async function Page() {
         )
 
         newChat.messages = messages;
+
+        newChat.subdata = chat;
 
         combinedChats.push(newChat);
 
@@ -52,7 +51,14 @@ export default async function Page() {
             <tbody>
                 {combinedChats.map((chat, i) => <tr key={chat.chat_id}>
                     <td>{i}</td>
-                    <td>{chat.chat_id}</td>
+                    <td>{chat.chat_id}
+                        {(() => {
+                            const zz: any = chat;
+                            <pre>{JSON.stringify(zz.subdata, null, 2)}</pre>
+                            return null;
+                        })()}
+
+                    </td>
                     <td>
                         <table>
                             <tbody>
@@ -61,10 +67,10 @@ export default async function Page() {
                                         <div>direction {message.direction}</div>
                                         <div>type {message.type}</div>
                                         <div>создано <>
-                                            {dayjs(message.created).locale('ru').format("DD.MM.YYYY hh:mm")}
+                                            {dayjs.unix(message.created).format("DD.MM.YYYY hh:mm")}
                                         </></div>
-                                        <div>read <>
-                                            {message.read ? ("прочитано: "+dayjs(message.read).format("DD.MM.YYYY hh:mm")) : <>не прочитано</>}
+                                        <div><>
+                                            {message.read ? ("прочитано: " + dayjs.unix(message.read).format("DD.MM.YYYY hh:mm")) : <>не прочитано</>}
                                         </></div>
                                         <pre>{JSON.stringify(message, null, 2)}</pre>
                                         {(() => {
@@ -72,7 +78,7 @@ export default async function Page() {
                                                 return <pre>текст: {message.content.text}</pre>
                                             }
                                             if (message.type === "image") {
-                                                return <pre>текст: <img src={message.content.image.sizes["140x105"]}/></pre>
+                                                return <pre>текст: <img src={message.content.image.sizes["140x105"]} /></pre>
                                             }
                                             return null;
                                         })()}
