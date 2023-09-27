@@ -17,7 +17,7 @@ export default async function getToken(
             return response.json();
         })
         .then(data => {
-            console.log('data', data);
+            console.log('data #sd4', data);
             return data.access_token;
         })
         .catch(error => {

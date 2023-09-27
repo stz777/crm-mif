@@ -1,5 +1,5 @@
-export default async function getChats(token: string, user_id: string): Promise<AvitoChatInterface> {
-    const url = `https://api.avito.ru/messenger/v2/accounts/${user_id}/chats`;
+export async function getAvitoMessages(token: string, user_id: number, chat_id: string) {
+    const url = `https://api.avito.ru/messenger/v3/accounts/${user_id}/chats/${chat_id}/messages/`;
     const data = await fetch(url, {
         method: 'GET',
         headers: {
@@ -21,10 +21,4 @@ export default async function getChats(token: string, user_id: string): Promise<
             return null;
         });
     return data;
-}
-
-interface AvitoChatInterface {
-    chats: {
-        id: string;
-    }[]
 }

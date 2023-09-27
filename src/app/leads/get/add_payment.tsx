@@ -66,7 +66,7 @@ const onSubmit: SubmitHandler<Inputs> = (data: any, resetForm: any) => {
     formdata.append("lead_id", data.lead_id);
     formdata.append("sum", data.sum);
     console.log('image', data.image);
-    console.log('data', data);
+    console.log('data #vf4', data);
 
     if (
         !(data.sum && (data.image?.length))

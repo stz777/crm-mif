@@ -1,8 +1,10 @@
-// import getMessages from "../db/messages/getMessages";
-import getChats from "./getChats";
+import { getAvitoMessages } from "./getAvitoMessages";
+import getAvitoChats from "./getAvitoChats";
 import getToken from "./getToken";
 import dayjs from "dayjs";
 import "dayjs/locale/ru"
+import { AvitoCredsInterface } from "./types/chats";
+import Link from "next/link";
 
 const avitoCreds: AvitoCredsInterface[] = JSON.parse(
     String(process.env.AVITO_ACCOUNTS)
@@ -14,7 +16,7 @@ export default async function Page() {
 
     const token = await getToken(client_id, client_secret);
 
-    const { chats } = await getChats(token, user_id);
+    const { chats } = await getAvitoChats(token, user_id);
 
     const combinedChats: CombinedChatInterface[] = [];
 
@@ -26,7 +28,7 @@ export default async function Page() {
         const newChat: any = {};
         newChat.chat_id = chatId;
 
-        const { messages } = await getMessages(
+        const { messages } = await getAvitoMessages(
             token, user_id, chatId
         )
 
@@ -40,6 +42,15 @@ export default async function Page() {
 
     return <>
         <h1>Avito</h1>
+        <strong>Аккаунты</strong>
+        <ul>
+            {avitoCreds.map(
+                acc => <li>
+                    <Link href={`/avito/accounts/${acc.user_id}`}>{acc.user_id}</Link>
+                    {/* {JSON.stringify(acc)} */}
+                </li>
+            )}
+        </ul>
         <table className="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -99,40 +110,4 @@ export default async function Page() {
 interface CombinedChatInterface {
     chat_id: string;
     messages: any[]
-}
-
-interface AvitoChatInterface {
-
-}
-
-interface AvitoCredsInterface {
-    client_id: string;
-    client_secret: string;
-    user_id: string;
-}
-
-async function getMessages(token: string, user_id: string, chat_id: string) {
-    const url = `https://api.avito.ru/messenger/v3/accounts/${user_id}/chats/${chat_id}/messages/`;
-    const data = await fetch(url, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not OK');
-            }
-            return response.json();
-        })
-        .then(data => {
-            return data;
-            // console.log(data);
-        })
-        .catch(error => {
-            console.error('Error №dлпл:', error);
-            return null;
-        });
-    return data;
-    console.log('data', data.chats[0]);
 }
