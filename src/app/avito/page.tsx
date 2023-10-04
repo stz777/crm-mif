@@ -10,17 +10,20 @@ const avitoCreds: AvitoCredsInterface[] = JSON.parse(
     String(process.env.AVITO_ACCOUNTS)
 );
 
+const off = true;
+
 export default async function Page() {
+    if (off) return <></>
 
     const { client_id, client_secret, user_id } = avitoCreds[0];
 
     const token = await getToken(client_id, client_secret);
 
-    const chatsREsponse  = await getAvitoChats(token, user_id);
+    const chatsREsponse = await getAvitoChats(token, user_id);
 
-    if(!chatsREsponse?.chats) return <>нет чатов</>
+    if (!chatsREsponse?.chats) return <>нет чатов</>
 
-    const  {chats} = chatsREsponse
+    const { chats } = chatsREsponse
 
     const combinedChats: CombinedChatInterface[] = [];
 
