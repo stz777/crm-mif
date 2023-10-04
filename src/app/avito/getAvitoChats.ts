@@ -17,7 +17,7 @@ export default async function getAvitoChats(token: string, user_id: number): Pro
             // console.log(data);
         })
         .catch(error => {
-            console.error('Error №dлпл:', error);
+            console.error('Error №dлxпл:', error);
             return null;
         });
     return data;

@@ -16,7 +16,11 @@ export default async function Page() {
 
     const token = await getToken(client_id, client_secret);
 
-    const { chats } = await getAvitoChats(token, user_id);
+    const chatsREsponse  = await getAvitoChats(token, user_id);
+
+    if(!chatsREsponse?.chats) return <>нет чатов</>
+
+    const  {chats} = chatsREsponse
 
     const combinedChats: CombinedChatInterface[] = [];
 
@@ -45,7 +49,7 @@ export default async function Page() {
         <strong>Аккаунты</strong>
         <ul>
             {avitoCreds.map(
-                acc => <li>
+                acc => <li key={acc.client_id}>
                     <Link href={`/avito/accounts/${acc.user_id}`}>{acc.user_id}</Link>
                     {/* {JSON.stringify(acc)} */}
                 </li>
@@ -73,7 +77,7 @@ export default async function Page() {
                     <td>
                         <table>
                             <tbody>
-                                {chat.messages.map(message => <tr>
+                                {chat.messages.map((message, i) => <tr key={i}>
                                     <td className="border border-dark">
                                         <div>direction {message.direction}</div>
                                         <div>type {message.type}</div>

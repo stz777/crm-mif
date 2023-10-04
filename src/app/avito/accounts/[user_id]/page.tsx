@@ -22,7 +22,7 @@ export default async function Page(props: { params: { user_id: string } }) {
     return <>
         <h1>Аккаунт #{props.params.user_id}</h1>
         <div className="row">
-            {ads.resources.map(ad => <div className="col-2">
+            {ads.resources.map(ad => <div className="col-2" key={ad.id}>
                 <div className="card">
                     <div className="card-header">
                         {ad.title}
@@ -64,7 +64,7 @@ async function getAvitoAds(token: string): Promise<AvitoCoreItems> {
             return data;
         })
         .catch(error => {
-            console.error('Error №dлпл:', error);
+            console.error('Error №dлddпл:', error);
             return null;
         });
     return data;

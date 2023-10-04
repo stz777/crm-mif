@@ -50,7 +50,7 @@ async function getAvitoAd(token: string, client_id: number, ad_id: string): Prom
             return data;
         })
         .catch(error => {
-            console.error('Error №dлпл:', error);
+            console.error('Error №d4fлпл:', error);
             return null;
         });
     return data;
