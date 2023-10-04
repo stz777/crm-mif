@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import insertCodeToDb from "./insertCodeToDb";
 import generateRandomString from "./generateRandomString";
 import getUserByCode from "./getUserByCode";
+import { pool } from "@/app/db/connect";
+import insertTokenToDB from "./insertTokenToDB";
 
 export async function POST(
     request: Request,
@@ -11,12 +12,12 @@ export async function POST(
         const user: any = await getUserByCode(resquestData.code);
         if (user) {
             const newToken = generateRandomString();
-            const updated = await insertCodeToDb(newToken, user.id);
-            if (updated) {
+            const tokenCreated = await insertTokenToDB(newToken, user.id);
+            if (tokenCreated) {
                 return NextResponse.json({
                     success: true,
                     token: newToken,
-                    user:user.username,
+                    user: user.username,
                 });
             } else {
                 return NextResponse.json({
@@ -33,4 +34,5 @@ export async function POST(
         success: false,
     });
 }
+
 
