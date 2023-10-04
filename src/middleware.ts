@@ -9,6 +9,13 @@ export async function middleware(request: NextRequest) {
     if (!request.nextUrl.pathname.startsWith('/_next') && !request.nextUrl.pathname.startsWith('/api')) { // IS PAGE!!
         const tokenIsValid = await checkAuthToken(String(authToken?.value), request.nextUrl.origin)
 
+        if (tokenIsValid) {
+            updateTokenDeadline(
+                String(authToken?.value), request.url
+            )
+        }
+
+
         if (pathname === "/login") {
             if (tokenIsValid) {
                 return NextResponse.redirect(new URL('/', request.url))
@@ -46,6 +53,20 @@ export const config = {
 
 async function checkAuthToken(token: string, currentUrl: string) {
     return await fetch(`${currentUrl}/api/auth/checkToken`, {
+        method: "POST",
+        body: JSON.stringify({
+            token: String(token)
+        })
+    })
+        .then(x => {
+            return x.status === 200;
+        })
+}
+
+
+
+async function updateTokenDeadline(token: string, currentUrl: string) {
+    return await fetch(`${currentUrl}/api/auth/updateTokenDeadline`, {
         method: "POST",
         body: JSON.stringify({
             token: String(token)
