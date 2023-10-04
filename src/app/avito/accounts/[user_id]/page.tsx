@@ -6,7 +6,13 @@ const avitoCreds: AvitoCredsInterface[] = JSON.parse(
     String(process.env.AVITO_ACCOUNTS)
 );
 
+const off = true;
+
+
 export default async function Page(props: { params: { user_id: string } }) {
+
+    if (off) return <></>
+
 
     const currentAcc = avitoCreds.find(acc => acc.user_id === Number(props.params.user_id));
     if (!currentAcc) {
