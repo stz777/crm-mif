@@ -5,7 +5,9 @@ import { Employee } from "./types/employee"
 export async function getUserByToken(token: string): Promise<Employee | undefined> {
     return new Promise(resolve => {
         pool.query(
-            `SELECT * FROM employees WHERE token = ?`,
+            `SELECT * FROM employees WHERE id IN (
+                SELECT user FROM tokens WHERE token = ?
+            )`,
             [token],
             function (err, res: any) {
                 if (err) {
