@@ -66,15 +66,13 @@ async function checkAuthToken(token: string, currentUrl: string) {
 
 
 async function updateTokenDeadline(token: string, currentUrl: string) {
-    console.log('updateTokenDeadline');
-    
-    // return await fetch(`${currentUrl}/api/auth/checkToken`, {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //         token: String(token)
-    //     })
-    // })
-    //     .then(x => {
-    //         return x.status === 200;
-    //     })
+    return await fetch(`${currentUrl}/api/auth/updateTokenDeadline`, {
+        method: "POST",
+        body: JSON.stringify({
+            token: String(token)
+        })
+    })
+        .then(x => {
+            return x.status === 200;
+        })
 }
