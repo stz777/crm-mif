@@ -12,7 +12,7 @@ export default async function SideMenu() {
         <ul className="list-group">
             {!user.is_boss ? null :
                 <>
-                    <li><Link href="/avito" className="list-group-item text-nowrap">Avito</Link></li>
+                    <li><Link href="/avito" className="list-group-item text-nowrap">Avito (закрыто на ремонт)</Link></li>
                     <li><Link href="/employees/create" className="list-group-item text-nowrap">Создать сотрудника</Link></li>
                 </>}
             {!user.is_boss ? null : <li><Link href="/employees/get" className="list-group-item text-nowrap">Список сотрудников</Link></li>}
