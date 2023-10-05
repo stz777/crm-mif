@@ -65,7 +65,7 @@ function RightsForm({ role, employeeId, leadId, is_boss }: { role: string | null
 
     ];
     if (Boolean(is_boss)) {
-        roles.push(...[['Контроллер', 'inspector'],
+        roles.push(...[['Контролер', 'inspector'],
         ['Наблюдатель', 'viewer'],])
     }
 

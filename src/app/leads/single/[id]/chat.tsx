@@ -84,7 +84,7 @@ async function fetchGetMessages(essense: string, essense_id: number) {
 
 
 export const roleTranslator: any = {
-    inspector: "Контроллер",
+    inspector: "Контролер",
     executor: "Исполнитель",
     viewer: "Наблюдатель",
 }

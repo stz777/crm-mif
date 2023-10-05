@@ -1,5 +1,5 @@
 const roleTranslator: any = {
-    inspector: "Контроллер",
+    inspector: "Контролер",
     executor: "Исполнитель",
     viewer: "Наблюдатель",
 }

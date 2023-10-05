@@ -62,7 +62,7 @@ function RightsForm({ role, employeeId, task_id }: { role: string | null, employ
     const roles = [
         ['Нет прав', "no_rights"],
         ['Исполнитель', 'executor'],
-        ['Контроллер', 'inspector'],
+        ['Контролер', 'inspector'],
         ['Наблюдатель', 'viewer'],
     ];
 
