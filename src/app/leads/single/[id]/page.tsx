@@ -9,6 +9,8 @@ import { cookies } from 'next/headers';
 import { getRoleByLeadId } from '../../get/getLeadsFn';
 import getEmployeesByLeadId from './getEmployeesByLeadId';
 import roleTranslator from '@/app/components/translate/roleTranslator';
+import getClient from './getClient';
+import getClentMeta from '@/app/db/clients/getClentMeta';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
@@ -31,7 +33,11 @@ export default async function Page({ params }: { params: { id: number } }) {
 
     const messages = await getMessagesByLeadId(lead.id);
 
+    const client = await getClient(lead.client);
+    const clientMeta = await getClentMeta(Number(client?.id));
+
     return <>
+
         <h1>Заказ #{leadId}</h1>
         <table className='table table-bordered w-auto'>
             <tbody>
@@ -39,7 +45,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                 <tr><td>описание</td><td>{lead.description}</td></tr>
                 <tr><td>дата создания</td><td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td></tr>
                 <tr><td>дедлайн</td><td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td></tr>
-                <tr><td>ответстенные</td>
+                <tr><td>ответственные</td>
                     {!employees ? null : <table className='table'>
                         <tbody>
                             {employees.map(employee => <tr key={employee.id}>
@@ -49,13 +55,39 @@ export default async function Page({ params }: { params: { id: number } }) {
                         </tbody>
                     </table>}
 
-                    {/* <td>
-                        <pre>{JSON.stringify(employees, null, 2)}</pre>
-                    </td> */}
+                </tr>
+                <tr>
+                    <td>клиент</td>
+                    <td>
+                        <table>
+                            <tbody>
+                                <tr><td>id</td><td>{client?.id}</td></tr>
+                                <tr><td>имя</td><td>{client?.full_name}</td></tr>
+                                <tr><td>whatsapp</td><td>
+                                    {(() => {
+                                        const phoneItem = clientMeta.find(item => item.data_type === "phone");
+                                        if (!phoneItem) return <>телефон не указан</>
+                                        return generateWALink(phoneItem.data);
+                                    })()}</td></tr>
+                            </tbody>
+                        </table>
+                    </td>
                 </tr>
             </tbody>
         </table>
         <MessageForm leadId={leadId} />
         <div className='mb-4'><Chat messages={messages || []} essense_type="lead" essense_id={lead.id} /></div>
     </>
+}
+
+
+function generateWALink(phoneNumber: string) {
+    const толькоЦифры = phoneNumber.replace(/\D/g, '');
+    if (толькоЦифры.length === 11) {
+        return <a href={`https://wa.me/${'7' + толькоЦифры.slice(1)}`}>{phoneNumber}</a>;
+    } else if (толькоЦифры.length === 10) {
+        return <a href={`https://wa.me/${'7' + толькоЦифры.slice(1)}`}>{phoneNumber}</a>;
+    } else {
+        return 'Некорректный номер телефона ' + phoneNumber;
+    }
 }
