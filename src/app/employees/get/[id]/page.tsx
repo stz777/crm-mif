@@ -45,6 +45,5 @@ export default async function Page(props: { params: { id: number } }) {
                 </tr>
             </tbody>
         </table>
-        <h3>Заказы</h3>
     </>
 }
