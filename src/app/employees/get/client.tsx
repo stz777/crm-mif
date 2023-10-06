@@ -39,7 +39,9 @@ export default function Client(props: { employees: Employee[], searchParams: { i
             </thead>
             <tbody>
                 {employees.map(employee => <tr key={employee.id}>
-                    <td>{employee.id}</td>
+                    <td>
+                        <Link href={`/employees/get/${employee.id}`}>Сотрудник #{employee.id}</Link>
+                    </td>
                     <td>{employee.username}</td>
                     <td>{employee.telegram_id}</td>
                     <td>{employee.tg_chat_id ? "да" : "нет"}</td>
