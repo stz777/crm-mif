@@ -7,7 +7,7 @@ export async function POST(
 ) {
     const requestData = await request.json();
     const updated = await updateTokenDeadline(requestData.token);
-    deleteUnusedTokens();
+    await deleteUnusedTokens();
     if (updated) {
         return NextResponse.json({
             success: true,

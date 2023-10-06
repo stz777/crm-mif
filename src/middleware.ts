@@ -10,11 +10,10 @@ export async function middleware(request: NextRequest) {
         const tokenIsValid = await checkAuthToken(String(authToken?.value), request.nextUrl.origin)
 
         if (tokenIsValid) {
-            updateTokenDeadline(
-                String(authToken?.value), request.url
-            )
+            await updateTokenDeadline(
+                String(authToken?.value), request.nextUrl.origin
+            );
         }
-
 
         if (pathname === "/login") {
             if (tokenIsValid) {
@@ -62,8 +61,6 @@ async function checkAuthToken(token: string, currentUrl: string) {
             return x.status === 200;
         })
 }
-
-
 
 async function updateTokenDeadline(token: string, currentUrl: string) {
     return await fetch(`${currentUrl}/api/auth/updateTokenDeadline`, {
