@@ -12,6 +12,7 @@ import insertPayment from './insertPayment';
 import noticeEmployees from './noticeEmployees';
 import saveImageToDB from './saveImageToDB';
 import saveMessage from './saveMessage';
+import checkPhoneIsExists from './checkPhoneIsExists';
 
 export async function POST(req: Request) {
     const auth = cookies().get('auth');
@@ -23,11 +24,21 @@ export async function POST(req: Request) {
     const data = await req.formData();
     const items: any = Array.from(data);
 
-    const newClientId: number = await createClientFn(String(data.get('fio')), String(data.get('address')));
 
     const phones = JSON.parse(String(data.get('phones')));
 
-    console.log('phones', phones);
+    for (let index = 0; index < phones.length; index++) {
+        const { phone } = phones[index];
+        const phoneIsExists = await checkPhoneIsExists(phone);
+        if (phoneIsExists) {
+            return NextResponse.json({
+                success: false,
+                error: "Клиент с таким телефоном существует #nfus223"
+            });
+        }
+    }
+
+    const newClientId: number = await createClientFn(String(data.get('fio')), String(data.get('address')));
 
 
     const emails: any = JSON.parse(String(data.get('emails')));
@@ -114,7 +125,6 @@ export async function POST(req: Request) {
             }
         }
     }
-
 
     return NextResponse.json({
         success: true,
