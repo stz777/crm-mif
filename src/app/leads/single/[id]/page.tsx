@@ -37,12 +37,12 @@ export default async function Page({ params }: { params: { id: number } }) {
     const clientMeta = await getClentMeta(Number(client?.id));
 
     return <>
-
         <h1>Заказ #{leadId}</h1>
         <table className='table table-bordered w-auto'>
             <tbody>
                 <tr><td>номер</td><td>{lead.id}</td></tr>
                 <tr><td>описание</td><td>{lead.description}</td></tr>
+                <tr><td>стоимость заказа</td><td>{lead.sum} р</td></tr>
                 <tr><td>дата создания</td><td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td></tr>
                 <tr><td>дедлайн</td><td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td></tr>
                 <tr><td>ответственные</td>

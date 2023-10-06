@@ -29,12 +29,11 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
     }, [leads])
 
     return <>
-
-
         {leads ? <table className="table table-bordered">
             <thead>
                 <tr>
                     <th>Заказ</th>
+                    {props.is_manager && <th><span className="text-nowrap">стоимость заказа</span></th>}
                     <th>Клиент</th>
                     <th>создан</th>
                     <th>дедлайн</th>
@@ -46,7 +45,6 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     <th>аванс</th>
                     {props.is_manager && <th>выполнен, ожидает оплаты</th>}
                     {props.is_manager && <th>выполнен, ожидает отправки</th>}
-                    {props.is_manager && <th>сумма заказа</th>}
                     <th>дата факт. выполнения</th>
                     <th></th>
                 </tr>
@@ -54,6 +52,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
                     <td><Link href={`/leads/single/${lead.id}`} className="text-nowrap">Заказ #{lead.id}</Link></td> {/*lead id*/}
+                    {props.is_manager && <td>{lead.sum} р</td>}{/*сумма заказа*/}
                     <td className="text-nowrap">{!props.is_manager ? null : <Link href={`/clients/get/${lead.client}`}>Клиент {lead.client}</Link>}</td>{/*client id*/}
                     <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
@@ -276,7 +275,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             >отметить</button>
                         })()}
                     </td>}
-                    {props.is_manager && <td>{lead.sum}</td>}{/*сумма заказа*/}
+                    
                     <td>
                         <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "-"}</span>
                     </td>{/*дата выполнения*/}
