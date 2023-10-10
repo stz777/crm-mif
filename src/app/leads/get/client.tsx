@@ -29,32 +29,40 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
     }, [leads])
 
     return <>
-        {leads ? <table className="table table-bordered">
-            <thead>
+        {leads ? <table className="table table-bordered table-striped">
+            <thead className="sticky-top">
                 <tr>
                     <th>Заказ</th>
-                    {props.is_manager && <th><span className="text-nowrap">стоимость заказа</span></th>}
-                    <th>Клиент</th>
-                    <th>создан</th>
+                    {/* {props.is_manager && <th><span className="text-nowrap">#стоимость заказа стоимость заказа</span></th>} */}
+                    {/* <th>Клиент</th> */}
+                    {/* <th>#создан</th> */}
                     <th>дедлайн</th>
                     <th>срочность</th>
                     <th>описание</th>
                     {props.is_manager && <th>расходы</th>}
                     {props.is_manager && <th>оплаты</th>}
-                    <th>оплата</th>
-                    <th>аванс</th>
-                    {props.is_manager && <th>выполнен, ожидает оплаты</th>}
-                    {props.is_manager && <th>выполнен, ожидает отправки</th>}
-                    <th>дата факт. выполнения</th>
+                    {/* <th>оплата #оплата</th> */}
+                    {/* <th>аванс</th> */}
+                    {/* {props.is_manager && <th>выполнен, ожидает оплаты</th>} */}
+                    {/* {props.is_manager && <th>выполнен, ожидает отправки</th>} */}
+                    <th>выполнен</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
-                    <td><Link href={`/leads/single/${lead.id}`} className="text-nowrap">Заказ #{lead.id}</Link></td> {/*lead id*/}
-                    {props.is_manager && <td>{lead.sum} р</td>}{/*сумма заказа*/}
-                    <td className="text-nowrap">{!props.is_manager ? null : <Link href={`/clients/get/${lead.client}`}>Клиент {lead.client}</Link>}</td>{/*client id*/}
-                    <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
+                    <td>
+                        <div className="text-nowrap">
+                            <Link href={`/leads/single/${lead.id}`}  className="">Заказ #{lead.id}</Link>
+                        </div>
+                        <div className="text-nowrap mt-2">
+                            {!props.is_manager ? null : <Link href={`/clients/get/${lead.client}`} className="">Клиент {lead.client}</Link>}
+                        </div>
+                    </td> {/*lead id*/}
+                    {/* {props.is_manager && <td>{lead.sum} р</td>} */}
+                    {/*сумма заказа*/}
+                    {/* <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td> */}
+                    {/*created_date*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {
                         const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0);
@@ -69,7 +77,18 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     })()}</td>
                     <td>{lead.description}</td>{/*description*/}
                     {props.is_manager && <td>
-                        <ul className="list-group">
+                        {(() => {
+                            let totalSum = 0;
+                            if (lead.expensesPerLead?.length) {
+                                totalSum = lead.expensesPerLead
+                                    .map(({ sum }) => sum)
+                                    .reduce((a, b) => a + b);
+                            }
+                            return <>
+                                <div className="fw-bold">{totalSum}</div>
+                            </>
+                        })()}
+                        {/* <ul className="list-group">
                             {lead.expensesPerLead?.map(expense =>
                                 <li key={expense.id} className="list-group-item d-flex justify-content-between align-items-center">
                                     <div>{expense.sum}</div>
@@ -88,11 +107,21 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                         <div className="fw-bold">Σ {totalSum}</div>
                                     </>
                                 })()}</li>
-                        </ul>
-                        <div className="mt-2"><AddExpense lead_id={lead.id} /></div>
+                        </ul> */}
+                        {/* <div className="mt-2"><AddExpense lead_id={lead.id} /></div> */}
                     </td>}{/*expenses list*/}
                     {props.is_manager && <td>
-                        <ul className="list-group">
+                        {(() => {
+                            let totalSum = 0;
+                            if (lead.payments?.length) {
+                                totalSum = lead.payments
+                                    .map(({ sum }) => sum)
+                                    .reduce((a, b) => a + b);
+                            }
+                            return <div className="fw-bold">{totalSum} из {lead.sum}</div>
+                        })()}
+                        {/* <ul className="list-group">
+                            #оплаты
                             {lead.payments?.map(payment =>
                                 <li key={payment.id} className="list-group-item d-flex justify-content-between align-items-center">
                                     <div>{payment.sum}</div>
@@ -111,10 +140,11 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                 }
                                 return <div className="fw-bold">Σ {totalSum}</div>
                             })()}</li>
-                        </ul>
-                        <div className="mt-2"><Add_Payment lead_id={lead.id} /></div>
+                        </ul> */}
+                        {/* <div className="mt-2"><Add_Payment lead_id={lead.id} /></div> */}
                     </td>}{/*payments list*/}
-                    {<td>
+                    {/* {<td>
+                        #оплата
                         {(() => {
                             let totalSum = 0;
                             const leadSum = lead.sum;
@@ -126,8 +156,10 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             const полнаяОплатаПроведена = leadSum <= totalSum;
                             return <CheckPaymentUI done={полнаяОплатаПроведена} />
                         })()}
-                    </td>}{/*оплата полностью проведена*/}
-                    <td>
+                    </td>} */}
+                    {/*оплата полностью проведена*/}
+                    {/* <td>
+                        #аванс
                         {(() => {
                             let totalSum = 0;
                             if (lead.payments?.length) {
@@ -138,14 +170,15 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             const предоплатаПроведена = totalSum > 0;
                             return <CheckPaymentUI done={предоплатаПроведена} />
                         })()}
-                    </td>{/*внесена предоплата*/}
-                    {props.is_manager && <td>
-                        {/* ждет оплату */}
+                    </td> */}
+                    {/*внесена предоплата*/}
+                    {/* {props.is_manager && <td>
+                        #выполнен, ожидает оплаты
                         {(() => {
                             if (lead.done_at) return "-";
 
 
-                            if(lead.wait_pay) return  <CheckPaymentUI done={true} />
+                            if (lead.wait_pay) return <CheckPaymentUI done={true} />
 
 
                             return <button className="btn btn-sm btn-outline-dark text-nowrap"
@@ -202,18 +235,17 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                                     console.log(x);
                                                 })
                                         })
-
                                 }}
                             >отметить</button>
                         })()}
-                    </td>}
-                    {props.is_manager && <td>
-                        {/* ждет отправку */}
+                    </td>} */}
+                    {/* {props.is_manager && <td>
+                        #выполнен, ожидает отправки
                         {(() => {
                             if (lead.done_at) return "-";
 
 
-                            if(lead.waiting_shipment) return  <CheckPaymentUI done={true} />
+                            if (lead.waiting_shipment) return <CheckPaymentUI done={true} />
 
 
                             return <button className="btn btn-sm btn-outline-dark text-nowrap"
@@ -274,20 +306,19 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                 }}
                             >отметить</button>
                         })()}
-                    </td>}
-                    
+                    </td>} */}
                     <td>
-                        <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "-"}</span>
+                        <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "нет"}</span>
                     </td>{/*дата выполнения*/}
                     <td>
-                        <div className="d-flex nowrap">
+                        {/* <div className="d-flex nowrap">
                             {(() => {
                                 if (lead.done_at) return <>Заказ закрыт</>
                                 if (props.is_boss) return <CloseLead leadId={lead.id} />
                                 return <>В работе</>
                             })()}
                             {props.is_manager && <div className="ms-2"><RightsManagement leadId={lead.id} is_boss={props.is_boss} /></div>}
-                        </div>
+                        </div> */}
                     </td>
                 </tr>)}
             </tbody>
