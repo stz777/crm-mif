@@ -5,11 +5,10 @@ export interface LeadInterface {
     created_date: string
     deadline: string
     done_at: string | null
+    comment: string
     sum: number
     payments?: PaymentInterface[]
     expensesPerLead?: ExpensesPerLeadInterface[]
-    wait_pay: boolean | 0 | 1
-    waiting_shipment: boolean | 0 | 1
 }
 
 export interface PaymentInterface {

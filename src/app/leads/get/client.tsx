@@ -1,16 +1,11 @@
 "use client"
 import Link from "next/link";
-import ConfirmPayment from "./confirmPayment";
-import DeclinePayment from "./declinePayment";
-import CloseLead from "./closeLead";
-import { RightsManagement } from "./righsManagement/rightsManagement";
 import { LeadInterface } from "@/app/components/types/lead";
-import { Add_Payment } from "./add_payment";
-import { FaCheck } from "react-icons/fa"
 import dayjs from 'dayjs'
 import { useEffect, useState } from "react";
-import { AddExpense } from "./addExpense";
 import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
+import Comment from "./Comment";
 
 export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean, searchParams: any }) {
     const [leads, setLeads] = useState(props.leads)
@@ -33,18 +28,12 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             <thead className="sticky-top">
                 <tr>
                     <th>Заказ</th>
-                    {/* {props.is_manager && <th><span className="text-nowrap">#стоимость заказа стоимость заказа</span></th>} */}
-                    {/* <th>Клиент</th> */}
-                    {/* <th>#создан</th> */}
                     <th>дедлайн</th>
                     <th>срочность</th>
+                    <th>комментарий</th>
                     <th>описание</th>
                     {props.is_manager && <th>расходы</th>}
                     {props.is_manager && <th>оплаты</th>}
-                    {/* <th>оплата #оплата</th> */}
-                    {/* <th>аванс</th> */}
-                    {/* {props.is_manager && <th>выполнен, ожидает оплаты</th>} */}
-                    {/* {props.is_manager && <th>выполнен, ожидает отправки</th>} */}
                     <th>выполнен</th>
                     <th></th>
                 </tr>
@@ -52,17 +41,8 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
                     <td>
-                        <div className="text-nowrap">
-                            <Link href={`/leads/single/${lead.id}`}  className="">Заказ #{lead.id}</Link>
-                        </div>
-                        <div className="text-nowrap mt-2">
-                            {!props.is_manager ? null : <Link href={`/clients/get/${lead.client}`} className="">Клиент {lead.client}</Link>}
-                        </div>
+                        <Link href={`/leads/single/${lead.id}`} className="">Заказ #{lead.id}</Link>
                     </td> {/*lead id*/}
-                    {/* {props.is_manager && <td>{lead.sum} р</td>} */}
-                    {/*сумма заказа*/}
-                    {/* <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td> */}
-                    {/*created_date*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {
                         const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0);
@@ -75,6 +55,9 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                         if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
                         return <>{diffInDays}</>
                     })()}</td>
+                    <td>
+                        <Comment currentText={lead.comment} lead_id={lead.id} />
+                    </td>{/*description*/}
                     <td>{lead.description}</td>{/*description*/}
                     {props.is_manager && <td>
                         {(() => {
@@ -87,29 +70,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             return <>
                                 <div className="fw-bold">{totalSum}</div>
                             </>
-                        })()}
-                        {/* <ul className="list-group">
-                            {lead.expensesPerLead?.map(expense =>
-                                <li key={expense.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>{expense.sum}</div>
-                                    <div>{expense.comment}</div>
-                                </li>)}
-
-                            <li className="list-group-item">
-                                {(() => {
-                                    let totalSum = 0;
-                                    if (lead.expensesPerLead?.length) {
-                                        totalSum = lead.expensesPerLead
-                                            .map(({ sum }) => sum)
-                                            .reduce((a, b) => a + b);
-                                    }
-                                    return <>
-                                        <div className="fw-bold">Σ {totalSum}</div>
-                                    </>
-                                })()}</li>
-                        </ul> */}
-                        {/* <div className="mt-2"><AddExpense lead_id={lead.id} /></div> */}
-                    </td>}{/*expenses list*/}
+                        })()}</td>}{/*expenses list*/}
                     {props.is_manager && <td>
                         {(() => {
                             let totalSum = 0;
@@ -120,218 +81,17 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             }
                             return <div className="fw-bold">{totalSum} из {lead.sum}</div>
                         })()}
-                        {/* <ul className="list-group">
-                            #оплаты
-                            {lead.payments?.map(payment =>
-                                <li key={payment.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>{payment.sum}</div>
-                                    <div>{!payment.confirmed ? <div className="d-flex ms-2">
-                                        <ConfirmPayment paymentId={payment.id} />
-                                        <DeclinePayment paymentId={payment.id} />
-                                    </div> : <><FaCheck color="green" /></>}</div>
-                                </li>)}
-
-                            <li className="list-group-item">{(() => {
-                                let totalSum = 0;
-                                if (lead.payments?.length) {
-                                    totalSum = lead.payments
-                                        .map(({ sum }) => sum)
-                                        .reduce((a, b) => a + b);
-                                }
-                                return <div className="fw-bold">Σ {totalSum}</div>
-                            })()}</li>
-                        </ul> */}
-                        {/* <div className="mt-2"><Add_Payment lead_id={lead.id} /></div> */}
                     </td>}{/*payments list*/}
-                    {/* {<td>
-                        #оплата
-                        {(() => {
-                            let totalSum = 0;
-                            const leadSum = lead.sum;
-                            if (lead.payments?.length) {
-                                totalSum = lead.payments
-                                    .map(({ sum }) => sum)
-                                    .reduce((a, b) => a + b);
-                            }
-                            const полнаяОплатаПроведена = leadSum <= totalSum;
-                            return <CheckPaymentUI done={полнаяОплатаПроведена} />
-                        })()}
-                    </td>} */}
-                    {/*оплата полностью проведена*/}
-                    {/* <td>
-                        #аванс
-                        {(() => {
-                            let totalSum = 0;
-                            if (lead.payments?.length) {
-                                totalSum = lead.payments
-                                    .map(({ sum }) => sum)
-                                    .reduce((a, b) => a + b);
-                            }
-                            const предоплатаПроведена = totalSum > 0;
-                            return <CheckPaymentUI done={предоплатаПроведена} />
-                        })()}
-                    </td> */}
-                    {/*внесена предоплата*/}
-                    {/* {props.is_manager && <td>
-                        #выполнен, ожидает оплаты
-                        {(() => {
-                            if (lead.done_at) return "-";
-
-
-                            if (lead.wait_pay) return <CheckPaymentUI done={true} />
-
-
-                            return <button className="btn btn-sm btn-outline-dark text-nowrap"
-                                onClick={() => {
-                                    fetch(
-                                        "/api/leads/set_wait_pay",
-                                        {
-                                            method: "POST",
-                                            body: JSON.stringify({
-                                                lead_id: lead.id
-                                            })
-                                        }
-                                    ).then(
-                                        response => {
-                                            if (response.ok) {
-                                                return response.json()
-                                            } else {
-                                                throw new Error(response.statusText);
-                                            }
-                                        }
-                                    ).then(data => {
-                                        if (data.success) {
-                                            // if (!data.leads) {
-                                            //     toast.error("Что-то пошло не так #errncd7d");
-                                            // }
-                                            return data;
-                                        } else {
-                                            toast.error("Что-то пошло не так #errncx8");
-                                        }
-                                    })
-                                        .catch(error => {
-                                            const statusText = String(error);
-                                            fetch(
-                                                `/api/bugReport`,
-                                                {
-                                                    method: "POST",
-                                                    headers: {
-                                                        'Content-Type': 'application/json'
-                                                    },
-                                                    body: JSON.stringify({
-                                                        text: {
-                                                            err: "#errjdn7",
-                                                            data: {
-                                                                statusText,
-                                                                error,
-                                                                values: {}
-                                                            }
-                                                        }
-                                                    })
-                                                }
-                                            )
-                                                .then(x => x.json())
-                                                .then(x => {
-                                                    console.log(x);
-                                                })
-                                        })
-                                }}
-                            >отметить</button>
-                        })()}
-                    </td>} */}
-                    {/* {props.is_manager && <td>
-                        #выполнен, ожидает отправки
-                        {(() => {
-                            if (lead.done_at) return "-";
-
-
-                            if (lead.waiting_shipment) return <CheckPaymentUI done={true} />
-
-
-                            return <button className="btn btn-sm btn-outline-dark text-nowrap"
-                                onClick={() => {
-                                    fetch(
-                                        "/api/leads/set_wait_shipment",
-                                        {
-                                            method: "POST",
-                                            body: JSON.stringify({
-                                                lead_id: lead.id
-                                            })
-                                        }
-                                    ).then(
-                                        response => {
-                                            if (response.ok) {
-                                                return response.json()
-                                            } else {
-                                                throw new Error(response.statusText);
-                                            }
-                                        }
-                                    ).then(data => {
-                                        if (data.success) {
-                                            // if (!data.leads) {
-                                            //     toast.error("Что-то пошло не так #errncd7d");
-                                            // }
-                                            return data;
-                                        } else {
-                                            toast.error("Что-то пошло не так #errnx3cx8");
-                                        }
-                                    })
-                                        .catch(error => {
-                                            const statusText = String(error);
-                                            fetch(
-                                                `/api/bugReport`,
-                                                {
-                                                    method: "POST",
-                                                    headers: {
-                                                        'Content-Type': 'application/json'
-                                                    },
-                                                    body: JSON.stringify({
-                                                        text: {
-                                                            err: "#err44dn7",
-                                                            data: {
-                                                                statusText,
-                                                                error,
-                                                                values: {}
-                                                            }
-                                                        }
-                                                    })
-                                                }
-                                            )
-                                                .then(x => x.json())
-                                                .then(x => {
-                                                    console.log(x);
-                                                })
-                                        })
-
-                                }}
-                            >отметить</button>
-                        })()}
-                    </td>} */}
                     <td>
                         <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "нет"}</span>
                     </td>{/*дата выполнения*/}
                     <td>
-                        {/* <div className="d-flex nowrap">
-                            {(() => {
-                                if (lead.done_at) return <>Заказ закрыт</>
-                                if (props.is_boss) return <CloseLead leadId={lead.id} />
-                                return <>В работе</>
-                            })()}
-                            {props.is_manager && <div className="ms-2"><RightsManagement leadId={lead.id} is_boss={props.is_boss} /></div>}
-                        </div> */}
+
                     </td>
                 </tr>)}
             </tbody>
         </table> : <>нет заказов...</>}
     </>
-}
-
-function CheckPaymentUI(props: { done: boolean }) {
-    return <div className="border border-dark d-flex justify-align-center align-items-middle" style={{
-        width: 20, height: 20
-    }}>
-        {props.done && <FaCheck color="red" />}
-    </div>
 }
 
 async function fetchLeads(searchParams: any) {
