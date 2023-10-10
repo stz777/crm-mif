@@ -11,6 +11,7 @@ import getEmployeesByLeadId from './getEmployeesByLeadId';
 import roleTranslator from '@/app/components/translate/roleTranslator';
 import getClient from './getClient';
 import getClentMeta from '@/app/db/clients/getClentMeta';
+import { GenerateWALink } from './generateWALink';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
@@ -67,7 +68,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                                     {(() => {
                                         const phoneItem = clientMeta.find(item => item.data_type === "phone");
                                         if (!phoneItem) return <>телефон не указан</>
-                                        return generateWALink(phoneItem.data);
+                                        return <GenerateWALink phoneNumber={phoneItem.data} />;
                                     })()}</td></tr>
                             </tbody>
                         </table>
@@ -80,14 +81,3 @@ export default async function Page({ params }: { params: { id: number } }) {
     </>
 }
 
-
-function generateWALink(phoneNumber: string) {
-    const толькоЦифры = phoneNumber.replace(/\D/g, '');
-    if (толькоЦифры.length === 11) {
-        return <a href={`https://wa.me/${'7' + толькоЦифры.slice(1)}`}>{phoneNumber}</a>;
-    } else if (толькоЦифры.length === 10) {
-        return <a href={`https://wa.me/${'7' + толькоЦифры.slice(1)}`}>{phoneNumber}</a>;
-    } else {
-        return 'Некорректный номер телефона ' + phoneNumber;
-    }
-}
