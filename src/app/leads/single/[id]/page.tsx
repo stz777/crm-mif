@@ -12,6 +12,13 @@ import roleTranslator from '@/app/components/translate/roleTranslator';
 import getClient from './getClient';
 import getClentMeta from '@/app/db/clients/getClentMeta';
 import { GenerateWALink } from './generateWALink';
+import Link from 'next/link';
+import { RightsManagement } from '../../get/righsManagement/rightsManagement';
+import { Add_Payment } from '../../get/add_payment';
+import ConfirmPayment from '../../get/confirmPayment';
+import DeclinePayment from '../../get/declinePayment';
+import { FaCheck } from 'react-icons/fa';
+import { getPaymentsByLeadId } from '@/app/db/payments_by_lead/getPaymentsByLeadId';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
@@ -34,6 +41,8 @@ export default async function Page({ params }: { params: { id: number } }) {
 
     const messages = await getMessagesByLeadId(lead.id);
 
+    const payments = await getPaymentsByLeadId(lead.id)
+
     const client = await getClient(lead.client);
     const clientMeta = await getClentMeta(Number(client?.id));
 
@@ -43,7 +52,7 @@ export default async function Page({ params }: { params: { id: number } }) {
             <tbody>
                 <tr><td>номер</td><td>{lead.id}</td></tr>
                 <tr><td>описание</td><td>{lead.description}</td></tr>
-                <tr><td>стоимость заказа</td><td>{lead.sum} р</td></tr>
+                <tr><td>стоимость заказа</td><td><span className='fw-bold'>{lead.sum} р</span></td></tr>
                 <tr><td>дата создания</td><td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td></tr>
                 <tr><td>дедлайн</td><td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td></tr>
                 <tr><td>ответственные</td>
@@ -58,22 +67,62 @@ export default async function Page({ params }: { params: { id: number } }) {
 
                 </tr>
                 <tr>
+                    <td>настроить права</td>
+                    <td><RightsManagement
+                        leadId={leadId}
+                        is_boss={!!user.is_boss}
+                    /></td>
+                </tr>
+                <tr>
+                    <td>
+                        Оплаты
+                    </td>
+                    <td>
+                        <ul className="list-group">
+                            {payments?.map(payment =>
+                                <li key={payment.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>{payment.sum}</div>
+                                    <div>{!payment.confirmed ? <div className="d-flex ms-2">
+                                        <ConfirmPayment paymentId={payment.id} />
+                                        <DeclinePayment paymentId={payment.id} />
+                                    </div> : <><FaCheck color="green" /></>}</div>
+                                </li>)}
+
+                            <li className="list-group-item">{(() => {
+                                let totalSum = 0;
+                                if (payments?.length) {
+                                    totalSum = payments
+                                        .map(({ sum }) => sum)
+                                        .reduce((a, b) => a + b);
+                                }
+                                return <div className="fw-bold">Σ {totalSum}</div>
+                            })()}</li>
+                        </ul>
+                        <Add_Payment lead_id={leadId} />
+                    </td>
+                </tr>
+                <tr>
                     <td>клиент</td>
                     <td>
                         <table>
                             <tbody>
-                                <tr><td>id</td><td>{client?.id}</td></tr>
+                                <tr><td>id</td><td>
+                                    <Link href={`/clients/get/${client?.id}`}>{client?.id}</Link>
+                                </td></tr>
                                 <tr><td>имя</td><td>{client?.full_name}</td></tr>
-                                <tr><td>whatsapp</td><td>
-                                    {(() => {
-                                        const phoneItem = clientMeta.find(item => item.data_type === "phone");
-                                        if (!phoneItem) return <>телефон не указан</>
-                                        return <GenerateWALink phoneNumber={phoneItem.data} />;
-                                    })()}</td></tr>
+                                <tr><td><span className='pr-3'>
+                                    whatsapp
+                                </span></td><td>
+                                        {(() => {
+                                            const phoneItem = clientMeta.find(item => item.data_type === "phone");
+                                            if (!phoneItem) return <>телефон не указан</>
+                                            return <GenerateWALink phoneNumber={phoneItem.data} />;
+                                        })()}</td></tr>
                             </tbody>
                         </table>
                     </td>
                 </tr>
+                <tr></tr>
             </tbody>
         </table>
         <MessageForm leadId={leadId} />

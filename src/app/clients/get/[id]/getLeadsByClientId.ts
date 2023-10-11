@@ -4,6 +4,7 @@ import { LeadInterface, PaymentInterface } from "@/app/components/types/lead";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 import getExpensesByLeadId from "@/app/leads/get/getExpensesByLeadId";
+import { getPaymentsByLeadId } from "@/app/db/payments_by_lead/getPaymentsByLeadId";
 
 interface SearchParametersInterface {
     id?: number
@@ -61,27 +62,6 @@ export async function getLeadsByClientId(
     return output;
 }
 
-async function getPaymentsByLeadId(leadId: number): Promise<PaymentInterface[]> {
-    return await new Promise(r => {
-        pool.query(
-            `SELECT * FROM payments WHERE lead_id = ${leadId}`,
-            function (err: any, res: PaymentInterface[]) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#dm3n5nd9s",
-                                error: err,
-                                values: { leadId }
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-                r(res);
-            }
-        )
-    });
-}
 
 export async function getRoleByLeadId(lead_id: number): Promise<string | null> {
     const auth = cookies().get('auth');
