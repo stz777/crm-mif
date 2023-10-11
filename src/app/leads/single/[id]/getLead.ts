@@ -1,7 +1,8 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
+import { LeadInterface } from "@/app/components/types/lead"
 import { pool } from "@/app/db/connect"
 
-export default async function getLead(leadId: number): Promise<Lead | false> {
+export default async function getLead(leadId: number): Promise<LeadInterface | false> {
     return new Promise((resolve) => {
         pool.query(
             "SELECT * FROM leads WHERE id = ? ORDER BY id DESC",
@@ -36,15 +37,4 @@ export default async function getLead(leadId: number): Promise<Lead | false> {
             }
         )
     })
-}
-
-interface Lead {
-    id: number
-    client: number
-    title: string
-    description: string
-    created_date: string
-    deadline: string
-    done_at: string
-    sum: number
 }

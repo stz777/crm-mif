@@ -19,6 +19,9 @@ import ConfirmPayment from '../../get/confirmPayment';
 import DeclinePayment from '../../get/declinePayment';
 import { FaCheck } from 'react-icons/fa';
 import { getPaymentsByLeadId } from '@/app/db/payments_by_lead/getPaymentsByLeadId';
+import { AddExpense } from '../../get/addExpense';
+import getExpensesByLeadId from '../../get/getExpensesByLeadId';
+import Comment from '../../get/Comment';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
@@ -41,9 +44,11 @@ export default async function Page({ params }: { params: { id: number } }) {
 
     const messages = await getMessagesByLeadId(lead.id);
 
-    const payments = await getPaymentsByLeadId(lead.id)
+    const payments = await getPaymentsByLeadId(lead.id);
 
-    const client = await getClient(lead.client);
+    const expenses = await getExpensesByLeadId(leadId);
+
+    const client = await getClient(Number(lead.client));
     const clientMeta = await getClentMeta(Number(client?.id));
 
     return <>
@@ -74,6 +79,31 @@ export default async function Page({ params }: { params: { id: number } }) {
                     /></td>
                 </tr>
                 <tr>
+                    <td>комментарий</td>
+                    <td>
+                        <Comment currentText={lead.comment} lead_id={leadId} />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        срочность
+                    </td>
+                    <td>
+                        {(() => {
+                            const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0);
+                            const date2 = dayjs().set("hour", 0).set("minute", 0);
+                            const diffInDays = date1.diff(date2, 'day');
+                            const limit = 1;
+
+                            if (lead.done_at) return <span className="badge text-bg-success">выполнено</span>
+                            if (diffInDays <= limit) return <span className="badge text-bg-danger">срочно</span>
+                            if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
+
+                            return <>{diffInDays}</>
+                        })()}
+                    </td>
+                </tr>
+                <tr>
                     <td>
                         Оплаты
                     </td>
@@ -99,6 +129,33 @@ export default async function Page({ params }: { params: { id: number } }) {
                             })()}</li>
                         </ul>
                         <Add_Payment lead_id={leadId} />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Расходы по заказу</td>
+                    <td>
+                        <ul className="list-group">
+                            {expenses?.map(expense =>
+                                <li key={expense.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>{expense.sum}</div>
+                                    <div>{expense.comment}</div>
+                                </li>)}
+
+                            <li className="list-group-item">
+                                {(() => {
+                                    let totalSum = 0;
+                                    if (expenses?.length) {
+                                        totalSum = expenses
+                                            .map(({ sum }) => sum)
+                                            .reduce((a, b) => a + b);
+                                    }
+                                    return <>
+                                        <div className="fw-bold">Σ {totalSum}</div>
+                                    </>
+                                })()}</li>
+
+                        </ul>
+                        <AddExpense lead_id={leadId} />
                     </td>
                 </tr>
                 <tr>
