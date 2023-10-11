@@ -22,6 +22,7 @@ import { getPaymentsByLeadId } from '@/app/db/payments_by_lead/getPaymentsByLead
 import { AddExpense } from '../../get/addExpense';
 import getExpensesByLeadId from '../../get/getExpensesByLeadId';
 import Comment from '../../get/Comment';
+import CloseLead from '../../get/closeLead';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
@@ -116,7 +117,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                                                         <Link href={`/clients/get/${client?.id}`}>{client?.id}</Link>
                                                     </td></tr>
                                                     <tr><td>имя</td><td>{client?.full_name}</td></tr>
-                                                    <tr><td><span className='pr-3'>
+                                                    <tr><td><span className='pe-3'>
                                                         whatsapp
                                                     </span></td><td>
                                                             {(() => {
@@ -202,6 +203,17 @@ export default async function Page({ params }: { params: { id: number } }) {
                         <div className="card-body">
                             <MessageForm leadId={leadId} />
                             <div className='mb-4'><Chat messages={messages || []} essense_type="lead" essense_id={lead.id} /></div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col">
+                    <div className="card">
+                        <div className="card-body">
+                            {(() => {
+                                if (lead.done_at) return <>Заказ закрыт</>
+                                if (user.is_boss) return <CloseLead leadId={lead.id} />
+                                return <>В работе</>
+                            })()}
                         </div>
                     </div>
                 </div>
