@@ -197,6 +197,9 @@ export default async function Page({ params }: { params: { id: number } }) {
                 </div>
                 <div className="col">
                     <div className="card">
+                        <div className="card-header">
+                            <h3>Статус заказа</h3>
+                        </div>
                         <div className="card-body">
                             {(() => {
                                 if (lead.done_at) return <>Заказ закрыт</>
