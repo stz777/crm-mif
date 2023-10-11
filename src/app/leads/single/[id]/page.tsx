@@ -128,7 +128,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                                 return <div className="fw-bold">Σ {totalSum}</div>
                             })()}</li>
                         </ul>
-                        <Add_Payment lead_id={leadId} />
+                        <Add_Payment lead_id={leadId} is_boss={!!user.is_boss}/>
                     </td>
                 </tr>
                 <tr>

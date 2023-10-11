@@ -10,7 +10,7 @@ type Inputs = {
     sum: number
 }
 
-export function Add_Payment(props: { lead_id: number }) {
+export function Add_Payment(props: { lead_id: number, is_boss?: boolean }) {
     const [isOPen, setIsOpen] = useState(false);
     const { register, handleSubmit, reset }: any = useForm<Inputs>({
         defaultValues: {
@@ -20,10 +20,10 @@ export function Add_Payment(props: { lead_id: number }) {
     return <>
         {isOPen ? <div className="card">
             <div className="card-header">
-                <div className="card-title">Добавить оплату</div>
+                <div className="card-title">Добавить оплату </div>
             </div>
             <div className="card-body">
-                <form onSubmit={handleSubmit((e: any) => onSubmit(e, reset))} className="mb-2">
+                <form onSubmit={handleSubmit((e: any) => onSubmit(e, reset, props.is_boss))} className="mb-2">
                     <FieldWrapper
                         title="Сумма"
                         field={<>
@@ -61,20 +61,16 @@ export function Add_Payment(props: { lead_id: number }) {
     </>
 }
 
-const onSubmit: SubmitHandler<Inputs> = (data: any, resetForm: any) => {
+const onSubmit = (data: any, resetForm: any, is_boss: any) => {
     const formdata = new FormData();
     formdata.append("lead_id", data.lead_id);
     formdata.append("sum", data.sum);
     console.log('image', data.image);
     console.log('data #vf4', data);
 
-    if (
-        !(data.sum && (data.image?.length))
-    ) {
-        toast.error('Некорректно заполнена форма');
-        return;
-    }
-
+    if (!data.sum) { toast.error('Некорректно заполнена форма'); return; }
+    if ((!data.image?.length) && !is_boss) { toast.error('Некорректно заполнена форма'); return; }
+    // (data.image?.length)
     for (const key in data) {
         const element = data[key];
         if (key === "image") {
