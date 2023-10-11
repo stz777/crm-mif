@@ -34,8 +34,8 @@ export async function createLead(props: { client: number, description: string, t
     const { client, description, title, deadline, sum } = props;
     return await new Promise(resolve => {
         pool.query(
-            `INSERT INTO leads (client, description, title, deadline, sum) VALUES (?,?,?,?,?)`,
-            [client, description, title, deadline, sum],
+            `INSERT INTO leads (client, description, title, deadline, sum, comment) VALUES (?,?,?,?,?,?)`,
+            [client, description, title, deadline, sum, "недавно создан"],
             function (err, res: any) {
                 if (err) {
                     sendMessageToTg(
