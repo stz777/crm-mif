@@ -197,17 +197,6 @@ export default async function Page({ params }: { params: { id: number } }) {
                 </div>
                 <div className="col">
                     <div className="card">
-                        <div className="card-header">
-                            <h3>Чат</h3>
-                        </div>
-                        <div className="card-body">
-                            <MessageForm leadId={leadId} />
-                            <div className='mb-4'><Chat messages={messages || []} essense_type="lead" essense_id={lead.id} /></div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="card">
                         <div className="card-body">
                             {(() => {
                                 if (lead.done_at) return <>Заказ закрыт</>
@@ -217,6 +206,18 @@ export default async function Page({ params }: { params: { id: number } }) {
                         </div>
                     </div>
                 </div>
+                <div className="col">
+                    <div className="card">
+                        <div className="card-header">
+                            <h3>Чат</h3>
+                        </div>
+                        <div className="card-body">
+                            <MessageForm leadId={leadId} />
+                            <div className='mb-4'><Chat messages={messages || []} essense_type="lead" essense_id={lead.id} /></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </>
