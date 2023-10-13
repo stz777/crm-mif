@@ -52,7 +52,7 @@ export default function Comment(props: { currentText: string, lead_id: number })
     } else {
         return <>
             <form onSubmit={handleSubmit(e => onSubmit(e))}>
-                <input {...register("comment", {
+                <textarea {...register("comment", {
                     value: props.currentText,
                 })} autoComplete="off" />
                 <div className="d-flex justify-content-between">
