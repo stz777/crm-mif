@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                                         </td>
                                         <td>
                                             {(() => {
-                                                const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0);
+                                                const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0).add(1, "hours");
                                                 const date2 = dayjs().set("hour", 0).set("minute", 0);
                                                 const diffInDays = date1.diff(date2, 'day');
                                                 const limit = 1;
