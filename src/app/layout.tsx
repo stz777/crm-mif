@@ -15,8 +15,8 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body>
-        <header className='border'>
-          <div className="d-flex">
+        <header className='border py-2 mb-3'>
+          <div className="d-flex align-items-center">
             <div className="pe-3" style={{ width: "300px" }}>
               <div className="p-3">
                 <Link href={"/"}>
@@ -24,8 +24,11 @@ export default function RootLayout({
                 </Link>
               </div>
             </div>
-            <div style={{ minWidth: "400px" }}>
+            <div style={{ minWidth: "400px" }} className=' flex-grow-1'>
               {/* content */}
+              <div className='text-center'>
+                <div className='h1 '>CRM 80 lvl</div>
+              </div>
             </div>
           </div>
         </header>
