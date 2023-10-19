@@ -16,12 +16,6 @@ function ClientFields(props: {
 
     return <>
 
-        <FieldWrapper title="Имя клиента"
-            field={<>
-                <input {...props.register("fio", { required: true })} placeholder="ФИО" autoComplete="off" />
-            </>}
-        />
-
         <FieldWrapper title="Телефоны"
             field={<>
                 {props.phonesFields.map(({ id }: any, i: number) => <div key={id} className="d-flex">
@@ -29,6 +23,12 @@ function ClientFields(props: {
                     <div onClick={() => props.removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
                 </div>)}
                 <div onClick={() => props.appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+            </>}
+        />
+
+        <FieldWrapper title="Имя клиента"
+            field={<>
+                <input {...props.register("fio", { required: true })} placeholder="ФИО" autoComplete="off" />
             </>}
         />
 
