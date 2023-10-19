@@ -1,6 +1,6 @@
-import { sendMessageToTg } from "../api/bugReport/sendMessageToTg";
-import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../components/types/lead";
-import { pool } from "../db/connect";
+import { sendMessageToTg } from "../../api/bugReport/sendMessageToTg";
+import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../../components/types/lead";
+import { pool } from "../../db/connect";
 import { ReportSearchInterface } from "./page";
 
 export default async function getFinReportdata(searchParams: ReportSearchInterface) {

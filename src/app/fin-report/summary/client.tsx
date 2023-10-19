@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../components/types/lead";
+import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../../components/types/lead";
 import dayjs from "dayjs";
 import { ReportSearchInterface } from "./page";
 
@@ -54,7 +54,7 @@ export default function Client(props: {
     const total_profit = totalPayments - totalExpensesPerLeads;
 
     return <>
-        <h1>Отчет</h1>
+        <h1>Отчет (сводка)</h1>
         {(() => {
             const monthes = Array.from({ length: 12 }, (_, i) => i + 1);
             return <table className="table table-bordered table-striped" >

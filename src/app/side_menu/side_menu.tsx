@@ -55,7 +55,8 @@ export default async function SideMenu() {
         {!user.is_boss ? null : <div className="shadow mb-3">
             <h5 className="m-0">Отчет</h5>
             <ul className="list-group">
-                <li><Link href="/fin_report" className="list-group-item text-nowrap">Отчет</Link></li>
+                <li><Link href="/fin-report/summary" className="list-group-item text-nowrap">Отчет (сводка)</Link></li>
+                <li><Link href="/fin-report/detailing" className="list-group-item text-nowrap">Отчет (детализация)</Link></li>
             </ul>
         </div>}
 

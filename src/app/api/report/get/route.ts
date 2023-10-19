@@ -1,6 +1,6 @@
 import { getUserByToken } from "@/app/components/getUserByToken";
-import getFinReportdata from "@/app/fin_report/getFinReportdata";
-import { ReportSearchInterface } from "@/app/fin_report/page";
+import getFinReportdata from "@/app/fin-report/summary/getFinReportdata";
+import { ReportSearchInterface } from "@/app/fin-report/summary/page";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 

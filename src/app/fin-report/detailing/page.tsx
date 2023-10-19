@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getUserByToken } from "../components/getUserByToken";
+import { getUserByToken } from "../../components/getUserByToken";
 import Client from "./client";
 import getFinReportdata from "./getFinReportdata";
 import Filter from "./filter";
