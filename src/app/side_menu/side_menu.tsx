@@ -2,7 +2,10 @@ import Link from "next/link";
 import LogoutBTN from "../api/auth/logout/logoutBTN";
 import { cookies } from "next/headers";
 import { getUserByToken } from "../components/getUserByToken";
+import { FaRocket, FaRocketchat } from "react-icons/fa";
 
+
+FaRocketchat
 export default async function SideMenu() {
     const auth = cookies().get('auth');
     if (!auth?.value) return;
@@ -31,7 +34,9 @@ export default async function SideMenu() {
         <div className="shadow mb-3">
             <h5 className="m-0">Клиенты</h5>
             <ul className="list-group">
-                {!user.is_manager ? null : <li><Link href="/clients/create" className="list-group-item text-nowrap">Создать клиента</Link></li>}
+                {!user.is_manager ? null : <li><Link href="/clients/create" className="list-group-item text-nowrap">Создать клиента
+                    <FaRocket className="ms-2" color="red" size={25} />
+                </Link></li>}
                 <li>
                     {!user.is_manager ? null : <Link href="/clients/get" className="list-group-item text-nowrap">Список клиентов</Link>}
                 </li>
