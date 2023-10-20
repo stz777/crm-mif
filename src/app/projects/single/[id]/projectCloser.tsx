@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 export default function ProjectCloser(props: { task_id: number }) {
     return <>
         <button className="btn btn-sm btn-outline-danger" onClick={() => { fetchCloseProject(props.task_id) }}>
-            Закрыть проект {props.task_id}
+            Закрыть задачу
         </button>
     </>
 }
@@ -24,7 +24,7 @@ async function fetchCloseProject(project_id: number) {
         )
         .then(data => {
             if (data.success) {
-                toast.success("Проект закрыт");
+                toast.success("Задача закрыта");
             } else {
                 toast.error("Что-то пошло не так");
             }

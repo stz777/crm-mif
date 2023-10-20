@@ -18,7 +18,7 @@ export default async function Page(props: any) {
     const { searchParams } = props;
     const projects = await getProjectsFn(searchParams);
     return <>
-        <h1>Проекты</h1>
+        <h1>Задачи</h1>
         <Filter searchParams={searchParams} />
         <Client projects={projects} is_manager={!!user?.is_manager} is_boss={!!user.is_boss} searchParams={searchParams} />
     </>

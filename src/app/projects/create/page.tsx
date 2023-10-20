@@ -10,7 +10,7 @@ export default async function Page() {
     if (!user) return redirect("/");
     if (!user.is_manager) return redirect("/");
     return <>
-        <h1>Создать проект</h1>
+        <h1>Создать задачу</h1>
         <CreateProjectForm />
     </>
 }

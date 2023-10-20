@@ -30,7 +30,7 @@ export default function Client(props: { projects: ProjectInterface[], is_manager
         {projects ? <table className="table table-bordered">
             <thead>
                 <tr>
-                    <th>Проект</th>
+                    <th>Ссылка</th>
                     <th>Заголовок</th>
                     <th>описание</th>
                     <th>создан</th>
@@ -42,13 +42,13 @@ export default function Client(props: { projects: ProjectInterface[], is_manager
             </thead>
             <tbody>
                 {projects.map(project => <tr key={project.id}>
-                    <td><Link href={`/projects/single/${project.id}`} className="text-nowrap">Проект #{project.id}</Link></td> {/*project id*/}
+                    <td><Link href={`/projects/single/${project.id}`} className="text-nowrap">Задача #{project.id}</Link></td> {/*project id*/}
                     <td>{project.title}</td>{/*client id*/}
                     <td>{project.comment}</td>{/*description*/}
                     <td>{dayjs(project.created_date).format("DD.MM.YYYY")}</td>{/*created_date*/}
                     <td>{dayjs(project.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {
-                        const date1 = dayjs(project.deadline).set("hour", 0).set("minute", 0);
+                        const date1 = dayjs(project.deadline).set("hour", 0).set("minute", 0).add(1, "hours");;
                         const date2 = dayjs(project.created_date).set("hour", 0).set("minute", 0);
                         const diffInDays = date1.diff(date2, 'day');
                         const limit = 1;
@@ -64,7 +64,7 @@ export default function Client(props: { projects: ProjectInterface[], is_manager
                     <td>
                         <div className="d-flex nowrap">
                             {(() => {
-                                if (project.done_at) return <>Проект закрыт</>
+                                if (project.done_at) return <>Задача закрыта</>
                                 if (props.is_boss) return <CloseProject project_id={project.id} />
                                 return <>В работе</>
                             })()}

@@ -72,7 +72,7 @@ export default async function SideMenu() {
         </div>}
 
         {!user.is_manager ? null : <div className="shadow mb-3">
-            <h5 className="m-0">Проекты</h5>
+            <h5 className="m-0">Задачи</h5>
             <ul className="list-group">
                 <li><Link href="/projects/create" className="list-group-item text-nowrap">Создать проект</Link></li>
                 <li><Link href="/projects/get" className="list-group-item text-nowrap">Список проектов</Link></li>
