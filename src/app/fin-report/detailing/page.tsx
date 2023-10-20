@@ -34,14 +34,9 @@ export default async function Page(props: { searchParams: { from?: string, to?: 
                 <Expenses expenses={expensesPerPurchaseTask} />
             </div>
         </div>
-        {/* <Filter searchParams={props.searchParams} />
-        <Client reportData={data} searchParams={props.searchParams} /> */}
+        
     </>
 }
-
-// export interface ReportSearchInterface {
-//     year: number
-// }
 
 function Payments(props: { payments: PaymentInterface[] }) {
     return <>
