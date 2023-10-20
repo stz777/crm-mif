@@ -4,8 +4,9 @@ import { getUserByToken } from "../../components/getUserByToken";
 // import Client from "./client";
 // import Filter from "./filter";
 import getPayments from "./getPayments";
-import { PaymentInterface } from "@/app/components/types/lead";
+import { ExpensesPePerPurchaseTaskInterface, PaymentInterface } from "@/app/components/types/lead";
 import dayjs from "dayjs";
+import getExpensesPerPurchaseTask from "./getExpensesPerPurchaseTask";
 
 export default async function Page(props: { searchParams: { from?: string, to?: string } }) {
     const auth = cookies().get('auth');
@@ -16,9 +17,12 @@ export default async function Page(props: { searchParams: { from?: string, to?: 
 
     // const data = await getFinReportdata(props.searchParams);
     const payments = await getPayments(props.searchParams);
-    return <>
 
-        <pre>{JSON.stringify(props.searchParams, null, 2)}</pre>
+    const expensesPerPurchaseTask = await getExpensesPerPurchaseTask(props.searchParams)
+
+    return <>
+        <h1>Отчет (детализация)</h1>
+        {/* <pre>{JSON.stringify(props.searchParams, null, 2)}</pre> */}
 
         <div className="row">
             <div className="col">
@@ -27,17 +31,12 @@ export default async function Page(props: { searchParams: { from?: string, to?: 
             </div>
             <div className="col">
                 <h2>Закупки</h2>
-                <Payments payments={payments} />
+                <Expenses expenses={expensesPerPurchaseTask} />
             </div>
         </div>
-        {/* <Filter searchParams={props.searchParams} />
-        <Client reportData={data} searchParams={props.searchParams} /> */}
+        
     </>
 }
-
-// export interface ReportSearchInterface {
-//     year: number
-// }
 
 function Payments(props: { payments: PaymentInterface[] }) {
     return <>
@@ -58,22 +57,21 @@ function Payments(props: { payments: PaymentInterface[] }) {
     </>
 }
 
-// function Payments(props: { payments: PaymentInterface[] }) {
-//     return <>
-//         <table className="table bable-striped table-bordered">
-//             <thead className="sticky-top">
-//                 <tr>
-//                     <th>сумма</th>
-//                     <th>дата</th>
-//                 </tr>
-//             </thead>
-//             <tbody>
-//                 {props.payments.map(payment => <tr>
-//                     <td>{payment.sum}</td>
-//                     <td>{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
-//                 </tr>)}
-//             </tbody>
-//         </table>
-//     </>
-// }
-
+function Expenses(props: { expenses: ExpensesPePerPurchaseTaskInterface[] }) {
+    return <>
+        <table className="table bable-striped table-bordered">
+            <thead className="sticky-top">
+                <tr>
+                    <th>сумма</th>
+                    <th>дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {props.expenses.map(payment => <tr key={payment.id}>
+                    <td>{payment.sum}</td>
+                    <td>{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
+                </tr>)}
+            </tbody>
+        </table>
+    </>
+}

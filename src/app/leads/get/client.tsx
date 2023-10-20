@@ -27,7 +27,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
         {leads ? <table className="table table-bordered table-striped">
             <thead className="sticky-top">
                 <tr>
-                    <th>Заказ</th>
+                    <th>заказ</th>
                     <th>дедлайн</th>
                     <th>срочность</th>
                     <th>комментарий</th>
@@ -35,13 +35,12 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     {props.is_manager && <th>расходы</th>}
                     {props.is_manager && <th>оплаты</th>}
                     <th>выполнен</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
                     <td>
-                        <Link href={`/leads/single/${lead.id}`} className="">Заказ #{lead.id}</Link>
+                        <Link href={`/leads/single/${lead.id}`} className="">заказ #{lead.id}</Link>
                     </td> {/*lead id*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {
@@ -79,15 +78,13 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                     .map(({ sum }) => sum)
                                     .reduce((a, b) => a + b);
                             }
-                            return <div className="fw-bold">{totalSum} из {lead.sum}</div>
+                            return <div className="fw-bold">{totalSum} из <span style={{ fontSize: "1.3em", textDecoration: "underline" }}>{lead.sum}</span></div>
                         })()}
                     </td>}{/*payments list*/}
                     <td>
                         <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "нет"}</span>
                     </td>{/*дата выполнения*/}
-                    <td>
-
-                    </td>
+                    
                 </tr>)}
             </tbody>
         </table> : <>нет заказов...</>}
