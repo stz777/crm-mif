@@ -7,6 +7,9 @@ import MessageForm from "./messageForm";
 import ProjectCloser from "./projectCloser";
 import Chat from "@/app/components/chat/chat";
 import dayjs from "dayjs";
+import { RightsManagement } from "./righsManagement/rightsManagement";
+import getEmployeesByProjectId from "@/app/db/employees/getEmployeesByProjectId";
+import roleTranslator from "@/app/components/translate/roleTranslator";
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
@@ -18,6 +21,10 @@ export default async function Page({ params }: { params: { id: number } }) {
     const { id } = params;
     const project = await getProjectById(id);
     const messages = await getMessages("project", id);
+
+    const employees = await getEmployeesByProjectId(project.id);
+
+
     return <>
         <h1>Проект #{project.id}</h1>
         <div className="container-fluid">
@@ -25,7 +32,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                 <div className="col">
                     <div className="card">
                         <div className="card-header">
-                            <h3>Детали заказа</h3>
+                            <h3>Детали задачи</h3>
                         </div>
                         <div className="card-body">
                             <table className='table table-bordered w-auto'>
@@ -35,6 +42,21 @@ export default async function Page({ params }: { params: { id: number } }) {
                                     <tr><td>Дедлайн</td><td>{dayjs(project.deadline).format("DD.MM.YYYY")}</td></tr>
                                     <tr><td>Дата создания</td><td>{dayjs(project.created_date).format("DD.MM.YYYY")}</td></tr>
                                     <tr><td>Дата выполнения</td><td>{project.done_at ? dayjs(project.done_at).format("DD.MM.YYYY") : "-"}</td></tr>
+                                    <tr><td>Ответственные</td><td>
+                                        {!employees ? null : <table className='table'>
+                                            <tbody>
+                                                {employees.map(employee => <tr key={employee.id}>
+                                                    <td>{employee.username}</td>
+                                                    <td>{roleTranslator[employee.role]}</td>
+                                                </tr>)}
+                                            </tbody>
+                                        </table>}
+                                    </td></tr>
+                                    <tr><td>Ответственные</td><td>
+                                        <RightsManagement
+                                            project_id={project.id}
+                                        />
+                                    </td></tr>
                                 </tbody>
                             </table>
                         </div>
