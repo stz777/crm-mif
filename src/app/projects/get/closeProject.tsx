@@ -21,7 +21,7 @@ export default function CloseProject({ project_id }: { project_id: number }) {
                 }
             ).then(data => {
                 if (data.success) {
-                    toast.success("Проект закрыт");
+                    toast.success("Задача закрыта");
                     // resetForm();
                 } else {
                     toast.error("Что-то пошло не так");
@@ -51,6 +51,6 @@ export default function CloseProject({ project_id }: { project_id: number }) {
                         .then(x => x.json())
                 })
         }}
-    >Закрыть проект</button></>
+    >Закрыть задачу</button></>
 }
 
