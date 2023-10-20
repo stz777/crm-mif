@@ -41,7 +41,7 @@ export default function Filter(props: { searchParams: ReportSearchInterface }) {
         route.push(newLink);
     }
 
-    const years = getYearList(2022);
+    const years = getYearList(2023);
 
     return (<>
         <form onSubmit={handleSubmit(onSubmit)}>
