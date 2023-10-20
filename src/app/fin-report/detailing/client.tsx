@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../../components/types/lead";
 import dayjs from "dayjs";
-import { ReportSearchInterface } from "./page";
 
 export default function Client(props: {
     reportData: {
@@ -183,3 +182,8 @@ const months = [
     "ноябрь",
     "декабрь"
 ];
+
+interface ReportSearchInterface {
+    from?: string;
+    to?: string;
+}

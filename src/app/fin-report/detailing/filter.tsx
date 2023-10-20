@@ -1,11 +1,12 @@
 "use client"
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ReportSearchInterface } from "./page";
 import { useRouter } from "next/navigation";
 
 type Inputs = {
     year: string,
 };
+
+type ReportSearchInterface = any;
 
 export default function Filter(props: { searchParams: ReportSearchInterface }) {
     const route = useRouter();

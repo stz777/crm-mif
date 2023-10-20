@@ -27,7 +27,7 @@ export default function RootLayout({
             <div style={{ minWidth: "400px" }} className=' flex-grow-1'>
               {/* content */}
               <div className='text-center'>
-                <div className='h1 '>CRM 80 lvl</div>
+                {/* <div className='h1 '>CRM 80 lvl</div> */}
               </div>
             </div>
           </div>

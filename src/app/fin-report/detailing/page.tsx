@@ -22,7 +22,7 @@ export default async function Page(props: { searchParams: { from?: string, to?: 
 
         <div className="row">
             <div className="col">
-                <h2>Платежи</h2>
+                <h2>Доходы</h2>
                 <Payments payments={payments} />
             </div>
             <div className="col">
@@ -49,7 +49,7 @@ function Payments(props: { payments: PaymentInterface[] }) {
                 </tr>
             </thead>
             <tbody>
-                {props.payments.map(payment => <tr>
+                {props.payments.map(payment => <tr key={payment.id}>
                     <td>{payment.sum}</td>
                     <td>{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
                 </tr>)}
