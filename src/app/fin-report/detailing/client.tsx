@@ -88,38 +88,58 @@ export default function Client(props: {
 }
 
 function Payments(props: { payments: PaymentInterface[] }) {
+    let total = 0;
+
+    if (props.payments.length) {
+        total = props.payments.map(item => item.sum).reduce((a, b) => a + b)
+    }
     return <>
         <table className="table bable-striped table-bordered">
             <thead className="sticky-top">
                 <tr>
-                    <th>сумма</th>
                     <th>дата</th>
+                    <th>сумма</th>
                 </tr>
             </thead>
             <tbody>
                 {props.payments.map(payment => <tr key={payment.id}>
+                    <td className="text-nowrap">{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
                     <td>{payment.sum}</td>
-                    <td>{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
                 </tr>)}
+                <tr>
+                    <th>всего</th>
+                    <th>{total}</th>
+                </tr>
             </tbody>
         </table>
     </>
 }
 
 function Expenses(props: { expenses: ExpensesPePerPurchaseTaskInterface[] }) {
+
+    let total = 0;
+
+    if (props.expenses.length) {
+        total = props.expenses.map(item => item.sum).reduce((a, b) => a + b)
+    }
+
     return <>
         <table className="table bable-striped table-bordered">
             <thead className="sticky-top">
                 <tr>
-                    <th>сумма</th>
                     <th>дата</th>
+                    <th>сумма</th>
                 </tr>
             </thead>
             <tbody>
                 {props.expenses.map(payment => <tr key={payment.id}>
+                    <td className="text-nowrap">{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
                     <td>{payment.sum}</td>
-                    <td>{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
                 </tr>)}
+                <tr>
+                    <th>всего </th>
+                    <td>{total}</td>
+                </tr>
             </tbody>
         </table>
     </>
