@@ -12,6 +12,6 @@ export default async function Page(req: any, res: Response) {
 
     return <>
         <h1>Создать клиента</h1>
-        <CreateClientForm />
+        <CreateClientForm is_boss={!!user.is_boss}/>
     </>
 }

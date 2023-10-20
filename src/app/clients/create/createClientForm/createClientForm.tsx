@@ -16,7 +16,9 @@ type FormValues = {
     image: any;
 };
 
-export default function CreateClientForm() {
+export default function CreateClientForm(
+    props: { is_boss: boolean }
+) {
     const { register, handleSubmit, control, reset } = useForm<FormValues>();
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
@@ -31,7 +33,7 @@ export default function CreateClientForm() {
         name: "telegram",
     });
     return (
-        <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
+        <form onSubmit={handleSubmit(e => onSubmit(e, reset, props.is_boss))}>
 
             <ClientFields
                 register={register}
@@ -73,7 +75,7 @@ export default function CreateClientForm() {
 }
 
 
-const onSubmit = (data: any, resetForm: any) => {
+const onSubmit = (data: any, resetForm: any, is_boss: boolean) => {
 
     const formdata = new FormData();
 
@@ -117,9 +119,12 @@ const onSubmit = (data: any, resetForm: any) => {
     }
 
     if (
-        (data.payment || data.image.length)
+        !is_boss
         &&
-        !(data.payment && data.image.length)
+        ((data.payment || data.image.length)
+            &&
+            !(data.payment && data.image.length)
+        )
     ) {
         toast.error('Прикрепите изображение к платежу');
         return;
