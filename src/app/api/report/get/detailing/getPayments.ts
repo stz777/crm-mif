@@ -1,23 +1,16 @@
-import { sendMessageToTg } from "../../api/bugReport/sendMessageToTg";
-import { PaymentInterface } from "../../components/types/lead";
-import { pool } from "../../db/connect";
-// import { ReportSearchInterface } from "./page";
+import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+import { PaymentInterface } from "@/app/components/types/lead";
+import { pool } from "@/app/db/connect";
 
-// export default async function getFinReportdata(searchParams: ReportSearchInterface) {
-//     const payments = await getPayments(searchParams);
-//     return {
-//         payments,
-//     };
-// }
 
-export default async function getPayments(props: { from?: string }): Promise<PaymentInterface[]> {
+export default async function getPayments(props: { year: number, month: number }): Promise<PaymentInterface[]> {
 
     return await new Promise(resolve => {
 
         const whereArray: [string, string, string][] = [];
-        // if (props?.year) {
-        //     whereArray.push(["YEAR(created_date)", "=", String(props.year)])
-        // }
+        
+        whereArray.push(["YEAR(created_date)", "=", String(props.year)])
+        whereArray.push(["MONTH(created_date)", "=", String(props.month)])
         const whereString = !whereArray.length
             ? ""
             : ("WHERE " + whereArray.map(([i1, i2, i3]) => `${i1} ${i2} ${i3}`).join(" AND "));

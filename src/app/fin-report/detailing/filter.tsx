@@ -4,9 +4,15 @@ import { useRouter } from "next/navigation";
 
 type Inputs = {
     year: string,
+    month: string,
 };
 
-type ReportSearchInterface = any;
+
+
+interface ReportSearchInterface {
+    year: string,
+    month: string,
+};
 
 export default function Filter(props: { searchParams: ReportSearchInterface }) {
     const route = useRouter();
@@ -19,6 +25,7 @@ export default function Filter(props: { searchParams: ReportSearchInterface }) {
         for (const key in searchParams) {
             if (key === "year") {
                 defaultValues.year = searchParams['year']
+                defaultValues.month = searchParams['month']
             }
         }
     }
@@ -34,26 +41,63 @@ export default function Filter(props: { searchParams: ReportSearchInterface }) {
         route.push(newLink);
     }
 
+    const years = getYearList(2022);
+
     return (<>
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="card">
                 <div className="card-body">
                     <div className="d-flex">
                         <div className="me-2">
-                            <h6>Год</h6>
-                            <input type="number"  {...register("year")} autoComplete="off" />
+                            <select {...register("year", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                                <option value="" disabled>
+                                    Выберите год
+                                </option>
+                                {years.map(
+                                    year => <option value={year} key={year}>{year}</option>
+                                )}
+                            </select>
+                        </div>
+                        <div className="me-2">
+                            <select {...register("month", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                                <option value="" disabled>
+                                    Выберите месяц
+                                </option>
+                                {months.map(
+                                    (month, i) => <option value={i + 1} key={month}>{month}</option>
+                                )}
+                            </select>
                         </div>
                     </div>
-                    <button className="btn btn-sm btn-outline-dark mt-2 me-2">фильтр</button>
-                    <div className="btn btn-sm btn-outline-dark mt-2"
-                        onClick={() => {
-                            reset();
-                            route.push(window.location.pathname);
-                        }}
-                    >сбросить</div>
+                    <button className="btn btn-sm btn-outline-dark mt-2 me-2">получить отчет</button>
                 </div>
             </div>
         </form>
     </>
     );
 }
+
+function getYearList(startYear: number) {
+    var currentYear = new Date().getFullYear();
+    var yearList = [];
+    for (var year = startYear; year <= currentYear; year++) {
+        yearList.push(year);
+    }
+    return yearList.reverse();
+}
+
+
+const months = [
+    "январь",
+    "февраль",
+    "март",
+    "апрель",
+    "май",
+    "июнь",
+    "июль",
+    "август",
+    "сентябрь",
+    "октябрь",
+    "ноябрь",
+    "декабрь"
+];

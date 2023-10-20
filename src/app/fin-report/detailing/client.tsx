@@ -1,189 +1,126 @@
 "use client"
-
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../../components/types/lead";
+import Filter from "./filter";
+import { useEffect, useState } from "react";
+import { PaymentInterface, ExpensesPePerPurchaseTaskInterface } from "@/app/components/types/lead";
 import dayjs from "dayjs";
 
 export default function Client(props: {
-    reportData: {
-        payments: PaymentInterface[]
-        expensesPerLead: ExpensesPerLeadInterface[]
-        expenses_per_purchase_task: ExpensesPePerPurchaseTaskInterface[]
-    },
-    searchParams: ReportSearchInterface
-
+    searchParams: {
+        year: string,
+        month: string,
+    }
 }) {
 
-    const [reportData, setReportData] = useState(props.reportData)
+    const [data, setData]: any = useState();
 
     useEffect(() => {
-        let mount = true;
-        (async function refresh() {
-            if (!mount) return;
-            await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
-            const response = await fetchGetReportData(props.searchParams);
-            if (JSON.stringify(reportData) !== JSON.stringify(response.reportData)) setReportData(response.reportData)
-            await refresh();
-        })();
-        return () => { mount = false; }
-    }, [props, reportData])
 
-    let totalPayments;
-    if (reportData?.payments?.length) {
-        totalPayments = reportData.payments.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
-    } else {
-        totalPayments = 0;
-    }
+        if (props.searchParams.month && props.searchParams.year) {
+            console.log('asdas', props.searchParams.month, props.searchParams.year);
+            fetch(
+                "/api/report/get/detailing",
+                {
+                    method: "POST",
+                    body: JSON.stringify(
+                        props.searchParams
+                    )
+                }
+            ).then(
+                response => {
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        throw new Error(response.statusText);
+                    }
+                }
+            ).then(data => {
+                if (data.success) {
+                    setData(data.data);
+                } else {
+                    toast.error("Что-то пошло не так");
+                }
+            })
+                .catch(error => {
+                    toast.error("Что-то пошло не так");
+                    const statusText = String(error);
+                    fetch(
+                        `/api/bugReport`,
+                        {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                text: {
+                                    err: "#jdsccn*d",
+                                    data: {
+                                        statusText,
+                                    }
+                                }
+                            })
+                        }
+                    )
+                        .then(x => x.json())
+                        .then(x => {
+                            console.log(x);
+                        })
+                });
+        }
 
-    let totalExpensesPerLeads;
-    if (reportData?.expensesPerLead?.length) {
-        totalExpensesPerLeads = reportData.expensesPerLead.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
-    } else {
-        totalExpensesPerLeads = 0;
-    }
-
-    let totalExpensesPerPurchaseTaskInterface;
-    if (reportData?.expenses_per_purchase_task?.length) {
-        totalExpensesPerPurchaseTaskInterface = reportData.expenses_per_purchase_task.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
-    } else {
-        totalExpensesPerPurchaseTaskInterface = 0;
-    }
-    const total_balance = totalPayments - totalExpensesPerPurchaseTaskInterface;
-    const total_profit = totalPayments - totalExpensesPerLeads;
+    }, [props])
 
     return <>
-        <h1>Отчет (детализация)</h1>
-        {(() => {
-            const monthes = Array.from({ length: 12 }, (_, i) => i + 1);
-            return <table className="table table-bordered table-striped" >
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>доходы</th>
-                        <th>расходы</th>
-                        <th>прибыль</th>
-                        <th>закупки</th>
-                        <th>баланс</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {monthes.map(month => {
+        <Filter searchParams={props.searchParams} />
 
-                        const paymentsPerMonth = reportData.payments
-                            .filter(payment => dayjs(payment.created_date).format("M") === String(month))
-                            .map(payment => payment.sum);
-                        const paymentsPerMonthSum = (paymentsPerMonth?.length) ? paymentsPerMonth.reduce((a, b) => a + b) : 0;
+        {data ? <div className="row">
+            <div className="col">
+                <h2>Доходы</h2>
+                <Payments payments={data.payments} />
+            </div>
+            <div className="col">
+                <h2>Закупки</h2>
+                <Expenses expenses={data.expensesPerPurchaseTask} />
+            </div>
+        </div> : null}
+    </>
 
-                        const expensesPerLeadsPerMonth = reportData.expensesPerLead
-                            .filter(expense => dayjs(expense.created_date).format("M") === String(month))
-                            .map(expense => expense.sum);
-                        const expensesPerLeadsPerMonthSum = (expensesPerLeadsPerMonth?.length) ? expensesPerLeadsPerMonth.reduce((a, b) => a + b) : 0;
+}
 
-                        const totalExpensesPerPurchaseTaskPerMonth = reportData.expenses_per_purchase_task
-                            .filter(expense => dayjs(expense.created_date).format("M") === String(month))
-                            .map(expense => expense.sum);
-                        const totalExpensesPerPurchaseTaskPerMonthSum = (totalExpensesPerPurchaseTaskPerMonth?.length) ? totalExpensesPerPurchaseTaskPerMonth.reduce((a, b) => a + b) : 0;
-                        const profit = paymentsPerMonthSum - expensesPerLeadsPerMonthSum;
-                        const balance = paymentsPerMonthSum - totalExpensesPerPurchaseTaskPerMonthSum;
-
-                        return <tr key={month}>
-                            <td>{months[month - 1]}</td>
-                            <td>{paymentsPerMonthSum}</td>
-                            <td>{expensesPerLeadsPerMonthSum}</td>
-                            <td>{profit}</td>
-                            <td>{totalExpensesPerPurchaseTaskPerMonthSum}</td>
-                            <td>{balance}</td>
-                        </tr>
-                    })}
-                    <tr>
-                        <th>Общее</th>
-                        <td>{totalPayments}</td>
-                        <td>{totalExpensesPerLeads}</td>
-                        <td>{total_profit}</td>
-                        <td>{totalExpensesPerPurchaseTaskInterface}</td>
-                        <td>{total_balance}</td>
-                    </tr>
-                </tbody>
-            </table>
-        })()}
+function Payments(props: { payments: PaymentInterface[] }) {
+    return <>
+        <table className="table bable-striped table-bordered">
+            <thead className="sticky-top">
+                <tr>
+                    <th>сумма</th>
+                    <th>дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {props.payments.map(payment => <tr key={payment.id}>
+                    <td>{payment.sum}</td>
+                    <td>{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
+                </tr>)}
+            </tbody>
+        </table>
     </>
 }
 
-
-
-
-async function fetchGetReportData(searchParams: ReportSearchInterface) {
-    return fetch(
-        "/api/report/get",
-        {
-            method: "POST",
-            body: JSON.stringify({
-                searchParams
-            })
-        }
-    ).then(
-        response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error(response.statusText);
-            }
-        }
-    ).then(data => {
-        if (data.success) {
-            if (!data.reportData) {
-                toast.error("Что-то пошло не так #dnsnNSd3k");
-            }
-            return data;
-        } else {
-            toast.error("Что-то пошло не так");
-        }
-    })
-        .catch(error => {
-            const statusText = String(error);
-            fetch(
-                `/api/bugReport`,
-                {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        text: {
-                            err: "#dsadn3nNj",
-                            data: {
-                                statusText,
-                                values: {}
-                            }
-                        }
-                    })
-                }
-            )
-                .then(x => x.json())
-                .then(x => {
-                    console.log(x);
-                })
-        })
-}
-
-
-const months = [
-    "январь",
-    "февраль",
-    "март",
-    "апрель",
-    "май",
-    "июнь",
-    "июль",
-    "август",
-    "сентябрь",
-    "октябрь",
-    "ноябрь",
-    "декабрь"
-];
-
-interface ReportSearchInterface {
-    from?: string;
-    to?: string;
+function Expenses(props: { expenses: ExpensesPePerPurchaseTaskInterface[] }) {
+    return <>
+        <table className="table bable-striped table-bordered">
+            <thead className="sticky-top">
+                <tr>
+                    <th>сумма</th>
+                    <th>дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {props.expenses.map(payment => <tr key={payment.id}>
+                    <td>{payment.sum}</td>
+                    <td>{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
+                </tr>)}
+            </tbody>
+        </table>
+    </>
 }
