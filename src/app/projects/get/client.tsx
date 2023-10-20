@@ -37,7 +37,7 @@ export default function Client(props: { projects: ProjectInterface[], is_manager
                     <th>дедлайн</th>
                     <th>срочность</th>
                     <th>дата факт. выполнения</th>
-                    <th></th>
+                    {/* <th></th> */}
                 </tr>
             </thead>
             <tbody>
@@ -61,7 +61,7 @@ export default function Client(props: { projects: ProjectInterface[], is_manager
                     <td>
                         <span className="text-nowrap">{project.done_at ? dayjs(project.done_at).format("DD.MM.YYYY HH:mm") : "-"}</span>
                     </td>{/*дата выполнения*/}
-                    <td>
+                    {/* <td>
                         <div className="d-flex nowrap">
                             {(() => {
                                 if (project.done_at) return <>Задача закрыта</>
@@ -70,7 +70,7 @@ export default function Client(props: { projects: ProjectInterface[], is_manager
                             })()}
                             {props.is_boss && <div className="ms-2"><RightsManagement project_id={project.id} /></div>}
                         </div>
-                    </td>
+                    </td> */}
                 </tr>)}
             </tbody>
         </table> : <>нет проектов...</>}
