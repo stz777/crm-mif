@@ -1,5 +1,5 @@
 import getClentMeta from "@/app/db/clients/getClentMeta";
-import getClient from "@/app/leads/single/[id]/getClient"
+import getClient from "@/app/leads/single/[id]/getClientByLeadId"
 import dayjs from "dayjs";
 import Link from "next/link";
 import { getLeadsByClientId } from "./getLeadsByClientId";

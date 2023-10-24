@@ -1,16 +1,11 @@
 import { notFound, redirect } from 'next/navigation'
-import getLead from "./getLead";
-import getMessagesByLeadId from './getMessagesByLeadId';
 import MessageForm from './messageForm';
 import dayjs from 'dayjs';
 import Chat from './chat';
 import { getUserByToken } from '@/app/components/getUserByToken';
 import { cookies } from 'next/headers';
 import { getRoleByLeadId } from '../../get/getLeadsFn';
-import getEmployeesByLeadId from './getEmployeesByLeadId';
 import roleTranslator from '@/app/components/translate/roleTranslator';
-import getClient from './getClient';
-import getClentMeta from '@/app/db/clients/getClentMeta';
 import { GenerateWALink } from './generateWALink';
 import Link from 'next/link';
 import { RightsManagement } from '../../get/righsManagement/rightsManagement';
@@ -18,11 +13,10 @@ import { Add_Payment } from '../../get/add_payment';
 import ConfirmPayment from '../../get/confirmPayment';
 import DeclinePayment from '../../get/declinePayment';
 import { FaCheck } from 'react-icons/fa';
-import { getPaymentsByLeadId } from '@/app/db/payments_by_lead/getPaymentsByLeadId';
 import { AddExpense } from '../../get/addExpense';
-import getExpensesByLeadId from '../../get/getExpensesByLeadId';
 import Comment from '../../get/Comment';
 import CloseLead from '../../get/closeLead';
+import getLeadFullData from './getLeadFullData';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
@@ -37,16 +31,13 @@ export default async function Page({ params }: { params: { id: number } }) {
     }
 
     const { id: leadId } = params;
-    const lead = await getLead(leadId);
 
-    if (!lead) return notFound();
+    const leadFullData = await getLeadFullData(leadId);
 
-    const employees = await getEmployeesByLeadId(lead.id);
-    const messages = await getMessagesByLeadId(lead.id);
-    const payments = await getPaymentsByLeadId(lead.id);
-    const expenses = await getExpensesByLeadId(leadId);
-    const client = await getClient(Number(lead.client));
-    const clientMeta = await getClentMeta(Number(client?.id));
+    if (!leadFullData?.lead) return notFound();
+
+    const { lead, employees, messages, payments, expenses, client, clientMeta } = leadFullData;
+
     return <>
         <h1>Заказ #{leadId}</h1>
         <div className="container-fluid">
@@ -129,7 +120,6 @@ export default async function Page({ params }: { params: { id: number } }) {
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -225,4 +215,5 @@ export default async function Page({ params }: { params: { id: number } }) {
         </div>
     </>
 }
+
 
