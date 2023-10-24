@@ -1,7 +1,6 @@
-// import { getLeads } from "@/app/leads/get/page";
 import { getUserByToken } from "@/app/components/getUserByToken";
+import getMessagesByLeadId from "@/app/db/leads/getLeadFullData/getMessagesByLeadId";
 import getMessages from "@/app/db/messages/getMessages";
-import getMessagesByLeadId from "@/app/leads/single/[id]/getMessagesByLeadId";
 import getMessagesByTaskId from "@/app/purchasing_tasks/single/[task_id]/getMessagesByTaskId";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
