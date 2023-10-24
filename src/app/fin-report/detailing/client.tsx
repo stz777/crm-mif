@@ -102,14 +102,14 @@ function Payments(props: { payments: PaymentInterface[] }) {
                 </tr>
             </thead>
             <tbody>
-                {props.payments.map(payment => <tr key={payment.id}>
-                    <td className="text-nowrap">{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
-                    <td>{payment.sum}</td>
-                </tr>)}
                 <tr>
                     <th>всего</th>
                     <th>{total}</th>
                 </tr>
+                {props.payments.map(payment => <tr key={payment.id}>
+                    <td className="text-nowrap">{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
+                    <td>{payment.sum}</td>
+                </tr>)}
             </tbody>
         </table>
     </>
@@ -132,14 +132,14 @@ function Expenses(props: { expenses: ExpensesPePerPurchaseTaskInterface[] }) {
                 </tr>
             </thead>
             <tbody>
-                {props.expenses.map(payment => <tr key={payment.id}>
-                    <td className="text-nowrap">{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
-                    <td>{payment.sum}</td>
-                </tr>)}
                 <tr>
                     <th>всего </th>
                     <td>{total}</td>
                 </tr>
+                {props.expenses.map(payment => <tr key={payment.id}>
+                    <td className="text-nowrap">{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
+                    <td>{payment.sum}</td>
+                </tr>)}
             </tbody>
         </table>
     </>
