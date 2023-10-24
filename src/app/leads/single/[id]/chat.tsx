@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AttachmentsArea from "./AttachmentsArea";
-import { MessageInterface } from "./getMessagesByLeadId";
+import { MessageInterface } from "../../../db/leads/getLeadFullData/getMessagesByLeadId";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 

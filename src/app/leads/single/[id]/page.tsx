@@ -16,7 +16,7 @@ import { FaCheck } from 'react-icons/fa';
 import { AddExpense } from '../../get/addExpense';
 import Comment from '../../get/Comment';
 import CloseLead from '../../get/closeLead';
-import getLeadFullData from './getLeadFullData';
+import getLeadFullData from '../../../db/leads/getLeadFullData/getLeadFullData';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');

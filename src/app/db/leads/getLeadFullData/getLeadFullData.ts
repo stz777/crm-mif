@@ -1,6 +1,6 @@
 import getClentMeta from "@/app/db/clients/getClentMeta";
 import { getPaymentsByLeadId } from "@/app/db/payments_by_lead/getPaymentsByLeadId";
-import getExpensesByLeadId from "../../get/getExpensesByLeadId";
+import getExpensesByLeadId from "./getExpensesByLeadId";
 import getClientByLeadId from "./getClientByLeadId";
 import getEmployeesByLeadId from "./getEmployeesByLeadId";
 import getLead from "./getLead";

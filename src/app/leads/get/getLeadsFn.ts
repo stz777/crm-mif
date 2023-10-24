@@ -1,7 +1,7 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { LeadInterface, PaymentInterface } from "@/app/components/types/lead";
-import getExpensesByLeadId from "./getExpensesByLeadId";
+import getExpensesByLeadId from "../../db/leads/getLeadFullData/getExpensesByLeadId";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 
