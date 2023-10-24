@@ -1,9 +1,18 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
+import { MessageInterface, Media } from "@/app/components/types/messages";
 import { pool } from "@/app/db/connect"
-import { MessageInterface, Media } from "@/app/leads/single/[id]/getMessagesByLeadId"; //перенести типы в папку types
 //TODO привести чат к нескольким сущностям (leads,purchase_tasks,projects)
-export default async function getMessagesByTaskId(task_id: number): Promise<MessageInterface[]> {
-    const messages: MessageInterface[] = await new Promise((resolve) => {
+
+type Adds = {
+    attachments: any;
+    role: any;
+    username: any;
+}
+
+type CombinedMessageInterface = MessageInterface & Adds;
+
+export default async function getMessagesByTaskId(task_id: number): Promise<CombinedMessageInterface[]> {
+    const messages: CombinedMessageInterface[] = await new Promise((resolve) => {
 
         pool.query(
             `SELECT * FROM messages WHERE messages.essense = 'purchase_task' AND messages.essense_id=? ORDER BY messages.id DESC`,
@@ -95,7 +104,7 @@ async function getUsername(user_id: number): Promise<string> {
 
         pool.query(
             `SELECT * FROM employees WHERE id = ?`,
-            [ user_id],
+            [user_id],
             function (err, result: any[]) {
 
                 if (err) {

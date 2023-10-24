@@ -5,9 +5,9 @@ import slugify from 'slugify'
 import fs from "fs"
 import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
-import getEmployeesByLeadId from "@/app/leads/single/[id]/getEmployeesByLeadId";
 import getEmployeesByProjectId from "@/app/db/employees/getEmployeesByProjectId";
 import getEmployeesByPurchaseTask from "@/app/db/employees/getEmployeesByPurchaseTask";
+import getEmployeesByLeadId from "@/app/db/leads/getLeadFullData/getEmployeesByLeadId";
 
 export async function POST(
     request: Request,

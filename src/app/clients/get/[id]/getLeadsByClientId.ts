@@ -3,8 +3,8 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { LeadInterface, PaymentInterface } from "@/app/components/types/lead";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
-import getExpensesByLeadId from "@/app/leads/get/getExpensesByLeadId";
 import { getPaymentsByLeadId } from "@/app/db/payments_by_lead/getPaymentsByLeadId";
+import getExpensesByLeadId from "@/app/db/leads/getLeadFullData/getExpensesByLeadId";
 
 interface SearchParametersInterface {
     id?: number

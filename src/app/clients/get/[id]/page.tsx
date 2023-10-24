@@ -1,12 +1,12 @@
 import getClentMeta from "@/app/db/clients/getClentMeta";
-import getClient from "@/app/leads/single/[id]/getClientByLeadId"
+import getClientById from "@/app/db/clients/getClentById";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { getLeadsByClientId } from "./getLeadsByClientId";
 
 export default async function Page(props: { params: { id: number } }) {
-
-    const client = await getClient(props.params.id);
+    // src / app / db / clients / getClentById.ts
+    const client = await getClientById(props.params.id);
     const meta = await getClentMeta(props.params.id);
 
     const leads = await getLeadsByClientId(props.params.id)

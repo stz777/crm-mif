@@ -3,9 +3,8 @@ import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
-import getEmployeesByLeadId from "@/app/leads/single/[id]/getEmployeesByLeadId";
+import getEmployeesByLeadId from "@/app/db/leads/getLeadFullData/getEmployeesByLeadId";
 import slugify from "slugify";
-
 import fs from "fs"
 export async function POST(
     request: Request,

@@ -1,7 +1,8 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
+import { ClientInterface } from "@/app/components/types/clients"
 import { pool } from "@/app/db/connect"
 
-export default async function getClentById(id: number) {
+export default async function getClentById(id: number): Promise<ClientInterface | false> {
     return new Promise((resolve) => {
         pool.query(
             "SELECT * FROM clients WHERE id = ? ORDER BY id DESC",

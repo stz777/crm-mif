@@ -1,20 +1,22 @@
-import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
-import { ClientInterface } from "@/app/components/types/clients"
-import { pool } from "@/app/db/connect"
+import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
+import { ClientInterface } from "@/app/components/types/clients";
+import { pool } from "@/app/db/connect";
 
-export default async function getClientByLeadId(clientId: number): Promise<ClientInterface | null> {
+export default async function getClientByLeadId(lead_id: number): Promise<ClientInterface | null> {
     return new Promise((resolve) => {
         pool.query(
-            "SELECT * FROM clients WHERE id = ? ORDER BY id DESC",
-            [clientId],
+            `SELECT * FROM clients WHERE 
+            id IN (SELECT client FROM leads WHERE id = ? )
+            ORDER BY id DESC`,
+            [lead_id],
             function (err, result: any[]) {
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#kd03kn4m",
+                                errorNo: "#kd55m",
                                 error: err,
-                                values: { clientId }
+                                values: { lead_id }
                             }, null, 2),
                         "5050441344"
                     )
@@ -24,9 +26,9 @@ export default async function getClientByLeadId(clientId: number): Promise<Clien
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#n3n6n8m3nc",
+                                errorNo: "#n328m3nc",
                                 error: "Запросили клиента, которого нет",
-                                values: { clientId }
+                                values: { lead_id }
                             }, null, 2),
                         "5050441344"
                     )

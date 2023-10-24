@@ -1,4 +1,4 @@
-import getEmployeesByLeadId from "@/app/leads/single/[id]/getEmployeesByLeadId";
+import getEmployeesByLeadId from "@/app/db/leads/getLeadFullData/getEmployeesByLeadId";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import translator from "./translator";
 
