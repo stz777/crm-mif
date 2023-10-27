@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { clientId: number } })
     return <>
         <h1>Создать заказ</h1>
         <div className="mb-3">Клиент: <strong>{client.full_name}</strong></div>
-        <CreateLeadForm clientId={params.clientId} />
+        <CreateLeadForm clientId={params.clientId} is_boss={!!user.is_boss} />
     </>
 }
 

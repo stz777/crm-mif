@@ -4,6 +4,14 @@ import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
 import getEployeeByID from "@/app/db/employees/getEployeeById";
+import slugify from "slugify";
+import checkImageIsExists from "../../clients/create/checkImageIsExists";
+import insertPayment from "../../clients/create/insertPayment";
+import noticeEmployees from "../../clients/create/noticeEmployees";
+import saveImageToDB from "../../clients/create/saveImageToDB";
+import saveMessage from "../../clients/create/saveMessage";
+import createNewRole from "../update_employee_rights/createNewRole";
+import fs from "fs";
 
 export async function POST(
     request: Request,
@@ -16,14 +24,64 @@ export async function POST(
     if (!user) return new Response("Кто ты", { status: 401, });;
     if (!user.is_manager) return new Response("Кто ты", { status: 401, });;
 
-    const { client, description, title, deadline, sum } = await request.json();
+    const data: any = await request.formData();
 
-    const leadId: number = await createLead({ client, description, title, deadline, sum });
-    if (!leadId) { return NextResponse.json({ success: false }); }
-    if (user) {
-        await setUserPermissionInLead(user.id, leadId, "inspector");
-        if (user.id !== 1) await setUserPermissionInLead(1, leadId, "inspector");
+    const items: any = Array.from(data);
+
+    let leadId = null;;
+    let newRoleId = null;
+
+    const clientId = items.find((item: any) => item[0] === "client")[1];
+
+    if (data.get('description') && data.get('deadline') && data.get('sum')) {
+        leadId = await createLead({
+            client: clientId,
+            description: String(data.get('description')),
+            title: "", deadline: String(data.get('deadline')), sum: String(data.get('sum'))
+        })
+        newRoleId = await createNewRole(user.id, leadId, "inspector");
     }
+
+    if (leadId) {
+
+        let paymentId = null;
+        if (data.get("payment")) {
+            paymentId = await insertPayment(leadId, Number(data.get("payment")), user.id);
+        }
+
+        const messageId = await saveMessage(`Оплата по заказу: ${data.get("payment")}₽`, "lead", leadId, user.id);
+
+        for (let index = 0; index < items.length; index++) {
+            const [name, value]: any = items[index]
+            if (value instanceof File && name === "images") {
+                let filename = slugify(value.name.toLocaleLowerCase().replace(/[^ a-zA-Zа-яА-Я0-9-.]/igm, ""));
+
+                const imageIsExists = await checkImageIsExists(filename);
+                if (imageIsExists) {
+                    const splittedFilename = filename.split(".");
+                    const newfilename = splittedFilename[0] + String(Date.now()) + "." + splittedFilename[1];
+                    filename = newfilename;
+                }
+
+                if (!messageId) break;
+
+                noticeEmployees(
+                    "lead",
+                    leadId,
+                    user.username,
+                    `${process.env.SERVER}`
+                );
+
+                await saveImageToDB(filename, messageId)
+
+                const buffer = await value.arrayBuffer();
+                const filePath = `${String(process.env.IMAGES_FOLDER)}/${filename}`;
+
+                fs.writeFileSync(filePath, Buffer.from(buffer));
+            }
+        }
+    }
+
     return NextResponse.json({
         success: true
     });
@@ -65,40 +123,4 @@ export async function createLead(props: { client: number, description: string, t
             }
         );
     })
-}
-
-async function setUserPermissionInLead(employeeId: number, leadId: number, role: "inspector" | "executor" | "viewer" | "no_rights") {
-
-    return await new Promise(resolve => {
-        pool.query(
-            `INSERT INTO leads_roles (user,lead_id,role) VALUES (?,?,?)`,
-            [employeeId, leadId, role],
-            function (err, res: any) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#asdacm4nsS",
-                                error: err,
-                                values: { employeeId, leadId }
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-
-                sendMessageToTg(
-                    [
-                        `Создали новую роль`,
-                        "код #dfjfdh",
-                        JSON.stringify({ employeeId, leadId, role }, null, 2)
-                    ].join("\n"),
-                    "5050441344"
-                )
-
-
-                resolve(res?.insertId);
-            }
-        );
-    })
-
 }

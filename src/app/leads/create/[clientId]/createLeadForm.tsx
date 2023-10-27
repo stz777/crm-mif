@@ -13,9 +13,11 @@ type FormValues = {
     description: string
     deadline: any
     sum: number
+    payment: number
+    image: any
 };
 
-export default function CreateLeadForm({ clientId }: { clientId: number }) {
+export default function CreateLeadForm({ clientId, is_boss }: { clientId: number, is_boss: boolean }) {
     const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormValues>({
         defaultValues: {
             title: "",
@@ -25,7 +27,7 @@ export default function CreateLeadForm({ clientId }: { clientId: number }) {
         }
     });
     return (
-        <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
+        <form onSubmit={handleSubmit(e => onSubmit(e, reset, is_boss))}>
             <FieldWrapper title="Дедлайн"
                 field={<>
                     <Controller
@@ -57,22 +59,71 @@ export default function CreateLeadForm({ clientId }: { clientId: number }) {
                 </>}
             />
 
+            <div className="m-2 p-2 border">
+                <h4>Оплата</h4>
+                <FieldWrapper title="Сумма"
+                    field={<>
+                        <input type="number"{...register("payment")} autoComplete="off" />
+                    </>}
+                />
+                <FieldWrapper title="Изображение"
+                    field={<>
+                        <input type="file" {...register("image"/* , { required: true } */)}
+                        />
+                    </>}
+                />
+            </div>
+
             {/* <input type="submit" /> */}
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );
 }
 
-const onSubmit = (data: any, resetForm: any) => {
+const onSubmit = (data: any, resetForm: any, is_boss: boolean) => {
+
+    const formdata = new FormData();
+
+
     if (!data.deadline) {
         toast.error(`Нужно заполнить все поля`)
         return;
     }
+
+    if (
+        !is_boss
+        &&
+        ((data.payment || data.image.length)
+            &&
+            !(data.payment && data.image.length)
+        )
+    ) {
+        toast.error('Прикрепите изображение к платежу');
+        return;
+    }
+
+
+
+    for (const key in data) {
+        const element = data[key];
+
+        if (key === "image") {
+            for (let i = 0; i < element.length; i++) {
+                formdata.append('images', element[i]);
+            }
+            continue;
+        }
+
+        formdata.append(key, element);
+    }
+
+
+
     fetch(
         "/api/leads/create",
         {
             method: "POST",
-            body: JSON.stringify(data)
+            body: formdata
         }
     ).then(
         response => {
