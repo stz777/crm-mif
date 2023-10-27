@@ -1,7 +1,7 @@
-import { ClientInterface, ClientMetaInterface } from "@/app/components/types/clients";
-import { LeadInterface, PaymentInterface, ExpensesPerLeadInterface } from "@/app/components/types/lead";
-import { MessageInterface, Media } from "@/app/components/types/messages";
-import EmployeesCombinedInterface from "./EmployeesCombinedInterface";
+import EmployeesCombinedInterface from "@/app/leads/single/[id]/EmployeesCombinedInterface";
+import { ClientInterface, ClientMetaInterface } from "./clients";
+import { LeadInterface, PaymentInterface, ExpensesPerLeadInterface } from "./lead";
+import { MessageInterface, Media } from "./messages";
 
 export type MessageToLead = MessageInterface & {
     username: string;

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import AttachmentsArea from "./AttachmentsArea";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
-import { MessageToLead } from "./types";
+import { MessageToLead } from "@/app/components/types/fullLeadTypes";
 
 export default function Chat(props: { messages: MessageToLead[], essense_type: "lead" | "purchase_task", essense_id: number }) {
     const [stateMessages, setStateMessages] = useState(props.messages);

@@ -1,8 +1,8 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { getUserByToken } from "@/app/components/getUserByToken";
+import { MessageToLead } from "@/app/components/types/fullLeadTypes";
 import { Media } from "@/app/components/types/messages";
 import { pool } from "@/app/db/connect"
-import { MessageToLead } from "@/app/leads/single/[id]/types";
 import { cookies } from "next/headers";
 
 

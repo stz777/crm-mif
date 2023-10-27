@@ -8,13 +8,11 @@ import { GenerateWALink } from "./generateWALink";
 import Link from "next/link";
 import { RightsManagement } from "../../get/righsManagement/rightsManagement";
 import Comment from "../../get/Comment";
-import { ExpensesPerLeadInterface, LeadInterface, PaymentInterface } from "@/app/components/types/lead";
 import dayjs from "dayjs";
 import roleTranslator from "@/app/components/translate/roleTranslator";
-import { ClientInterface, ClientMetaInterface } from "@/app/components/types/clients";
 import CloseLead from "../../get/closeLead";
 import Chat from "./chat";
-import { LeadFullDatInterface } from "./types";
+import { LeadFullDatInterface } from "@/app/components/types/fullLeadTypes";
 
 export default function Client(props: LeadFullDatInterface) {
 
