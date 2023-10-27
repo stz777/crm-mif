@@ -27,17 +27,12 @@ export default async function Page({ params }: { params: { id: number } }) {
 
     if (!client) return <>ОШИБКА #vm5i9v</>
     if (!employees) return <>ОШИБКА #vmC9v</>
+    if(!leadFullData) return <>err #fjvfnd4</>
 
     return <>
         <h1>Заказ #{leadId}</h1>
         <Client
-            lead={lead}
-            employees={employees}
-            messages={messages}
-            payments={payments}
-            expenses={expenses}
-            client={client}
-            clientMeta={clientMeta}
+            lead_fullData={leadFullData}
             is_boss={!!user.is_boss}
         />
     </>

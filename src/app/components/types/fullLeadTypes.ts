@@ -13,8 +13,7 @@ export type MessageToLead = MessageInterface & {
 export type LeadFullDatInterface = {
     lead: LeadInterface;
     employees: EmployeesCombinedInterface[];
-    is_boss: boolean;
-    client: ClientInterface;
+    client: ClientInterface | null;
     clientMeta: ClientMetaInterface[];
     payments: PaymentInterface[];
     expenses: ExpensesPerLeadInterface[];

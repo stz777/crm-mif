@@ -2,7 +2,7 @@
 
 import FieldWrapper from "@/app/ui/form/fieldWrapper"
 import { useState } from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 type Inputs = {
@@ -65,12 +65,11 @@ const onSubmit = (data: any, resetForm: any, is_boss: any) => {
     const formdata = new FormData();
     formdata.append("lead_id", data.lead_id);
     formdata.append("sum", data.sum);
-    console.log('image', data.image);
-    console.log('data #vf4', data);
 
     if (!data.sum) { toast.error('Некорректно заполнена форма'); return; }
-    if ((!data.image?.length) && !is_boss) { toast.error('Некорректно заполнена форма'); return; }
-    // (data.image?.length)
+    if ((!data.image?.length) && !is_boss) {
+        toast.error('Некорректно заполнена форма #err_sd3'); return;
+    }
     for (const key in data) {
         const element = data[key];
         if (key === "image") {

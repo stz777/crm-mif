@@ -1,3 +1,5 @@
+"use client"
+
 import { FaCheck } from "react-icons/fa";
 import { AddExpense } from "../../get/addExpense";
 import { Add_Payment } from "../../get/add_payment";
@@ -13,19 +15,45 @@ import roleTranslator from "@/app/components/translate/roleTranslator";
 import CloseLead from "../../get/closeLead";
 import Chat from "./chat";
 import { LeadFullDatInterface } from "@/app/components/types/fullLeadTypes";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-export default function Client(props: LeadFullDatInterface) {
+export default function Client(props: {
+    lead_fullData: LeadFullDatInterface;
+    is_boss: boolean
+}) {
+
+    const [state, setState] = useState(props.lead_fullData);
+
+    useEffect(() => {
+        let mount = true;
+        (async function refreshData() {
+            if (!mount) return;
+            await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
+            const response = await fetchFullLead(props.lead_fullData.lead.id);
+            if (JSON.stringify(state) !== JSON.stringify(response.data)) {
+                setState(response.data);
+            }
+            await new Promise(r => {
+                setTimeout(() => {
+                    r(1);
+                }, 1000);
+            })
+            await refreshData();
+        })();
+        return () => { mount = false; }
+    }, [props]);
+    const data = state || props;
 
     const {
         lead,
         employees,
-        is_boss,
         client,
         clientMeta,
         payments,
         expenses,
         messages,
-    } = props;
+    } = data;
 
     return <>
         <div className="container-fluid">
@@ -64,7 +92,7 @@ export default function Client(props: LeadFullDatInterface) {
                                         <td>настроить права</td>
                                         <td><RightsManagement
                                             leadId={lead.id}
-                                            is_boss={is_boss}
+                                            is_boss={props.is_boss}
                                         /></td>
                                     </tr>
 
@@ -139,7 +167,7 @@ export default function Client(props: LeadFullDatInterface) {
                                     return <div className="fw-bold">Σ {totalSum}</div>
                                 })()}</li>
                             </ul>
-                            <Add_Payment lead_id={lead.id} is_boss={!!is_boss} />
+                            <Add_Payment lead_id={lead.id} is_boss={!!props.is_boss} />
                         </div>
                     </div>
                 </div>
@@ -181,7 +209,7 @@ export default function Client(props: LeadFullDatInterface) {
                         <div className="card-body">
                             {(() => {
                                 if (lead.done_at) return <>Заказ закрыт</>
-                                if (is_boss) return <CloseLead leadId={lead.id} />
+                                if (props.is_boss) return <CloseLead leadId={lead.id} />
                                 return <>В работе</>
                             })()}
                         </div>
@@ -201,4 +229,57 @@ export default function Client(props: LeadFullDatInterface) {
             </div>
         </div>
     </>
+}
+
+async function fetchFullLead(lead_id: number) {
+    return fetch(
+        `/api/leads/get/${lead_id}`,
+        {
+            method: "POST",
+            body: JSON.stringify({ lead_id })
+        }
+    ).then(
+        response => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new Error(response.statusText);
+            }
+        }
+    ).then(data => {
+        if (data.success) {
+            if (!data.data) {
+                toast.error("Что-то пошло не так #dnsd3J");
+            }
+            return data;
+        } else {
+            toast.error("Что-то пошло не так #mdna3");
+        }
+    })
+        .catch(error => {
+            const statusText = String(error);
+            fetch(
+                `/api/bugReport`,
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: {
+                            err: "#dhhcds8",
+                            data: {
+                                statusText,
+                                error,
+                                values: {}
+                            }
+                        }
+                    })
+                }
+            )
+                .then(x => x.json())
+                .then(x => {
+                    console.log(x);
+                })
+        })
 }
