@@ -13,11 +13,9 @@ import dayjs from "dayjs";
 import roleTranslator from "@/app/components/translate/roleTranslator";
 import { ClientInterface, ClientMetaInterface } from "@/app/components/types/clients";
 import CloseLead from "../../get/closeLead";
-import { Media, MessageInterface } from "@/app/components/types/messages";
 import EmployeesCombinedInterface from "./EmployeesCombinedInterface";
-
-type SuperMessageInterface = MessageInterface& { attachments: Media[] };
-
+import Chat from "./chat";
+import { MessageToLead } from "./types";
 
 type ComponentInterface = {
     lead: LeadInterface;
@@ -27,7 +25,7 @@ type ComponentInterface = {
     clientMeta: ClientMetaInterface[];
     payments: PaymentInterface[];
     expenses: ExpensesPerLeadInterface[];
-    messages: SuperMessageInterface[];
+    messages: MessageToLead[];
 }
 
 export default function Client({
@@ -207,7 +205,7 @@ export default function Client({
                         </div>
                         <div className="card-body">
                             <MessageForm leadId={lead.id} />
-                            {/* <div className='mb-4'><Chat messages={messages || []} essense_type="lead" essense_id={lead.id} /></div> */}
+                            <div className='mb-4'><Chat messages={messages || []} essense_type="lead" essense_id={lead.id} /></div>
                         </div>
                     </div>
                 </div>
