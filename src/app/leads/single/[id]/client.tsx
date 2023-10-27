@@ -10,11 +10,9 @@ import { RightsManagement } from "../../get/righsManagement/rightsManagement";
 import Comment from "../../get/Comment";
 import { ExpensesPerLeadInterface, LeadInterface, PaymentInterface } from "@/app/components/types/lead";
 import dayjs from "dayjs";
-import { Employee } from "@/app/components/types/employee";
 import roleTranslator from "@/app/components/translate/roleTranslator";
 import { ClientInterface, ClientMetaInterface } from "@/app/components/types/clients";
 import CloseLead from "../../get/closeLead";
-import Chat from "./chat";
 import { Media, MessageInterface } from "@/app/components/types/messages";
 import EmployeesCombinedInterface from "./EmployeesCombinedInterface";
 
