@@ -13,31 +13,22 @@ import dayjs from "dayjs";
 import roleTranslator from "@/app/components/translate/roleTranslator";
 import { ClientInterface, ClientMetaInterface } from "@/app/components/types/clients";
 import CloseLead from "../../get/closeLead";
-import EmployeesCombinedInterface from "./EmployeesCombinedInterface";
 import Chat from "./chat";
-import { MessageToLead } from "./types";
+import { LeadFullDatInterface } from "./types";
 
-type ComponentInterface = {
-    lead: LeadInterface;
-    employees: EmployeesCombinedInterface[];
-    is_boss: boolean;
-    client: ClientInterface;
-    clientMeta: ClientMetaInterface[];
-    payments: PaymentInterface[];
-    expenses: ExpensesPerLeadInterface[];
-    messages: MessageToLead[];
-}
+export default function Client(props: LeadFullDatInterface) {
 
-export default function Client({
-    lead,
-    employees,
-    is_boss,
-    client,
-    clientMeta,
-    payments,
-    expenses,
-    messages,
-}: ComponentInterface) {
+    const {
+        lead,
+        employees,
+        is_boss,
+        client,
+        clientMeta,
+        payments,
+        expenses,
+        messages,
+    } = props;
+
     return <>
         <div className="container-fluid">
             <div className="row">
