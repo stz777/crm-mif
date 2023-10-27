@@ -2,11 +2,17 @@
 
 import { useEffect, useState } from "react";
 import AttachmentsArea from "./AttachmentsArea";
-import { MessageInterface } from "../../../db/leads/getLeadFullData/getMessagesByLeadId";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
+import { Media, MessageInterface } from "@/app/components/types/messages";
 
-export default function Chat(props: { messages: MessageInterface[], essense_type: "lead" | "purchase_task", essense_id: number }) {
+type MessageMutated = MessageInterface & {
+    username: string;
+    role: string;
+    attachments: Media[]
+};
+
+export default function Chat(props: { messages: MessageMutated[], essense_type: "lead" | "purchase_task", essense_id: number }) {
     const [stateMessages, setStateMessages] = useState(props.messages);
     useEffect(() => {
         let mounted = true;

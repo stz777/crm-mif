@@ -1,6 +1,6 @@
 "use client"
+import { Media } from '@/app/components/types/messages';
 import Image from 'next/image';
-import { Media } from '../../../db/leads/getLeadFullData/getMessagesByLeadId';
 import { useState } from 'react';
 
 

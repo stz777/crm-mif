@@ -1,7 +1,8 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { pool } from "@/app/db/connect"
+import EmployeesCombinedInterface from "@/app/leads/single/[id]/EmployeesCombinedInterface"
 
-export default async function getEmployeesByLeadId(leadId: number): Promise<Employee[] | false> {
+export default async function getEmployeesByLeadId(leadId: number): Promise<EmployeesCombinedInterface[]> {
     return new Promise((resolve) => {
         pool.query(
             `SELECT leads_roles.user as user_id, leads_roles.role, employees.username, employees.tg_chat_id
@@ -21,7 +22,7 @@ export default async function getEmployeesByLeadId(leadId: number): Promise<Empl
                             }, null, 2),
                         "5050441344"
                     )
-                    resolve(false)
+                    resolve([])
                 }
                 if (!result.length) {
                     sendMessageToTg(
@@ -33,21 +34,11 @@ export default async function getEmployeesByLeadId(leadId: number): Promise<Empl
                             }, null, 2),
                         "5050441344"
                     )
-                    resolve(false)
+                    resolve([])
                 } else {
                     resolve(result)
                 }
             }
         )
     })
-}
-
-interface Employee {
-    id: number
-    user_id: number
-    username: string
-    telegram_id: string
-    tg_chat_id: number
-    role: string;
-    leads?: any[]
 }

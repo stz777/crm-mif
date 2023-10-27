@@ -1,7 +1,8 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
+import { ClientMetaInterface } from "@/app/components/types/clients"
 import { pool } from "@/app/db/connect"
 
-export default async function getClentMeta(client_id: number): Promise<{ data_type: string; data: string; }[]> {
+export default async function getClentMeta(client_id: number): Promise<ClientMetaInterface[]> {
     return new Promise((resolve) => {
         pool.query(
             "SELECT * FROM clients_meta WHERE client = ? ORDER BY id DESC",

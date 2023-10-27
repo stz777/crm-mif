@@ -1,9 +1,12 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { getUserByToken } from "@/app/components/getUserByToken";
+import { Media, MessageInterface } from "@/app/components/types/messages";
 import { pool } from "@/app/db/connect"
 import { cookies } from "next/headers";
 
-export default async function getMessagesByLeadId(leadId: number): Promise<MessageInterface[] | false> {
+type SuperMessageInterface = MessageInterface& { attachments: Media[] };
+
+export default async function getMessagesByLeadId(leadId: number): Promise<SuperMessageInterface[]> {
 
     const auth = cookies().get('auth');
 
@@ -19,7 +22,7 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
 
     const whereString = ` WHERE ${whereArr.join(" AND ")}`;
 
-    const messages: MessageInterface[] | false = await new Promise((resolve) => {
+    const messages: SuperMessageInterface[] = await new Promise((resolve) => {
         pool.query(
             `SELECT 
                 messages.id, messages.text, messages.text, messages.created_date, employees.username, leads_roles.role
@@ -43,7 +46,7 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
                             }, null, 2),
                         "5050441344"
                     )
-                    resolve(false)
+                    resolve([])
                 }
                 resolve(result || [])
             }
@@ -81,20 +84,4 @@ async function getMediaByMessageId(messageId: number): Promise<Media[]> {
             }
         )
     });
-}
-
-export interface MessageInterface {
-    id: number
-    text: string
-    username: string
-    created_date: string
-    attachments?: Media[]
-    role: string
-    essense_id: number
-    sender: number
-}
-
-export interface Media {
-    id: number
-    name: string
 }

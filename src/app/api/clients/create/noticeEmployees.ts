@@ -17,7 +17,7 @@ export default async function noticeEmployees(essense: string, essense_id: numbe
 
     if (employees) {
         for (let index = 0; index < employees.length; index++) {
-            const { user_id, tg_chat_id } = employees[index];
+            const { tg_chat_id } = employees[index];
             if (tg_chat_id) {
                 await sendMessageToTg(
                     `Пришло сообщение в ${translator[essense].name} #${essense_id} от ${username}`,
