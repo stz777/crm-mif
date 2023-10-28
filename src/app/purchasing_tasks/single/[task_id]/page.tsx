@@ -6,6 +6,7 @@ import Chat from "@/app/leads/single/[id]/chat";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import get_all_materials from "@/app/db/materials/get_all_materials";
 
 export default async function Page({ params }: { params: { task_id: number } }) {
     const auth = cookies().get('auth');
@@ -19,8 +20,10 @@ export default async function Page({ params }: { params: { task_id: number } }) 
 
     const messages = await getMessagesByTaskId(params.task_id);
 
+    const materials = await get_all_materials();
+
     return <>
-        <Client combinedPurchaseTaskData={combinedPurchaseTaskData} />
+        <Client combinedPurchaseTaskData={combinedPurchaseTaskData} materials={materials}/>
         <Chat messages={messages} essense_type="purchase_task" essense_id={task_id} />
     </>
 }

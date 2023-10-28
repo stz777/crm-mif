@@ -6,14 +6,15 @@ import dayjs from "dayjs"
 import CreatePurschaseForm from "./createPurchaseForm"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import Chat from "@/app/leads/single/[id]/chat"
 import MessageForm from "./messageForm"
+import { MaterialInterface } from "@/types/materials/materialInterface"
 
 export default function Client(props: {
     combinedPurchaseTaskData: {
         task: PurchaseTaskInterface
         purchases: PurchaseInterface[]
-    }
+    },
+    materials:MaterialInterface[]
 }) {
 
     const [combinedPurchaseTaskData, setCombinedPurchaseTaskData] = useState(props.combinedPurchaseTaskData)
@@ -52,7 +53,7 @@ export default function Client(props: {
                     <tr><td>Дата выполнения</td><td>{task.done_at ? dayjs(task.done_at).format("DD.MM.YYYY") : "-"}</td></tr>
                 </tbody>
             </table>
-            {!task.done_at && <CreatePurschaseForm task_id={task.id} />}
+            {!task.done_at && <CreatePurschaseForm task_id={task.id} materials={props.materials}/>}
 
             <div className="card mt-3">
                 <div className="card-header"><div className="h3">Закупки</div></div>
@@ -79,7 +80,6 @@ export default function Client(props: {
                     </table> : <>нет закупок</>}
                 </div>
                 <MessageForm task_id={task.id} />
-                {/* <Chat /> */}
             </div>
         </>
     </>
