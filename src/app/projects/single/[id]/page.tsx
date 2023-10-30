@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { id: number } }) {
 
     const { id } = params;
     const project = await getProjectById(id);
-    const messages = await getMessages("project", id);
+    const messages: any /*FIXME прописать тип*/ = await getMessages("project", id);
 
     const employees = await getEmployeesByProjectId(project.id);
 
