@@ -7,6 +7,7 @@ import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import get_all_materials from "@/app/db/materials/get_all_materials";
+import getEmployeesByPurchaseTask from "@/app/db/employees/getEmployeesByPurchaseTask";
 
 export default async function Page({ params }: { params: { task_id: number } }) {
     const auth = cookies().get('auth');
@@ -22,8 +23,10 @@ export default async function Page({ params }: { params: { task_id: number } }) 
 
     const materials = await get_all_materials();
 
+    const employees = await getEmployeesByPurchaseTask(params.task_id);
+
     return <>
-        <Client combinedPurchaseTaskData={combinedPurchaseTaskData} materials={materials}/>
+        <Client combinedPurchaseTaskData={combinedPurchaseTaskData} materials={materials} employees={employees} />
         <Chat messages={messages} essense_type="purchase_task" essense_id={task_id} />
     </>
 }

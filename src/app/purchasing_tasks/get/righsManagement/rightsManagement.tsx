@@ -1,13 +1,14 @@
 "use client"
 import { useEffect, useState } from "react"
-import { Employee, getEmployeesByTaskId } from "./getEmployeesByTaskId";
+import { getEmployeesByTaskId } from "./getEmployeesByTaskId";
 import { useForm, } from "react-hook-form"
 import { toast } from "react-toastify";
+import { EmployeeToPurchaseTaskInterface } from "@/types/employees/employeeToPurchaseTaskInterface";
 
 export function RightsManagement({ task_id }: { task_id: number }) {
     const [open, setOpen] = useState(false);
 
-    const [employees, setEmployees] = useState<null | Employee[]>(null)
+    const [employees, setEmployees] = useState<null | EmployeeToPurchaseTaskInterface[]>(null)
 
     useEffect(() => {
         if (open) {
@@ -33,9 +34,9 @@ export function RightsManagement({ task_id }: { task_id: number }) {
                     return <>
                         <table className="table table-bordered">
                             <tbody>
-                                {employees.map((employee, i) => <tr key={employee.user_id + task_id + i}>
+                                {employees.map((employee, i) => <tr key={employee.id + task_id + i}>
                                     <td className="text-nowrap">{employee.username}</td>
-                                    <td className="text-nowrap"> <RightsForm role={employee.role} employeeId={employee.user_id} task_id={task_id} />  </td>
+                                    <td className="text-nowrap"> <RightsForm role={employee.role} employeeId={employee.id} task_id={task_id} />  </td>
                                 </tr>)}
                             </tbody>
                         </table>
@@ -49,7 +50,7 @@ export function RightsManagement({ task_id }: { task_id: number }) {
 
 type Inputs = { role: any }
 
-function RightsForm({ role, employeeId, task_id }: { role: string | null, employeeId: number, task_id: number }) {
+function RightsForm({ role, employeeId, task_id }: { role: number | null, employeeId: number, task_id: number }) {
 
     const {
         register,

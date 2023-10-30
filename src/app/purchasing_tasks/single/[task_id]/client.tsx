@@ -8,13 +8,16 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import MessageForm from "./messageForm"
 import { MaterialInterface } from "@/types/materials/materialInterface"
+import roleTranslator from "@/app/components/translate/roleTranslator"
+import { EmployeeToPurchaseTaskInterface } from "@/types/employees/employeeToPurchaseTaskInterface"
 
 export default function Client(props: {
     combinedPurchaseTaskData: {
         task: PurchaseTaskInterface
         purchases: PurchaseInterface[]
     },
-    materials:MaterialInterface[]
+    materials: MaterialInterface[]
+    employees: EmployeeToPurchaseTaskInterface[]
 }) {
 
     const [combinedPurchaseTaskData, setCombinedPurchaseTaskData] = useState(props.combinedPurchaseTaskData)
@@ -51,9 +54,20 @@ export default function Client(props: {
                     <tr><td>Дедлайн</td><td>{dayjs(task.deadline).format("DD.MM.YYYY")}</td></tr>
                     <tr><td>Дата создания</td><td>{dayjs(task.created_date).format("DD.MM.YYYY")}</td></tr>
                     <tr><td>Дата выполнения</td><td>{task.done_at ? dayjs(task.done_at).format("DD.MM.YYYY") : "-"}</td></tr>
+                    <tr><td>Ответственные</td><td>
+                        {!props.employees ? null : <table className='table'>
+                            <tbody>
+                                {props.employees.map(employee => <tr key={employee.id}>
+                                    <td>{employee.username}</td>
+                                    <td>{roleTranslator[employee.role]}</td>
+                                </tr>)}
+                            </tbody>
+                        </table>}
+                    </td></tr>
+
                 </tbody>
             </table>
-            {!task.done_at && <CreatePurschaseForm task_id={task.id} materials={props.materials}/>}
+            {!task.done_at && <CreatePurschaseForm task_id={task.id} materials={props.materials} />}
 
             <div className="card mt-3">
                 <div className="card-header"><div className="h3">Закупки</div></div>

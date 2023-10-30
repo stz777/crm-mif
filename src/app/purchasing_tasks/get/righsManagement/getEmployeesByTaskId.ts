@@ -1,6 +1,7 @@
+import { EmployeeToPurchaseTaskInterface } from "@/types/employees/employeeToPurchaseTaskInterface";
 import { toast } from "react-toastify";
 
-export async function getEmployeesByTaskId(task_id: number): Promise<Employee[]> {
+export async function getEmployeesByTaskId(task_id: number): Promise<EmployeeToPurchaseTaskInterface[]> {
     return await fetch(
         `/api/employees/get/with_purchase_task_rights/${task_id}`,
         {
@@ -44,12 +45,4 @@ export async function getEmployeesByTaskId(task_id: number): Promise<Employee[]>
                 .then(x => x.json())
             return null;
         })
-}
-
-
-
-export interface Employee {
-    role: null | string
-    user_id: number
-    username: string
 }

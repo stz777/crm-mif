@@ -1,24 +1,25 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
-import { pool } from "@/app/db/connect"
-import { EmployeeToPurchaseTaskInterface } from "@/types/employees/employeeToPurchaseTaskInterface"
+import { Employee } from "@/app/components/types/employee"
+import { pool } from "../../connect"
 
-export default async function getEmployeesByPurchaseTask(id: number): Promise<EmployeeToPurchaseTaskInterface[]> {
+export async function getEmployeesByPurchaseTaskId(task_id: number): Promise<Employee[]> {
     return new Promise((resolve) => {
         pool.query(
-            `SELECT purchasing_task_roles.user as user_id, purchasing_task_roles.role, employees.username, employees.tg_chat_id
-            FROM purchasing_task_roles 
-            LEFT JOIN (employees)
-            ON (employees.id = purchasing_task_roles.user)
-            WHERE purchasing_task_roles.task = ?`,
-            [id],
+            `SELECT employees.id as user_id, purchasing_task_roles.role, employees.username
+            FROM employees 
+            LEFT JOIN (purchasing_task_roles)
+            ON (employees.id = purchasing_task_roles.user AND purchasing_task_roles.task = ?)
+            WHERE employees.is_active = 1
+            `,
+            [task_id],
             function (err, result: any[]) {
                 if (err) {
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#erropn4",
+                                errorNo: "#dnsvk8u8",
                                 error: err,
-                                values: { id }
+                                values: { task_id }
                             }, null, 2),
                         "5050441344"
                     )
@@ -28,9 +29,9 @@ export default async function getEmployeesByPurchaseTask(id: number): Promise<Em
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#err4jkd3nm",
+                                errorNo: "#cmfg6si9",
                                 error: "Запросили сотрудника, которого нет",
-                                values: { id }
+                                values: { task_id }
                             }, null, 2),
                         "5050441344"
                     )
@@ -41,13 +42,4 @@ export default async function getEmployeesByPurchaseTask(id: number): Promise<Em
             }
         )
     })
-}
-
-interface Employee {
-    id: number
-    user_id: number
-    username: string
-    telegram_id: string
-    tg_chat_id: number
-    role: string;
 }
