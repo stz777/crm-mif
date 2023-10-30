@@ -36,7 +36,7 @@ export function RightsManagement({ task_id }: { task_id: number }) {
                             <tbody>
                                 {employees.map((employee, i) => <tr key={employee.id + task_id + i}>
                                     <td className="text-nowrap">{employee.username}</td>
-                                    <td className="text-nowrap"> <RightsForm role={employee.role} employeeId={employee.id} task_id={task_id} />  </td>
+                                    <td className="text-nowrap"><RightsForm role={employee.role} employeeId={employee.id} task_id={task_id} />  </td>
                                 </tr>)}
                             </tbody>
                         </table>

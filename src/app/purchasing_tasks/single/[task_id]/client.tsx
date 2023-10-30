@@ -10,6 +10,9 @@ import MessageForm from "./messageForm"
 import { MaterialInterface } from "@/types/materials/materialInterface"
 import roleTranslator from "@/app/components/translate/roleTranslator"
 import { EmployeeToPurchaseTaskInterface } from "@/types/employees/employeeToPurchaseTaskInterface"
+import { RightsManagement } from "../../get/righsManagement/rightsManagement"
+import Chat from "@/app/components/chat/chat"
+import { messageToPurchaseTakInterface } from "@/types/messages/messageToPurchaseTakInterface"
 
 export default function Client(props: {
     combinedPurchaseTaskData: {
@@ -18,6 +21,7 @@ export default function Client(props: {
     },
     materials: MaterialInterface[]
     employees: EmployeeToPurchaseTaskInterface[]
+    messages: messageToPurchaseTakInterface[]
 }) {
 
     const [combinedPurchaseTaskData, setCombinedPurchaseTaskData] = useState(props.combinedPurchaseTaskData)
@@ -46,54 +50,85 @@ export default function Client(props: {
         {!task.done_at && <div className="mb-3">
             <TaskCloser task_id={task_id} />
         </div>}
-        <>
-            <table className="table table-bordered w-auto">
-                <tbody>
-                    <tr><td>Заголовок</td><td>{task.title}</td></tr>
-                    <tr><td>Описание</td><td>{task.comment}</td></tr>
-                    <tr><td>Дедлайн</td><td>{dayjs(task.deadline).format("DD.MM.YYYY")}</td></tr>
-                    <tr><td>Дата создания</td><td>{dayjs(task.created_date).format("DD.MM.YYYY")}</td></tr>
-                    <tr><td>Дата выполнения</td><td>{task.done_at ? dayjs(task.done_at).format("DD.MM.YYYY") : "-"}</td></tr>
-                    <tr><td>Ответственные</td><td>
-                        {!props.employees ? null : <table className='table'>
-                            <tbody>
-                                {props.employees.map(employee => <tr key={employee.id}>
-                                    <td>{employee.username}</td>
-                                    <td>{roleTranslator[employee.role]}</td>
-                                </tr>)}
-                            </tbody>
-                        </table>}
-                    </td></tr>
 
-                </tbody>
-            </table>
-            {!task.done_at && <CreatePurschaseForm task_id={task.id} materials={props.materials} />}
 
-            <div className="card mt-3">
-                <div className="card-header"><div className="h3">Закупки</div></div>
-                <div className="card-body">
-                    {purchases.length ? <table className="table table-bordered w-auto">
-                        <thead>
-                            <tr>
-                                <td>номер</td>
-                                <td>дата</td>
-                                <td>сумма</td>
-                                <td>комментарий</td>
-                                <td>цель</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {purchases.map(purchase => <tr key={purchase.id}>
-                                <td>{purchase.id}</td>
-                                <td className="text-nowrap">{dayjs(purchase.created_date).format("DD.MM.YYYY")}</td>
-                                <td>{purchase.sum}</td>
-                                <td>{purchase.comment}</td>
-                                <td>{purchase.material_name} (арт. {purchase.materials})</td>
-                            </tr>)}
-                        </tbody>
-                    </table> : <>нет закупок</>}
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col">
+                    <div className="card">
+                        <div className="card-header"><h3>Детали задачи</h3></div>
+                        <div className="card-body">
+                            <table className="table table-bordered w-auto">
+                                <tbody>
+                                    <tr><td>Заголовок</td><td>{task.title}</td></tr>
+                                    <tr><td>Описание</td><td>{task.comment}</td></tr>
+                                    <tr><td>Дедлайн</td><td>{dayjs(task.deadline).format("DD.MM.YYYY")}</td></tr>
+                                    <tr><td>Дата создания</td><td>{dayjs(task.created_date).format("DD.MM.YYYY")}</td></tr>
+                                    <tr><td>Дата выполнения</td><td>{task.done_at ? dayjs(task.done_at).format("DD.MM.YYYY") : "-"}</td></tr>
+                                    <tr><td>Ответственные</td><td>
+                                        {!props.employees ? null : <table className='table'>
+                                            <tbody>
+                                                {props.employees.map(employee => <tr key={employee.id}>
+                                                    <td>{employee.username}</td>
+                                                    <td>{roleTranslator[employee.role]}</td>
+                                                </tr>)}
+                                            </tbody>
+                                        </table>}
+                                    </td></tr>
+                                    <tr><td>Ответственные</td><td>
+                                        <RightsManagement
+                                            task_id={task.id}
+                                        />
+                                    </td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <MessageForm task_id={task.id} />
+
+                <div className="col">
+                    <div className="card">
+                        <div className="card-header"><h3>Закупки</h3></div>
+                        <div className="card-body">
+                            {!task.done_at && <CreatePurschaseForm task_id={task.id} materials={props.materials} />}
+                            {purchases.length ? <table className="table table-bordered w-auto">
+                                <thead>
+                                    <tr>
+                                        <td>номер</td>
+                                        <td>дата</td>
+                                        <td>сумма</td>
+                                        <td>комментарий</td>
+                                        <td>цель</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {purchases.map(purchase => <tr key={purchase.id}>
+                                        <td>{purchase.id}</td>
+                                        <td className="text-nowrap">{dayjs(purchase.created_date).format("DD.MM.YYYY")}</td>
+                                        <td>{purchase.sum}</td>
+                                        <td>{purchase.comment}</td>
+                                        <td>{purchase.material_name} (арт. {purchase.materials})</td>
+                                    </tr>)}
+                                </tbody>
+                            </table> : <>нет закупок</>}
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <>
+
+
+            <div className="card">
+                <div className="card-header"><div className="h3">Чат</div></div>
+                <div className="card-body">
+                    <MessageForm task_id={task.id} />
+                    <Chat messages={props.messages} essense_type="purchase_task" essense_id={task_id} />
+                </div>
+
             </div>
         </>
     </>

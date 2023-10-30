@@ -26,8 +26,8 @@ export default async function Page({ params }: { params: { task_id: number } }) 
     const employees = await getEmployeesByPurchaseTask(params.task_id);
 
     return <>
-        <Client combinedPurchaseTaskData={combinedPurchaseTaskData} materials={materials} employees={employees} />
-        <Chat messages={messages} essense_type="purchase_task" essense_id={task_id} />
+        <Client combinedPurchaseTaskData={combinedPurchaseTaskData} materials={materials} employees={employees} messages={messages} />
+
     </>
 }
 

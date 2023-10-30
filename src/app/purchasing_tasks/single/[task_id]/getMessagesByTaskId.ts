@@ -1,18 +1,11 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
-import { MessageInterface, Media } from "@/app/components/types/messages";
+import {  Media } from "@/app/components/types/messages";
 import { pool } from "@/app/db/connect"
+import { messageToPurchaseTakInterface } from "@/types/messages/messageToPurchaseTakInterface";
 //TODO привести чат к нескольким сущностям (leads,purchase_tasks,projects)
 
-type Adds = {
-    attachments: any;
-    role: any;
-    username: any;
-}
-
-type CombinedMessageInterface = MessageInterface & Adds;
-
-export default async function getMessagesByTaskId(task_id: number): Promise<CombinedMessageInterface[]> {
-    const messages: CombinedMessageInterface[] = await new Promise((resolve) => {
+export default async function getMessagesByTaskId(task_id: number): Promise<messageToPurchaseTakInterface[]> {
+    const messages: messageToPurchaseTakInterface[] = await new Promise((resolve) => {
 
         pool.query(
             `SELECT * FROM messages WHERE messages.essense = 'purchase_task' AND messages.essense_id=? ORDER BY messages.id DESC`,

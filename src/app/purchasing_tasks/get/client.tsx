@@ -34,7 +34,7 @@ export default function Client(props: { purchaseTasks: PurchaseTaskInterface[]; 
                     <th>дедлайн</th>
                     <th>статус</th>
                     <th>дата выполнения</th>
-                    <th></th>
+                    {/* <th></th> */}
                 </tr>
             </thead>
             <tbody>
@@ -54,7 +54,7 @@ export default function Client(props: { purchaseTasks: PurchaseTaskInterface[]; 
                         return <>{diffInDays}</>
                     })()}</td>
                     <td>{task.done_at ? dayjs(task.done_at).format("DD.MM.YYYY") : "-"}</td>
-                    <td>
+                    {/* <td>
                         <div className="d-flex nowrap">
                             {(() => {
                                 if (task.done_at) return <>Задача закрыта</>
@@ -63,7 +63,7 @@ export default function Client(props: { purchaseTasks: PurchaseTaskInterface[]; 
                             })()}
                             {props.is_boss && <div className="ms-2"><RightsManagement task_id={task.id} /></div>}
                         </div>
-                    </td>
+                    </td> */}
                 </tr>)}
             </tbody>
         </table>

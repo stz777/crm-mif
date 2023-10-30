@@ -5,7 +5,7 @@ import { pool } from "../../connect"
 export async function getEmployeesByPurchaseTaskId(task_id: number): Promise<Employee[]> {
     return new Promise((resolve) => {
         pool.query(
-            `SELECT employees.id as user_id, purchasing_task_roles.role, employees.username
+            `SELECT employees.id, purchasing_task_roles.role, employees.username
             FROM employees 
             LEFT JOIN (purchasing_task_roles)
             ON (employees.id = purchasing_task_roles.user AND purchasing_task_roles.task = ?)

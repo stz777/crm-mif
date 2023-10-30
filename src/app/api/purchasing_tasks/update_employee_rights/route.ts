@@ -16,9 +16,8 @@ export async function POST(
     if (!user) return new Response("Кто ты", { status: 401, });;
     if (!user.is_boss) return new Response("Кто ты", { status: 401, });;
 
-    
-    const { employeeId, role, task_id } = await request.json();
-    
+    const data = await request.json();
+    const { employeeId, role, task_id } = data;
     const currentRole = await getCurrentRole(employeeId, task_id);
 
     if (!currentRole) { //В бд не задана роль

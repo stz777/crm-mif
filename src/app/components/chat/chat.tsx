@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
-import { MessageForChatInterface } from "../types/messages";
 import AttachmentsArea from "./AttachmentsArea";
 import { EssenseName } from "../types/essenses";
+import { messageToPurchaseTakInterface } from "@/types/messages/messageToPurchaseTakInterface";
 
-export default function Chat(props: { messages: MessageForChatInterface[], essense_type: EssenseName, essense_id: number }) {
+export default function Chat(props: { messages: messageToPurchaseTakInterface[], essense_type: EssenseName, essense_id: number }) {
     const [stateMessages, setStateMessages] = useState(props.messages);
     useEffect(() => {
         let mounted = true;
@@ -27,21 +27,20 @@ export default function Chat(props: { messages: MessageForChatInterface[], essen
         <div className="card">
             <div className="card-body">
                 {stateMessages.map(messageObject =>
-                    <div key={messageObject.message.id} className='border border-dsrk mb-5 p-1' style={{ maxWidth: "400px" }}>
+                    <div key={messageObject.id} className='border border-dsrk mb-5 p-1' style={{ maxWidth: "400px" }}>
 
                         <div className="d-flex justify-content-between">
                             <div className="text-dark fw-bold">
-                                {messageObject.employee.username} ({roleTranslator[messageObject.employeeRoleInEssense.role] || JSON.stringify(messageObject.employeeRoleInEssense.role)})
+                                {messageObject.username} ({roleTranslator[messageObject.role] || JSON.stringify(messageObject.role)})
                             </div> {/*username*/}
-                            <div className="ms-4 text-nowrap">{dayjs(messageObject.message.created_date).format("DD.MM.YYYY HH.mm")}</div> {/*username*/}
+                            <div className="ms-4 text-nowrap">{dayjs(messageObject.created_date).format("DD.MM.YYYY HH.mm")}</div> {/*username*/}
                         </div>
-
 
                         <pre
                             style={{
                                 fontSize: "inherit", marginBottom: "0"
                             }}
-                        >{messageObject.message.text}</pre>
+                        >{messageObject.text}</pre>
                         <AttachmentsArea attachments={messageObject.media} />
                     </div>)}
             </div>
