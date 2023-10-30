@@ -1,8 +1,20 @@
+// import path from "path"
+// import Image from "next/image"
 import bg from "../../public/mp_background.jpg"
+
+console.log(bg);
+
 
 export default function Home() {
   return (
     <main>
+      {/* <img src={bg.src} alt="" />
+      <Image
+        src={'/'}
+        // className={styles.image}
+        alt="image"
+        layout="fill"
+      /> */}
       <div
         className=""
         style={{
@@ -10,6 +22,7 @@ export default function Home() {
           height: "100%"
         }}
       ></div>
+      {/* <img src={bg} alt="" /> */}
     </main>
   )
 }
