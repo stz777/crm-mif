@@ -75,7 +75,7 @@ export default async function SideMenu() {
             <h5 className="m-0">Задачи</h5>
             <ul className="list-group">
                 <li><Link href="/projects/create" className="list-group-item text-nowrap">Создать задачу</Link></li>
-                <li><Link href="/projects/get" className="list-group-item text-nowrap">Список проектов</Link></li>
+                <li><Link href="/projects/get" className="list-group-item text-nowrap">Список задач</Link></li>
             </ul>
         </div>}
 
