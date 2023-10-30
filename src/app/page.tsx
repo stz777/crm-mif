@@ -2,8 +2,6 @@
 // import Image from "next/image"
 import bg from "../../public/mp_background.jpg"
 
-console.log(bg);
-
 
 export default function Home() {
   return (
