@@ -1,9 +1,9 @@
 import { notFound, redirect } from 'next/navigation'
 import { getUserByToken } from '@/app/components/getUserByToken';
 import { cookies } from 'next/headers';
-import { getRoleByLeadId } from '../../get/getLeadsFn';
 import getLeadFullData from '../../../db/leads/getLeadFullData/getLeadFullData';
 import Client from './client';
+import { getRoleByLeadId } from '../../get/getRoleByLeadId';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const auth = cookies().get('auth');
