@@ -34,7 +34,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                     <th>описание</th>
                     {props.is_manager && <th>расходы</th>}
                     {props.is_manager && <th>оплаты</th>}
-                    <th>выполнен</th>
+                    {props.searchParams?.is_archive && <th>выполнен</th>}
                 </tr>
             </thead>
             <tbody>
@@ -81,10 +81,9 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             return <div className="fw-bold">{totalSum} из <span style={{ fontSize: "1.3em", textDecoration: "underline" }}>{lead.sum}</span></div>
                         })()}
                     </td>}{/*payments list*/}
-                    <td>
+                    {props.searchParams?.is_archive && <td>
                         <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "нет"}</span>
-                    </td>{/*дата выполнения*/}
-                    
+                    </td>}{/*дата выполнения*/}
                 </tr>)}
             </tbody>
         </table> : <>нет заказов...</>}
