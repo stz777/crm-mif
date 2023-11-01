@@ -14,20 +14,11 @@ export default async function SideMenu() {
     return <div className="px-2">
 
         <div className="shadow mb-3">
-            {!user.is_boss ? null :
-                <>
-                    <h5 className="m-0">Avito</h5>
-                    <ul className="list-group">
-                        <li><Link href="/avito" className="list-group-item text-nowrap">Avito (на ремонт закрыто)</Link></li>
-                    </ul>
-                </>}
-        </div>
-
-        <div className="shadow mb-3">
-            <h5 className="m-0">Сотрудники</h5>
+            <h5 className="m-0">Заказы</h5>
             <ul className="list-group">
-                <li><Link href="/employees/create" className="list-group-item text-nowrap">Создать сотрудника</Link></li>
-                {!user.is_boss ? null : <li><Link href="/employees/get" className="list-group-item text-nowrap">Список сотрудников</Link></li>}
+                <li >
+                    <Link href="/leads/get" className="list-group-item text-nowrap">Список заказов</Link>
+                </li>
             </ul>
         </div>
 
@@ -43,20 +34,11 @@ export default async function SideMenu() {
             </ul>
         </div>
 
-        <div className="shadow mb-3">
-            <h5 className="m-0">Заказы</h5>
+        {!user.is_manager ? null : <div className="shadow mb-3">
+            <h5 className="m-0">Задачи</h5>
             <ul className="list-group">
-                <li >
-                    <Link href="/leads/get" className="list-group-item text-nowrap">Список заказов</Link>
-                </li>
-            </ul>
-        </div>
-
-        {!user.is_boss ? null : <div className="shadow mb-3">
-            <h5 className="m-0">Отчет</h5>
-            <ul className="list-group">
-                <li><Link href="/fin-report/summary" className="list-group-item text-nowrap">Отчет (сводка)</Link></li>
-                <li><Link href="/fin-report/detailing" className="list-group-item text-nowrap">Отчет (детализация)</Link></li>
+                <li><Link href="/projects/create" className="list-group-item text-nowrap">Создать задачу</Link></li>
+                <li><Link href="/projects/get" className="list-group-item text-nowrap">Список задач</Link></li>
             </ul>
         </div>}
 
@@ -71,14 +53,33 @@ export default async function SideMenu() {
             </ul>
         </div>}
 
-        {!user.is_manager ? null : <div className="shadow mb-3">
-            <h5 className="m-0">Задачи</h5>
+        <div className="shadow mb-3">
+            <h5 className="m-0">Сотрудники</h5>
             <ul className="list-group">
-                <li><Link href="/projects/create" className="list-group-item text-nowrap">Создать задачу</Link></li>
-                <li><Link href="/projects/get" className="list-group-item text-nowrap">Список задач</Link></li>
+                <li><Link href="/employees/create" className="list-group-item text-nowrap">Создать сотрудника</Link></li>
+                {!user.is_boss ? null : <li><Link href="/employees/get" className="list-group-item text-nowrap">Список сотрудников</Link></li>}
+            </ul>
+        </div>
+
+        <div className="shadow mb-3">
+            {!user.is_boss ? null :
+                <>
+                    <h5 className="m-0">Avito</h5>
+                    <ul className="list-group">
+                        <li><Link href="/avito" className="list-group-item text-nowrap">Avito (на ремонт закрыто)</Link></li>
+                    </ul>
+                </>}
+        </div>
+
+        {!user.is_boss ? null : <div className="shadow mb-3">
+            <h5 className="m-0">Отчет</h5>
+            <ul className="list-group">
+                <li><Link href="/fin-report/summary" className="list-group-item text-nowrap">Отчет (сводка)</Link></li>
+                <li><Link href="/fin-report/detailing" className="list-group-item text-nowrap">Отчет (детализация)</Link></li>
             </ul>
         </div>}
 
         <div className="mt-3"><LogoutBTN /></div>
+
     </div>
 } 
