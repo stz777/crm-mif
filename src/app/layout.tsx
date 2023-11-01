@@ -34,7 +34,7 @@ export default function RootLayout({
         </header>
         <div className="d-flex">
           <div className="pe-3 position-sticky sticky-top" style={{ width: "300px" }}><SideMenu /></div>
-          <div style={{ minWidth: "400px" }}> {children}</div>
+          <div style={{ minWidth: "400px" }} className='flex-grow-1'> {children}</div>
         </div>
         <ToastContainer />
       </body>

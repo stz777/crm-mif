@@ -56,17 +56,21 @@ export default function CreateClientForm(
             </div>
             <div className="m-2 p-2 border">
                 <h4>Оплата</h4>
-                <FieldWrapper title="Сумма"
-                    field={<>
-                        <input type="number"{...register("payment")} autoComplete="off" />
-                    </>}
-                />
-                <FieldWrapper title="Изображение"
-                    field={<>
-                        <input type="file" {...register("image"/* , { required: true } */)}
+                <table className="table">
+                    <tbody>
+                        <FieldWrapper title="Сумма"
+                            field={<>
+                                <input type="number"{...register("payment")} autoComplete="off" />
+                            </>}
                         />
-                    </>}
-                />
+                        <FieldWrapper title="Изображение"
+                            field={<>
+                                <input type="file" {...register("image"/* , { required: true } */)}
+                                />
+                            </>}
+                        />
+                    </tbody>
+                </table>
             </div>
 
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
