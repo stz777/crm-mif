@@ -41,7 +41,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                 {leads.map(lead => <tr key={lead.id}>
                     <td>
                         <Link href={`/leads/single/${lead.id}`} className="">заказ #{lead.id}</Link>
-                        <pre>{JSON.stringify(lead.clientData)}</pre>
+                        {/* <pre>{JSON.stringify(lead.clientData)}</pre> */}
                     </td> {/*lead id*/}
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {
