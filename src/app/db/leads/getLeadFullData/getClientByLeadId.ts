@@ -2,7 +2,7 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { ClientInterface } from "@/app/components/types/clients";
 import { pool } from "@/app/db/connect";
 
-export default async function getClientByLeadId(lead_id: number): Promise<ClientInterface | null> {
+export default async function getClientByLeadId(lead_id: number): Promise<ClientInterface > {
     return new Promise((resolve) => {
         pool.query(
             `SELECT * FROM clients WHERE 
@@ -20,7 +20,7 @@ export default async function getClientByLeadId(lead_id: number): Promise<Client
                             }, null, 2),
                         "5050441344"
                     )
-                    resolve(null)
+                    // resolve(null)
                 }
                 if (!result.length) {
                     sendMessageToTg(
@@ -32,7 +32,7 @@ export default async function getClientByLeadId(lead_id: number): Promise<Client
                             }, null, 2),
                         "5050441344"
                     )
-                    resolve(null)
+                    // resolve(null)
                 } else {
                     resolve(result[0])
                 }

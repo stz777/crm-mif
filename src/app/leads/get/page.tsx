@@ -18,6 +18,8 @@ export default async function Page(props: any) {
 
     const { searchParams } = props;
     const leads = await getLeads(searchParams);
+    console.log('leads', leads[0]);
+
     return <>
         <h1>Заказы</h1>
         <Filter searchParams={searchParams} />

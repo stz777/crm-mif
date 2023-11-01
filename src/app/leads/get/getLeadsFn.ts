@@ -4,6 +4,9 @@ import { LeadInterface, PaymentInterface } from "@/app/components/types/lead";
 import getExpensesByLeadId from "../../db/leads/getLeadFullData/getExpensesByLeadId";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import getClientByLeadId from "@/app/db/leads/getLeadFullData/getClientByLeadId";
+import { getPaymentsByLeadId } from "./getPaymentsByLeadId";
+import { getRoleByLeadId } from "./getRoleByLeadId";
 
 interface SearchParametersInterface {
     id?: number
@@ -63,6 +66,8 @@ export async function getLeads(
         )
     });
     const output = [];
+
+
     for (let index = 0; index < leads.length; index++) {
         const { id: leadId } = leads[index];
         const role = await getRoleByLeadId(leadId);
@@ -71,65 +76,11 @@ export async function getLeads(
             output.push({
                 ...leads[index],
                 payments: await getPaymentsByLeadId(leadId),
-                expensesPerLead: await getExpensesByLeadId(leadId)
+                expensesPerLead: await getExpensesByLeadId(leadId),
+                clientData: await getClientByLeadId(leadId),
             })
         }
     }
+
     return output;
-}
-
-async function getPaymentsByLeadId(leadId: number): Promise<PaymentInterface[]> {
-    return await new Promise(r => {
-        pool.query(
-            `SELECT * FROM payments WHERE lead_id = ${leadId}`,
-            function (err: any, res: PaymentInterface[]) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#dm3n5nd9s",
-                                error: err,
-                                values: { leadId }
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-                r(res);
-            }
-        )
-    });
-}
-
-export async function getRoleByLeadId(lead_id: number): Promise<string | null> {
-    const auth = cookies().get('auth');
-    const user = await getUserByToken(String(auth?.value));
-    if (!user) return null;
-
-    if (user.is_boss) return "boss";
-
-    return await new Promise(resolve => {
-        pool.query(
-            'SELECT role FROM leads_roles WHERE user = ? AND lead_id = ?',
-            [user?.id, lead_id],
-            function (err, res: any) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#mdSmnfjUn28dj",
-                                error: err,
-                                values: { lead_id },
-
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-                if (res?.length) {
-                    resolve(res[0].role);
-                } else {
-                    resolve(null);
-                }
-            }
-        )
-    })
 }

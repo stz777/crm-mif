@@ -1,3 +1,5 @@
+import { ClientInterface } from "./clients"
+
 export interface LeadInterface {
     id: number
     client: string
@@ -9,6 +11,7 @@ export interface LeadInterface {
     sum: number
     payments?: PaymentInterface[]
     expensesPerLead?: ExpensesPerLeadInterface[]
+    clientData: ClientInterface
 }
 
 export interface PaymentInterface {
