@@ -24,7 +24,7 @@ export async function getProjectsFn(searchParams
 
     const whereString = whereArr.length ? "WHERE " + whereArr.join(" AND ") : "";
 
-    const qs = `SELECT * FROM projects ${whereString}`;
+    const qs = `SELECT * FROM projects ${whereString} ORDER BY id DESC`;
 
     const projects: ProjectInterface[] = await new Promise(r => {
         pool.query(
