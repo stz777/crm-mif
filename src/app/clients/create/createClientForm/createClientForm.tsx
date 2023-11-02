@@ -60,7 +60,7 @@ export default function CreateClientForm(
                     <tbody>
                         <FieldWrapper title="Сумма"
                             field={<>
-                                <input type="number"{...register("payment")} autoComplete="off" />
+                                <input {...register("payment")} autoComplete="off" />
                             </>}
                         />
                         <FieldWrapper title="Изображение"

@@ -40,7 +40,7 @@ export default function LeadFields(props: {
 
                 <FieldWrapper title="Сумма заказа"
                     field={<>
-                        <input type="number" {...register("sum")} autoComplete="off" />
+                        <input {...register("sum")} autoComplete="off" />
                     </>}
                 />
             </tbody>

@@ -40,7 +40,7 @@ export default function Filter(props: { searchParams: ReportSearchInterface }) {
                     <div className="d-flex">
                         <div className="me-2">
                             <h6>Год</h6>
-                            <input type="number"  {...register("year")} autoComplete="off" />
+                            <input  {...register("year")} autoComplete="off" />
                         </div>
                     </div>
                     <button className="btn btn-sm btn-outline-dark mt-2 me-2">фильтр</button>

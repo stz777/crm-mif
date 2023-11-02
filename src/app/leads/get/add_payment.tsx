@@ -27,7 +27,7 @@ export function Add_Payment(props: { lead_id: number, is_boss?: boolean }) {
                     <FieldWrapper
                         title="Сумма"
                         field={<>
-                            <input {...register("sum", { required: true })} type="number" className="form-control" />
+                            <input {...register("sum", { required: true })} className="form-control" />
                         </>}
                     />
                     <FieldWrapper

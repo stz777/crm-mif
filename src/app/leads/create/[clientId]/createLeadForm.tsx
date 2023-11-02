@@ -55,7 +55,7 @@ export default function CreateLeadForm({ clientId, is_boss }: { clientId: number
 
             <FieldWrapper title="Сумма заказа"
                 field={<>
-                    <input type="number" {...register("sum", { required: true })} autoComplete="off" />
+                    <input {...register("sum", { required: true })} autoComplete="off" />
                 </>}
             />
 
@@ -63,7 +63,7 @@ export default function CreateLeadForm({ clientId, is_boss }: { clientId: number
                 <h4>Оплата</h4>
                 <FieldWrapper title="Сумма"
                     field={<>
-                        <input type="number"{...register("payment")} autoComplete="off" />
+                        <input {...register("payment")} autoComplete="off" />
                     </>}
                 />
                 <FieldWrapper title="Изображение"

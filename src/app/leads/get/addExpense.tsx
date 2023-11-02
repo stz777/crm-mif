@@ -24,7 +24,7 @@ export function AddExpense(props: { lead_id: number }) {
             </div>
             <div className="card-body">
                 <form onSubmit={handleSubmit((e: any) => onSubmit(e, reset, () => setIsOpen(false)))} className="mb-2">
-                    <input {...register("sum")} type="number" className="form-control" placeholder="сумма" />
+                    <input {...register("sum")} className="form-control" placeholder="сумма" />
                     <textarea {...register("comment")} className="form-control" placeholder="коммент" />
                     <div className="d-flex mt-2">
                         <button className="btn btn-sm btn-outline-dark me-2">Провести</button>
