@@ -4,8 +4,8 @@ import { LeadInterface } from "@/app/components/types/lead";
 import dayjs from 'dayjs'
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useForm } from "react-hook-form";
 import Comment from "./Comment";
+import { GenerateWALink } from "../single/[id]/generateWALink";
 
 export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean, searchParams: any }) {
     const [leads, setLeads] = useState(props.leads)
@@ -28,6 +28,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             <thead className="sticky-top">
                 <tr>
                     <th>заказ</th>
+                    <th>клиент</th>
                     <th>дедлайн</th>
                     <th>срочность</th>
                     <th>комментарий</th>
@@ -40,9 +41,15 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
                     <td>
-                        <Link href={`/leads/single/${lead.id}`} className="">заказ #{lead.id}</Link>
-                        {/* <pre>{JSON.stringify(lead.clientData)}</pre> */}
+                        <Link href={`/leads/single/${lead.id}`} className="text-nowrap">заказ #{lead.id}</Link>
                     </td> {/*lead id*/}
+                    <td>
+                        <div>{lead.clientData.full_name}</div>
+                        <div>{(() => {
+                            const phone = lead.clientData.meta.find(item => item.data_type === "phone")?.data;
+                            return <GenerateWALink phoneNumber={String(phone)} />
+                        })()}</div>
+                    </td>
                     <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
                     <td>{(() => {
                         const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0).add(1, "hours");

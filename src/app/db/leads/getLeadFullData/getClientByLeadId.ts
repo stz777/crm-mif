@@ -1,9 +1,12 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
-import { ClientInterface } from "@/app/components/types/clients";
+import { ClientInterface, ClientMetaInterface } from "@/app/components/types/clients";
 import { pool } from "@/app/db/connect";
+import getClentMeta from "../../clients/getClentMeta";
 
-export default async function getClientByLeadId(lead_id: number): Promise<ClientInterface > {
-    return new Promise((resolve) => {
+type superInterface = ClientInterface & { meta: ClientMetaInterface[] };
+
+export default async function getClientByLeadId(lead_id: number): Promise<superInterface> {
+    const client: ClientInterface = await new Promise((resolve) => {
         pool.query(
             `SELECT * FROM clients WHERE 
             id IN (SELECT client FROM leads WHERE id = ? )
@@ -38,5 +41,10 @@ export default async function getClientByLeadId(lead_id: number): Promise<Client
                 }
             }
         )
-    })
+    });
+    const client_meta = await getClentMeta(client.id);
+    return {
+        ...client,
+        meta: client_meta
+    };
 }
