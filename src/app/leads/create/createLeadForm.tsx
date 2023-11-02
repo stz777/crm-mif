@@ -50,6 +50,7 @@ export default function CreateLeadForm({ is_boss }: { is_boss: boolean }) {
                                             selected={field.value}
                                             onChange={(date) => field.onChange(date)}
                                             placeholderText="выберите дату"
+                                            autoComplete="off"
                                         />
                                     )}
                                 />
@@ -58,7 +59,7 @@ export default function CreateLeadForm({ is_boss }: { is_boss: boolean }) {
 
                         <FieldWrapper title="Описание"
                             field={<>
-                                <textarea {...register("description", { required: true })} autoComplete="off" />
+                                <textarea {...register("description", { required: true })} rows={5} autoComplete="off" />
                             </>}
                         />
 
