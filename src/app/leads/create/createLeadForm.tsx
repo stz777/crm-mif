@@ -215,6 +215,7 @@ function ClientFields(props: { setValue: any, clientIsSelected: boolean }) {
         <div className="m-2 p-2 border">
             <h4>Клиент</h4>
             <input placeholder="Телефон клиента"
+                autoComplete="off"
                 onChange={({ target }) => {
                     const { value } = target;
                     if (value.length > 3 && /^[+0-9]+$/.test(value)) {
