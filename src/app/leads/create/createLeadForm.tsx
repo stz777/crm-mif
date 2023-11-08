@@ -272,6 +272,7 @@ function ClientFields(props: { setValue: any, clientIsSelected: boolean }) {
                                 </tr>)}
                             </tbody>
                         </table>
+                        <div><Link href={`/clients/create`} className="btn btn-sm btn-outline-dark">Создать нового клиента</Link></div>
                     </>
                 })()}
             </div>
