@@ -33,46 +33,43 @@ export default function CreateClientForm(
         name: "telegram",
     });
     return (
-        <form onSubmit={handleSubmit(e => onSubmit(e, reset, props.is_boss))}>
-
-            <ClientFields
-                register={register}
-                phonesFields={phonesFields}
-                removePhone={removePhone}
-                appendPhone={appendPhone}
-                emailFields={emailFields}
-                removeEmail={removeEmail}
-                appendEmail={appendEmail}
-                telegramFields={telegramFields}
-                removeTelegram={removeTelegram}
-                appendTelegram={appendTelegram}
-            />
-            <div className="m-2 p-2 border">
-                <h4>Заказ</h4>
-                <LeadFields
-                    control={control}
-                    register={register}
-                />
-            </div>
-            <div className="m-2 p-2 border">
-                <h4>Оплата</h4>
-                <table className="table">
-                    <tbody>
-                        <FieldWrapper title="Сумма"
-                            field={<>
-                                <input {...register("payment")} autoComplete="off" />
-                            </>}
-                        />
-                        <FieldWrapper title="Изображение"
-                            field={<>
-                                <input type="file" {...register("image"/* , { required: true } */)}
-                                />
-                            </>}
-                        />
-                    </tbody>
-                </table>
-            </div>
-
+        <form
+            onSubmit={handleSubmit(e => onSubmit(e, reset, props.is_boss))}
+            style={{ maxWidth: "1000px" }}
+        >
+            <table className="table">
+                <tbody>
+                    <ClientFields
+                        register={register}
+                        phonesFields={phonesFields}
+                        removePhone={removePhone}
+                        appendPhone={appendPhone}
+                        emailFields={emailFields}
+                        removeEmail={removeEmail}
+                        appendEmail={appendEmail}
+                        telegramFields={telegramFields}
+                        removeTelegram={removeTelegram}
+                        appendTelegram={appendTelegram}
+                    />
+                    <tr><th><h4>Заказ</h4></th><td></td></tr>
+                    <LeadFields
+                        control={control}
+                        register={register}
+                    />
+                    <tr><th><h4>Оплата</h4></th><td></td></tr>
+                    <FieldWrapper title="Сумма"
+                        field={<>
+                            <input className="form-control"  {...register("payment")} autoComplete="off" />
+                        </>}
+                    />
+                    <FieldWrapper title="Изображение"
+                        field={<>
+                            <input type="file" {...register("image"/* , { required: true } */)}
+                            />
+                        </>}
+                    />
+                </tbody>
+            </table>
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );

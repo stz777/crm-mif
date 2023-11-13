@@ -11,40 +11,37 @@ export default function LeadFields(props: {
 }) {
     const { control, register } = props;
     return <>
-        <table className="table">
-            <tbody>
-                <FieldWrapper title="Дедлайн"
-                    field={<>
-                        <Controller
-                            control={control}
-                            name="deadline"
-                            render={({ field }) => (
-                                <DatePicker
-                                    locale="ru"
-                                    {...field}
-                                    dateFormat="dd.MM.yyyy"
-                                    selected={field.value}
-                                    onChange={(date) => field.onChange(date)}
-                                    placeholderText="выберите дату"
-                                />
-                            )}
+        <FieldWrapper title="Дедлайн"
+            field={<>
+                <Controller
+                    control={control}
+                    name="deadline"
+                    render={({ field }) => (
+                        <DatePicker
+                            locale="ru"
+                            {...field}
+                            dateFormat="dd.MM.yyyy"
+                            selected={field.value}
+                            onChange={(date) => field.onChange(date)}
+                            placeholderText="выберите дату"
+                            className="form-control"
                         />
-                    </>}
+                    )}
                 />
+            </>}
+        />
 
-                <FieldWrapper title="Описание"
-                    field={<>
-                        <textarea {...register("description")} autoComplete="off" />
-                    </>}
-                />
+        <FieldWrapper title="Описание"
+            field={<>
+                <textarea className="form-control" {...register("description")} autoComplete="off" />
+            </>}
+        />
 
-                <FieldWrapper title="Сумма заказа"
-                    field={<>
-                        <input {...register("sum")} autoComplete="off" />
-                    </>}
-                />
-            </tbody>
-        </table>
+        <FieldWrapper title="Сумма заказа"
+            field={<>
+                <input className="form-control" {...register("sum")} autoComplete="off" />
+            </>}
+        />
 
     </>
 }
