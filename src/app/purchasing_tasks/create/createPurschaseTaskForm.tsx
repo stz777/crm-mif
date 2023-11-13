@@ -39,6 +39,7 @@ export default function CreatePurschaseTaskForm() {
                                 selected={field.value}
                                 onChange={(date) => field.onChange(date)}
                                 placeholderText="выберите дату"
+                                autoComplete="off"
                             />
                         )}
                     />

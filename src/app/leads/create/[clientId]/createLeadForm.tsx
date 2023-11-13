@@ -41,6 +41,7 @@ export default function CreateLeadForm({ clientId, is_boss }: { clientId: number
                                 selected={field.value}
                                 onChange={(date) => field.onChange(date)}
                                 placeholderText="выберите дату"
+                                autoComplete="off"
                             />
                         )}
                     />
