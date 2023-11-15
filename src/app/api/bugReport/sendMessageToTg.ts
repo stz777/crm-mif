@@ -13,7 +13,7 @@ export async function sendMessageToTg(message: string, chat_id?: string) {
             cache: "no-cache",
             body: JSON.stringify({
                 chat_id: chat_id ? chat_id : "5050441344",
-                text: message,
+                text: "from: "+process.env.SERVER + "\n" + message,
             })
         }
     )
