@@ -8,13 +8,25 @@ import fs from "fs"
 export async function POST(request: Request) {
     const data: any = await request.formData();
     const items: any = Array.from(data);
-    console.log('items', items.find(([item]: any) => item));
+    fetch('http://localhost:3000/api/tasks/create', {
+        method: 'POST',
+        body: data,
+    })
+        .then(x => {
+            return x.json();
+        })
+        .then(
+            x => {
+                console.log('xxx', x);
+            }
+        )
+        .catch(error => {
+            console.log('error #fjv44', error);
+        });
     const messageId = await saveMessage(items.find(([item]: any) => item).description, "lead", 1, 1);
-    console.log('messageId', messageId);
     for (let index = 0; index < items.length; index++) {
         const [name, value]: any = items[index]
         if (value instanceof File && name === "images") {
-            
             let filename = slugify(value.name.toLocaleLowerCase().replace(/[^ a-zA-Zа-яА-Я0-9-.]/igm, ""));
 
             const imageIsExists = await checkImageIsExists(filename);

@@ -1,17 +1,20 @@
 "use client"
 
-import { useStore } from "effector-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
+import DatePicker, { registerLocale } from "react-datepicker";
+import ru from 'date-fns/locale/ru';
+import dayjs from "dayjs";
+registerLocale('ru', ru);
 
 type FormValues = {
     description: string,
     image: any
+    price: number
+    deadline: any
 };
 
 export default function CreateTaskForm() {
@@ -38,8 +41,36 @@ export default function CreateTaskForm() {
                         style={{ maxWidth: "1000px" }}
                     >
                         <div>
-                            <textarea className="form-control" rows={3} placeholder="Описание задачи" {...register(`description`, { required: true })} autoComplete="off" />
-                            <input type="file" {...register("image"/* , { required: true } */)} />
+                            <div className="mb-3">
+                                <h5>Описание задачи</h5>
+                                <textarea className="form-control" rows={3} {...register(`description`, { required: true })} autoComplete="off" />
+                            </div>
+                            <div className="mb-3">
+                                <h5>Изображение</h5>
+                                <input type="file" {...register("image"/* , { required: true } */)} />
+                            </div>
+                            <div className="mb-3">
+                                <h5>Цена</h5>
+                                <input {...register("price", { required: true })} />
+                            </div>
+                            <div className="mb-3">
+                                <h5>Дедлайн</h5>
+                                <Controller
+                                    control={control}
+                                    name="deadline"
+                                    render={({ field }) => (
+                                        <DatePicker
+                                            locale="ru"
+                                            {...field}
+                                            dateFormat="dd.MM.yyyy"
+                                            selected={field.value}
+                                            onChange={(date) => field.onChange(date)}
+                                            placeholderText="выберите дату"
+                                            className="form-control"
+                                        />
+                                    )}
+                                />
+                            </div>
                         </div>
                         <button className="btn-btn-sm">Сохранить</button>
                     </form>
@@ -47,9 +78,6 @@ export default function CreateTaskForm() {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Отмена
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Сохранить
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -69,18 +97,11 @@ const onSubmit = (data: any, resetForm: any) => {
             formdata.append("description", element);
             continue;
         }
-        // if (key === "emails") {
-        //     formdata.append("emails", JSON.stringify(element));
-        //     continue;
-        // }
-        // if (key === "telegram") {
-        //     formdata.append("telegram", JSON.stringify(element));
-        //     continue;
-        // }
-
+        if (key === "deadline") {
+            formdata.append("deadline", dayjs(element).format("YYYY-MM-DD HH:mm:ss"));
+            continue;
+        }
         if (key === "image") {
-            console.log('image');
-            
             for (let i = 0; i < element.length; i++) {
                 formdata.append('images', element[i]);
             }
@@ -90,23 +111,8 @@ const onSubmit = (data: any, resetForm: any) => {
         formdata.append(key, element);
     }
 
-    // if (!data?.phones?.length) {
-    //     toast.error('Нужно заполнить поле "телефон"');
-    //     return;
-    // }
-
-    // if (
-    //     (data.deadline || data.description || data.sum)
-    //     &&
-    //     !(data.deadline && data.description && data.sum)
-    // ) {
-    //     toast.error('Чтобы создать заказ, нужно заполнить все поля');
-    //     return;
-    // }
-
     fetch(
         "/api/tasks/create",
-        // String(process.env.TASK_MANAGES_URL) + "/api/tasks/create",
         {
             method: "POST",
             body: formdata
