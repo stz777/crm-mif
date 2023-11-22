@@ -17,6 +17,7 @@ import Chat from "./chat";
 import { LeadFullDatInterface } from "@/app/components/types/fullLeadTypes";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import CreateTaskForm from "@/app/components/tasks/create_task/CreateTaskForm";
 
 export default function Client(props: {
     lead_fullData: LeadFullDatInterface;
@@ -212,6 +213,16 @@ export default function Client(props: {
                                 if (props.is_boss) return <CloseLead leadId={lead.id} />
                                 return <>В работе</>
                             })()}
+                        </div>
+                    </div>
+                </div>
+                <div className="col">
+                    <div className="card">
+                        <div className="card-header">
+                            <h3>Задачи</h3>
+                        </div>
+                        <div className="card-body">
+                            <CreateTaskForm />
                         </div>
                     </div>
                 </div>
