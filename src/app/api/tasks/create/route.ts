@@ -3,26 +3,32 @@ import slugify from "slugify";
 import checkImageIsExists from "../../clients/create/checkImageIsExists";
 import saveImageToDB from "../../clients/create/saveImageToDB";
 import saveMessage from "../../clients/create/saveMessage";
-import fs from "fs"
+import fs from "fs";
 
 export async function POST(request: Request) {
     const data: any = await request.formData();
     const items: any = Array.from(data);
-    fetch('http://localhost:3000/api/tasks/create', {
+
+    const url = `${process.env.TASK_MANAGER_URL}/api/tasks/create`;
+
+    fetch(url, {
         method: 'POST',
         body: data,
     })
-        .then(x => {
-            return x.json();
-        })
-        .then(
-            x => {
-                console.log('xxx', x);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Request failed');
             }
-        )
+            return response.json();
+        })
+        .then(data => {
+            console.log('dadadada', data);
+        })
         .catch(error => {
-            console.log('error #fjv44', error);
+            // Обработка ошибок
+            console.error('err #n38cj', error);
         });
+   
     const messageId = await saveMessage(items.find(([item]: any) => item).description, "lead", 1, 1);
     for (let index = 0; index < items.length; index++) {
         const [name, value]: any = items[index]

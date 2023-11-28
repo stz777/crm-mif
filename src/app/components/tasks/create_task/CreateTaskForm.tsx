@@ -128,7 +128,7 @@ const onSubmit = (data: any, resetForm: any) => {
     ).then(data => {
         if (data.success) {
             toast.success("Клиент создан");
-            resetForm();
+            // resetForm();
         } else {
             toast.error("Что-то пошло не так " + data.error);
         }
