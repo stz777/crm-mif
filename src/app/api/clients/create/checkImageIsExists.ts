@@ -11,11 +11,10 @@ export default async function checkImageIsExists(imageName: string) {
                     sendMessageToTg(
                         JSON.stringify(
                             {
-                                errorNo: "#ndn3kvfd9",
+                                errorNo: "#d83n3",
                                 error: err,
                                 values: { imageName }
                             }, null, 2),
-                        "5050441344"
                     )
                     resolve(null)
                 }

@@ -47,11 +47,11 @@ export default function CreateTaskForm() {
                             </div>
                             <div className="mb-3">
                                 <h5>Изображение</h5>
-                                <input type="file" {...register("image"/* , { required: true } */)} />
+                                <input type="file" {...register("image"/* , { required: true } */)} multiple />
                             </div>
                             <div className="mb-3">
                                 <h5>Цена</h5>
-                                <input {...register("price", { required: true })} autoComplete="off"/>
+                                <input {...register("price", { required: true })} autoComplete="off" />
                             </div>
                             <div className="mb-3">
                                 <h5>Дедлайн</h5>
@@ -110,9 +110,10 @@ const onSubmit = (data: any, resetForm: any) => {
 
         formdata.append(key, element);
     }
-
+    console.log('IMAGES_FOLDER',process.env.IMAGES_FOLDER);
+    
     fetch(
-        "/api/tasks/create",
+        "http://78.24.216.61:3000/api/tasks/create",
         {
             method: "POST",
             body: formdata
@@ -128,7 +129,7 @@ const onSubmit = (data: any, resetForm: any) => {
         }
     ).then(data => {
         if (data.success) {
-            toast.success("Клиент создан");
+            toast.success("Задача создана");
             // resetForm();
         } else {
             toast.error("Что-то пошло не так " + data.error);
