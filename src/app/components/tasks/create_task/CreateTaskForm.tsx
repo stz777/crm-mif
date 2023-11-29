@@ -51,7 +51,7 @@ export default function CreateTaskForm() {
                             </div>
                             <div className="mb-3">
                                 <h5>Цена</h5>
-                                <input {...register("price", { required: true })} />
+                                <input {...register("price", { required: true })} autoComplete="off"/>
                             </div>
                             <div className="mb-3">
                                 <h5>Дедлайн</h5>
@@ -122,7 +122,8 @@ const onSubmit = (data: any, resetForm: any) => {
             if (response.ok) {
                 return response.json()
             } else {
-                throw new Error(response.statusText);
+                const { status, statusText } = response;
+                throw new Error(JSON.stringify({ status, statusText }, null, 2));
             }
         }
     ).then(data => {
