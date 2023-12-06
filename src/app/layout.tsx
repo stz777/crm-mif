@@ -3,9 +3,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SideMenu from "./side_menu/side_menu";
-import Logo from "@/media/images/logo.png";
+import Logo from "@/media/images/logo.svg";
 import Image from 'next/image';
 import Link from 'next/link';
+import LogoutBTN from './api/auth/logout/logoutBTN';
 
 export default function RootLayout({
   children,
@@ -15,26 +16,23 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body>
-        <header className='border py-2 mb-3'>
-          <div className="d-flex align-items-center">
-            <div className="pe-3" style={{ width: "300px" }}>
-              <div className="p-3">
-                <Link href={"/"}>
-                  <Image src={Logo} alt="МотоХит" width={268} />
+        <div className="d-flex">
+
+          <div
+            className="p-3 position-sticky sticky-top d-flex flex-column justify-content-between"
+            style={{ width: "300px", height: "100vh", background: "var(--background-grey-light, #F4F5F5)" }}
+          >
+            <div>
+              <div className='m-3'>
+                <Link href={"/"} >
+                  <Image src={Logo} alt="МотоХит" width={125} />
                 </Link>
               </div>
+              <SideMenu />
             </div>
-            <div style={{ minWidth: "400px" }} className=' flex-grow-1'>
-              {/* content */}
-              <div className='text-center'>
-                {/* <div className='h1 '>CRM 80 lvl</div> */}
-              </div>
-            </div>
+            <div className="mt-3"><LogoutBTN /></div>
           </div>
-        </header>
-        <div className="d-flex">
-          <div className="pe-3 position-sticky sticky-top" style={{ width: "300px" }}><SideMenu /></div>
-          <div style={{ minWidth: "400px" }} className='flex-grow-1'> {children}</div>
+          <div style={{ minWidth: "400px" }} className='flex-grow-1'>{children}</div>
         </div>
         <ToastContainer />
       </body>
