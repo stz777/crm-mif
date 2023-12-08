@@ -24,25 +24,30 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
     }, [leads])
 
     return <>
-        {leads ? <table className="table table-bordered table-striped">
+        {leads ? <table className="table table-bordered">
             <thead className="sticky-top">
-                <tr>
-                    <th>заказ</th>
-                    <th>клиент</th>
-                    <th>дедлайн</th>
-                    <th>срочность</th>
-                    <th>комментарий</th>
-                    <th>описание</th>
-                    {props.is_manager && <th>расходы</th>}
-                    {props.is_manager && <th>оплаты</th>}
+                <tr className="bordered">
+                    <th >ID</th>
+                    <th >Описание</th>
+                    <th >Статус</th>
+                    <th >Клиент</th>
+                    <th >Создан</th>
+                    <th >Дедлайн</th>
+                    {/* <th>Срочность</th> */}
+                    {props.is_manager && <th>Оплата, ₽</th>}
                     {props.searchParams?.is_archive && <th>выполнен</th>}
                 </tr>
             </thead>
             <tbody>
                 {leads.map(lead => <tr key={lead.id}>
                     <td>
-                        <Link href={`/leads/single/${lead.id}`} className="text-nowrap">заказ #{lead.id}</Link>
+                        {lead.id}
+                        {/* <Link href={`/leads/single/${lead.id}`} className="text-nowrap"></Link> */}
                     </td> {/*lead id*/}
+                    <td>{lead.description}</td>{/*description*/}
+                    <td>
+                        <Comment currentText={lead.comment} lead_id={lead.id} />
+                    </td>{/*description*/}
                     <td>
                         <div>{lead.clientData.full_name}</div>
                         <div>{(() => {
@@ -50,23 +55,41 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             return <GenerateWALink phoneNumber={String(phone)} />
                         })()}</div>
                     </td>
-                    <td>{dayjs(lead.deadline).format("DD.MM.YYYY")}</td>{/*deadline*/}
-                    <td>{(() => {
-                        const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0).add(1, "hours");
-                        const date2 = dayjs().set("hour", 0).set("minute", 0);
-                        const diffInDays = date1.diff(date2, 'day');
-                        const limit = 1;
-
-                        if (lead.done_at) return <span className="badge text-bg-success">выполнено</span>
-                        if (diffInDays <= limit) return <span className="badge text-bg-danger">срочно</span>
-                        if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
-                        return <>{diffInDays}</>
-                    })()}</td>
                     <td>
-                        <Comment currentText={lead.comment} lead_id={lead.id} />
-                    </td>{/*description*/}
-                    <td>{lead.description}</td>{/*description*/}
-                    {props.is_manager && <td>
+                        {dayjs(lead.created_date).format("DD.MM.YYYY")}
+
+                    </td>{/*created_date*/}
+                    <td>
+                        {dayjs(lead.deadline).format("DD.MM.YYYY")}
+                        <div>
+                            {(() => {
+                                const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0).add(1, "hours");
+                                const date2 = dayjs().set("hour", 0).set("minute", 0);
+                                const diffInDays = date1.diff(date2, 'day');
+                                const limit = 1;
+
+                                if (lead.done_at) return <span className="badge text-bg-success">выполнено</span>
+                                if (diffInDays <= limit) return <span className="badge text-bg-danger">срочно</span>
+                                if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
+                                return <>{diffInDays}</>
+                            })()}
+                        </div>
+                    </td>{/*deadline*/}
+                    {/* <td>
+                        {(() => {
+                            const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0).add(1, "hours");
+                            const date2 = dayjs().set("hour", 0).set("minute", 0);
+                            const diffInDays = date1.diff(date2, 'day');
+                            const limit = 1;
+
+                            if (lead.done_at) return <span className="badge text-bg-success">выполнено</span>
+                            if (diffInDays <= limit) return <span className="badge text-bg-danger">срочно</span>
+                            if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
+                            return <>{diffInDays}</>
+                        })()}
+                    </td> */}
+
+                    {/* {props.is_manager && <td>
                         {(() => {
                             let totalSum = 0;
                             if (lead.expensesPerLead?.length) {
@@ -77,7 +100,8 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                             return <>
                                 <div className="fw-bold">{totalSum}</div>
                             </>
-                        })()}</td>}{/*expenses list*/}
+                        })()}</td>} */}
+                    {/*expenses list*/}
                     {props.is_manager && <td>
                         {(() => {
                             let totalSum = 0;
@@ -86,7 +110,10 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                     .map(({ sum }) => sum)
                                     .reduce((a, b) => a + b);
                             }
-                            return <div className="fw-bold">{totalSum} из <span style={{ fontSize: "1.3em", textDecoration: "underline" }}>{lead.sum}</span></div>
+                            totalSum = 1200;
+                            return <div className={`fw-bold ` + ((lead.sum - totalSum) ? "" : "text-success")}>
+                                {totalSum} из <span>{lead.sum}</span>
+                            </div>
                         })()}
                     </td>}{/*payments list*/}
                     {props.searchParams?.is_archive && <td>

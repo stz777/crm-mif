@@ -1,0 +1,6 @@
+[placeholder="Поиск"] {
+    width: 250px;
+    position: relative;
+    z-index: 2;
+    background: no-repeat;
+}

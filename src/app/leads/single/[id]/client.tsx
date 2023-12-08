@@ -155,7 +155,7 @@ export default function Client(props: {
                                         <div>{!payment.confirmed ? <div className="d-flex ms-2">
                                             <ConfirmPayment paymentId={payment.id} />
                                             <DeclinePayment paymentId={payment.id} />
-                                        </div> : <><FaCheck color="green" /></>}</div>
+                                        </div> : <><FaCheck  className="text-body-success" /></>}</div>
                                     </li>)}
 
                                 <li className="list-group-item">{(() => {
