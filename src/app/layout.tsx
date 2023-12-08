@@ -20,7 +20,7 @@ export default function RootLayout({
 
           <div
             className="p-3 position-sticky sticky-top d-flex flex-column justify-content-between"
-            style={{ width: "300px", height: "100vh", background: "var(--background-grey-light, #F4F5F5)" }}
+            style={{ width: "245px", height: "100vh", background: "var(--background-grey-light, #F4F5F5)" }}
           >
             <div>
               <div className='m-3'>
@@ -32,7 +32,8 @@ export default function RootLayout({
             </div>
             <div className="mt-3"><LogoutBTN /></div>
           </div>
-          <div style={{ minWidth: "400px" }} className='flex-grow-1'>{children}</div>
+          <div
+            className='flex-grow-1 py-4 px-4'>{children}</div>
         </div>
         <ToastContainer />
       </body>
