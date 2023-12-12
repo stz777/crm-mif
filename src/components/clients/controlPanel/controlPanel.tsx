@@ -4,12 +4,12 @@ import Image from "next/image"
 import './styles.css'; // Подключение вашего CSS файла
 import SearchIcon from "./search.svg"
 import { toast } from "react-toastify";
-import CreateTask from "./components/create-tast/createTask";
+import CreateLead from "./components/create-lead/Root";
 
 export default function ControlPanel() {
     return <div className="d-flex justify-content-between">
         <div className="d-flex">
-            <CreateTask />
+            <CreateLead />
             <div className="d-flex">
                 <input type="text" style={{ width: 250 }} className="form-control" placeholder="Поиск" />
                 <Image src={SearchIcon} alt="" style={{

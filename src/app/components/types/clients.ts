@@ -15,3 +15,5 @@ export interface ClientMetaInterface {
 export interface ClientsSearchInterface {
     phone?: string;
 }
+
+export type ClientWithMetaInterface = ClientInterface & { meta: ClientMetaInterface[] }
