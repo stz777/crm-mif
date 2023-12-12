@@ -10,7 +10,6 @@ export default function SearchClient() {
     const clients = useStore($clients);
 
     const [loading, setLoading] = useState(false);
-    const [noClients, setNoClients] = useState(false);
     return <div>
         <div className="text-secondary">
             Поиск клиента
@@ -30,12 +29,7 @@ export default function SearchClient() {
                                 if (newString.length >= 3) {
                                     setLoading(true);
                                     const clients = await getClientsHints(newString.replace(/[^0-9]/igm, ""));
-                                    if (clients.length) {
-                                        setClients(clients)
-                                        setNoClients(false);
-                                    } else {
-                                        setNoClients(true);
-                                    }
+                                    setClients(clients)
                                     setLoading(false);
                                 }
                                 return newString;
@@ -48,8 +42,8 @@ export default function SearchClient() {
                 {(() => {
 
                     if (loading) return <>Загрузка...</>
-
-                    if (clients?.length) return clients.map((client, i) => {
+                    if (clients === null) return null;
+                    if (clients.length) return clients.map((client, i) => {
                         const phone = client.meta.find(meta => meta.data_type === "phone")?.data;
                         return <div key={client.id} className={`py-2 ${(clients.length === (i - 1)) ? "border-bottom" : ""}`}>
                             <div className="d-flex justify-content-between align-items-end">
@@ -68,7 +62,7 @@ export default function SearchClient() {
                             </div>
                         </div>
                     })
-                    if (noClients) return <>
+                    if (clients.length === 0) return <>
                         <p>Клиент с таким телефоном не найден</p>
                         <button className="btn btn-primary">Создать</button>
                     </>
