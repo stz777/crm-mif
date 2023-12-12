@@ -3,10 +3,14 @@ import { useForm } from "react-hook-form";
 import { $clients, setClients } from "./store/clientsStore";
 import { setComponentState } from "./store/componentState";
 import { setSelectedClient } from "./store/selectedClient";
+import { useState } from "react";
 
 export default function SearchClient() {
     const { register, setValue } = useForm<any>();
     const clients = useStore($clients);
+
+    const [loading, setLoading] = useState(false);
+    const [noClients, setNoClients] = useState(false);
     return <div>
         <div className="text-secondary">
             Поиск клиента
@@ -20,10 +24,20 @@ export default function SearchClient() {
                     <div className="my-2"></div>
                     <input type="text" className="form-control"
                         {...register("phone", {
-                            onChange: (e) => {
+                            onChange: async (e) => {
                                 const newString = formatPhoneNumber(e.target.value);
                                 setValue("phone", newString);
-                                if (newString.length >= 3) getClientsHints(newString.replace(/[^0-9]/igm, ""));
+                                if (newString.length >= 3) {
+                                    setLoading(true);
+                                    const clients = await getClientsHints(newString.replace(/[^0-9]/igm, ""));
+                                    if (clients.length) {
+                                        setClients(clients)
+                                        setNoClients(false);
+                                    } else {
+                                        setNoClients(true);
+                                    }
+                                    setLoading(false);
+                                }
                                 return newString;
                             }
                         })}
@@ -31,8 +45,11 @@ export default function SearchClient() {
                 </div>
             </form>
             <div className="mt-3">
-                {!clients.length ? null :
-                    clients.map((client, i) => {
+                {(() => {
+
+                    if (loading) return <>Загрузка...</>
+
+                    if (clients?.length) return clients.map((client, i) => {
                         const phone = client.meta.find(meta => meta.data_type === "phone")?.data;
                         return <div key={client.id} className={`py-2 ${(clients.length === (i - 1)) ? "border-bottom" : ""}`}>
                             <div className="d-flex justify-content-between align-items-end">
@@ -46,20 +63,20 @@ export default function SearchClient() {
                                             setComponentState("client_selected");
                                             setSelectedClient(client);
                                         }}
-
                                     >Выбрать</button>
                                 </div>
                             </div>
                         </div>
                     })
-                }
+                    if (noClients) return <>
+                        <p>Клиент с таким телефоном не найден</p>
+                        <button className="btn btn-primary">Создать</button>
+                    </>
+                })()}
             </div>
-            {/* <pre>{JSON.stringify(clients, null, 2)}</pre> */}
         </div>
     </div>
 }
-
-
 
 function formatPhoneNumber(phone: string) {
     let newStr = "";
@@ -86,5 +103,5 @@ async function getClientsHints(phone: string) {
         body: JSON.stringify({ phone })
     })
         .then(x => x.json())
-        .then(x => setClients(x.clients))
+        .then(x => x.clients)
 }

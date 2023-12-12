@@ -14,7 +14,7 @@ export function reset() {
 
 $modalIsOpen.watch((isOpen) => {
     if (!isOpen) {
-        setClients([]);
+        setClients(null);
         setInsertedPhone("");
         setSelectedClient(null);
         setComponentState("default");
