@@ -64,13 +64,12 @@ export async function POST(req: Request) {
 
     for (let index = 0; index < telegram.length; index++) {
         const { telegram: tgUsername } = telegram[index];
-        await createClientMetaFn({
+        if (tgUsername) await createClientMetaFn({
             client: newClientId,
             data_type: "telegram",
             data: tgUsername
         })
     }
-
 
     let leadId = null;;
     let newRoleId = null;;
@@ -119,7 +118,6 @@ export async function POST(req: Request) {
 
                 const buffer = await value.arrayBuffer();
                 const filePath = `${String(process.env.IMAGES_FOLDER)}/${filename}`;
-                console.log('filePath', filePath);
 
                 fs.writeFileSync(filePath, Buffer.from(buffer));
             }

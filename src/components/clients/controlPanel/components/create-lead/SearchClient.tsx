@@ -4,12 +4,15 @@ import { $clients, setClients } from "./store/clientsStore";
 import { setComponentState } from "./store/componentState";
 import { setSelectedClient } from "./store/selectedClient";
 import { useState } from "react";
+import { setInsertedPhone } from "./store/insertedPhone";
+import { formatPhoneNumber } from "../tools/formatPhoneNumber";
 
 export default function SearchClient() {
-    const { register, setValue } = useForm<any>();
+    const { register, setValue, getValues } = useForm<any>();
     const clients = useStore($clients);
 
     const [loading, setLoading] = useState(false);
+
     return <div>
         <div className="text-secondary">
             Поиск клиента
@@ -40,7 +43,6 @@ export default function SearchClient() {
             </form>
             <div className="mt-3">
                 {(() => {
-
                     if (loading) return <>Загрузка...</>
                     if (clients === null) return null;
                     if (clients.length) return clients.map((client, i) => {
@@ -64,29 +66,19 @@ export default function SearchClient() {
                     })
                     if (clients.length === 0) return <>
                         <p>Клиент с таким телефоном не найден</p>
-                        <button className="btn btn-primary">Создать</button>
+                        <button className="btn btn-primary"
+                            onClick={() => {
+                                setInsertedPhone(
+                                    getValues("phone")
+                                )
+                                setComponentState("client_not_selected");
+                            }}
+                        >Создать</button>
                     </>
                 })()}
             </div>
         </div>
     </div>
-}
-
-function formatPhoneNumber(phone: string) {
-    let newStr = "";
-    const onlyNumbers = phone.replace(/[^0-9]/igm, "");
-
-    const first = onlyNumbers.slice(0, 3);
-    const second = onlyNumbers.slice(3, 6);
-    const third = onlyNumbers.slice(6, 8);
-    const fourth = onlyNumbers.slice(8, 10);
-
-    if (first.length) newStr += `${first}`;
-    if (second.length) newStr += ` ${second}`;
-    if (third.length) newStr += ` ${third}`;
-    if (fourth.length) newStr += ` ${fourth}`;
-
-    return newStr;
 }
 
 

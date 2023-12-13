@@ -7,6 +7,7 @@ import PlusCircleIcon from "./media/plus_circle.svg"
 import { $componentState } from "./store/componentState";
 import SearchClient from "./SearchClient";
 import { CreateLeadForm } from "./CreateLeadForm";
+import CreateClientForm from "./CreateClientForm";
 
 export default function Root() {
     const modalIsOpen = useStore($modalIsOpen);
@@ -20,7 +21,7 @@ export default function Root() {
             <>
                 <div className="shadow" style={{ position: "fixed", right: 0, top: 0, width: "560px", height: "100vh", background: "white", zIndex: 9999 }} >
 
-                    <div className="border-bottom px-4 py-4 h3" >
+                    <div className="border-bottom px-4 py-3 h3" >
                         {(() => {
                             if (["default", "client_selected"].includes(componentState)) return <>Создать заказ</>
                             if (["client_not_selected"].includes(componentState)) return <>Создать клиента</>
@@ -31,6 +32,7 @@ export default function Root() {
                         {(() => {
                             if (componentState === "default") return <><SearchClient /></>
                             if (componentState === "client_selected") return <><CreateLeadForm /></>
+                            if (componentState === "client_not_selected") return <><CreateClientForm /></>
                         })()}
                     </div>
 

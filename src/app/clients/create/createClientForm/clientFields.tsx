@@ -1,4 +1,5 @@
 import FieldWrapper from "@/app/ui/form/fieldWrapper";
+import { formatPhoneNumber } from "@/components/clients/controlPanel/components/tools/formatPhoneNumber";
 
 function ClientFields(props: {
     register: any,
@@ -11,49 +12,56 @@ function ClientFields(props: {
     telegramFields: any
     removeTelegram: any
     appendTelegram: any
+    setValue: any
 }) {
 
 
     return <>
         <FieldWrapper title="Телефоны"
             field={<>
-                {props.phonesFields.map(({ id }: any, i: number) => <div key={id} className="d-flex">
-                    <input className="form-control" placeholder="Введите номер телефона" {...props.register(`phones.${i}.phone`, { required: true })} autoComplete="off" />
-                    <div onClick={() => props.removePhone(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
-                </div>)}
-                <div onClick={() => props.appendPhone({ phone: "" })} className="btn btn-outline-dark btn-sm mt-2">Добавить</div>
+                {props.phonesFields.map(({ id }: any, i: number) =>
+                    <div key={id} className="d-flex mb-2">
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <div className="input-group-text">+7</div>
+                            </div>
+                            <div className="my-2"></div>
+                            <input type="text" className="form-control"
+                                {...props.register(`phones.${i}.phone`, {
+                                    onChange: (e: any) => {
+                                        const newString = formatPhoneNumber(e.target.value);
+                                        props.setValue(`phones.${i}.phone`, newString);
+                                    }
+                                })}
+                                placeholder="000 000 00 00" autoComplete="off" />
+                        </div>
+                        {i > 0 && <div>
+                            <div onClick={() => props.removePhone(i)} className="btn btn-outline-danger btn-sm ms-2">Удалить</div>
+                        </div>}
+                    </div>)}
+
+                <div onClick={() => props.appendPhone({ phone: "" })} className="border-bottom text-secondary d-inline pb-1" style={{ borderBottomStyle: "dashed", cursor: "pointer" }}>Добавить еще один номер</div>
+
             </>}
         />
-
-        <FieldWrapper title="Наименование клиента"
+        <FieldWrapper title="Наименование"
             field={<>
                 <input className="form-control" {...props.register("fio", { required: true })} autoComplete="off" />
             </>}
         />
-
         <FieldWrapper title="Email"
             field={<>
-                {props.emailFields.map(({ id }: any, i: any) => <div key={id} className="d-flex">
-                    <input className="form-control" placeholder="Введите email" {...props.register(`emails.${i}.email`, { required: true })} autoComplete="off" />
-                    <div onClick={() => props.removeEmail(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
-                </div>)}
-                <div onClick={() => props.appendEmail({ email: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                <input className="form-control" {...props.register(`emails.0.email`)} autoComplete="off" />
             </>}
         />
-
         <FieldWrapper title="Телеграм"
             field={<>
-                {props.telegramFields.map(({ id }: any, i: any) => <div key={id} className="d-flex">
-                    <input className="form-control" placeholder="Введите телеграм" {...props.register(`telegram.${i}.telegram`, { required: true })} autoComplete="off" />
-                    <div onClick={() => props.removeTelegram(i)} className="btn btn-outline-danger btn-sm">Удалить</div>
-                </div>)}
-                <div onClick={() => props.appendTelegram({ telegram: "" })} className="btn btn-outline-dark btn-sm">Добавить</div>
+                <input className="form-control" {...props.register(`telegram.0.email`)} autoComplete="off" />
             </>}
         />
-
         <FieldWrapper title="Адрес"
             field={<>
-                <textarea className="form-control" {...props.register("address", { required: true })} placeholder="Адрес" autoComplete="off" />
+                <textarea className="form-control" {...props.register("address", { required: true })} autoComplete="off" />
             </>}
         />
 

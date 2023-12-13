@@ -1,25 +1,16 @@
-"use client"
-
-import { useFieldArray, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import ClientFields from "./clientFields";
-import LeadFields from "./leadFields";
 import FieldWrapper from "@/app/ui/form/fieldWrapper";
+import LeadFields from "@/app/clients/create/createClientForm/leadFields";
+import ClientFields from "@/app/clients/create/createClientForm/clientFields";
+import { toast } from "react-toastify";
+import { useForm, useFieldArray } from "react-hook-form";
+import { useEffect } from "react";
+import { useStore } from "effector-react";
+import { $insertedPhone } from "./store/insertedPhone";
+import { reset } from "./store/modalState";
 
-type FormValues = {
-    fio: string
-    phones: { phone: string }[];
-    emails: { email: string }[];
-    telegram: { telegram: string }[];
-    address: string;
-    payment: number;
-    image: any;
-};
-
-export default function CreateClientForm(
-    props: { is_boss: boolean }
-) {
-    const { register, handleSubmit, control, reset, setValue } = useForm<FormValues>();
+export default function CreateClientForm() {
+    const insertedPhone = useStore($insertedPhone);
+    const { register, handleSubmit, control, reset, getValues, setValue } = useForm<any>();
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
@@ -32,12 +23,21 @@ export default function CreateClientForm(
         control,
         name: "telegram",
     });
+    useEffect(() => {
+        appendPhone({ phone: insertedPhone })
+    }, [insertedPhone])
     return (
         <form
-            onSubmit={handleSubmit(e => onSubmit(e, reset, props.is_boss))}
+            onSubmit={handleSubmit((e: any) => onSubmit(e, reset))}
             style={{ maxWidth: "1000px" }}
         >
-            <table className="table">
+            <div onClick={() => {
+                console.log(
+                    getValues("emails")
+                );
+
+            }}>view</div>
+            <table className="table-borderless">
                 <tbody>
                     <ClientFields
                         register={register}
@@ -52,21 +52,22 @@ export default function CreateClientForm(
                         appendTelegram={appendTelegram}
                         setValue={setValue}
                     />
-                    <tr><th><h4>Заказ</h4></th><td></td></tr>
+                    <tr><th><>Заказ</></th><td></td></tr>
                     <LeadFields
                         control={control}
                         register={register}
                     />
-                    <tr><th><h4>Оплата</h4></th><td></td></tr>
-                    <FieldWrapper title="Сумма"
+                    <FieldWrapper title="Оплачено"
                         field={<>
-                            <input className="form-control"  {...register("payment")} autoComplete="off" />
+                            <input className="form-control"  {...register("payment", { required: true })} autoComplete="off" />
                         </>}
                     />
-                    <FieldWrapper title="Изображение"
+                    <FieldWrapper title="Чек"
                         field={<>
-                            <input type="file" {...register("image"/* , { required: true } */)}
-                            />
+                            <input type="file" id="image" {...register("image")} className="d-none" />
+                            <label htmlFor="image">
+                                <div className="btn btn-dark">Выбрать файл</div>
+                            </label>
                         </>}
                     />
                 </tbody>
@@ -77,7 +78,7 @@ export default function CreateClientForm(
 }
 
 
-const onSubmit = (data: any, resetForm: any, is_boss: boolean) => {
+const onSubmit = (data: any, resetForm: any) => {
 
     const formdata = new FormData();
 
@@ -111,26 +112,35 @@ const onSubmit = (data: any, resetForm: any, is_boss: boolean) => {
         return;
     }
 
-    if (
-        (data.deadline || data.description || data.sum)
-        &&
-        !(data.deadline && data.description && data.sum)
-    ) {
-        toast.error('Чтобы создать заказ, нужно заполнить все поля');
+    if (!data?.payment) {
+        toast.error('Заполните поле "оплачено"');
+        return;
+    }
+    if (!data?.sum) {
+        toast.error('Заполните поле "сумма заказа"');
+        return;
+    }
+    if (!data?.description) {
+        toast.error('Заполните поле "описание"');
         return;
     }
 
-    if (
-        !is_boss
-        &&
-        ((data.payment || data.image.length)
-            &&
-            !(data.payment && data.image.length)
-        )
-    ) {
-        toast.error('Прикрепите изображение к платежу');
+    if (!data.deadline) {
+        toast.error('Заполните поле "дедлайн');
         return;
     }
+
+    // if (
+    //     !is_boss
+    //     &&
+    //     ((data.payment || data.image.length)
+    //         &&
+    //         !(data.payment && data.image.length)
+    //     )
+    // ) {
+    //     toast.error('Прикрепите изображение к платежу');
+    //     return;
+    // }
 
     fetch(
         "/api/clients/create",
@@ -149,7 +159,9 @@ const onSubmit = (data: any, resetForm: any, is_boss: boolean) => {
     ).then(data => {
         if (data.success) {
             toast.success("Клиент создан");
-            resetForm();
+            setTimeout(() => {
+                reset();
+            }, 300);
         } else {
             toast.error("Что-то пошло не так " + data.error);
         }
