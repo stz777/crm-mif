@@ -20,7 +20,7 @@ export default async function SideMenu() {
 }
 
 const menuItems: { title: string, icon: any, link: string, }[] = [
-    { title: "Заказы", icon: images.leads, link: "/leads" },
+    { title: "Заказы", icon: images.leads, link: "/" },
     { title: "Задачи", icon: images.tasks, link: "/tasks" },
     { title: "Расходы", icon: images.expenses, link: "/expenses" },
     { title: "Склад", icon: images.stock, link: "/stock" },
