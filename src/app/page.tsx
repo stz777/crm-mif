@@ -14,7 +14,7 @@ export default async function Home(props: any) {
   if (!user) return redirect("/");
   const { searchParams } = props;
   const leads = await getLeads(searchParams);
-  if (!leads?.length) return <>нет заказов</>
+  // if (!leads?.length) return <>нет заказов</>
 
   return <>
     <PageTmp text="Заказы">

@@ -1,12 +1,16 @@
 "use client"
 import Image from "next/image"
+import { useRouter } from 'next/navigation';
 
 import './styles.css'; // Подключение вашего CSS файла
 import SearchIcon from "./search.svg"
 import { toast } from "react-toastify";
 import CreateLead from "./components/create-lead/Root";
+import querystring from "querystring";
 
 export default function ControlPanel() {
+    const router = useRouter();
+
     return <div className="d-flex justify-content-between">
         <div className="d-flex">
             <CreateLead />
@@ -17,6 +21,26 @@ export default function ControlPanel() {
                 }} className="me-2" width={15} height={15} />
             </div>
         </div>
-        <button onClick={() => toast.success("Go GO GO!")} className="btn btn-outline-dark float-left">Показать архив</button>
+        {(() => {
+            try {
+                const { origin, pathname, search } = window.location;
+                const queries = querystring.decode(search.replace("?", ""));//.split("&").map(string=>string.split())
+                let text = "";
+                if (queries.is_archive) {
+                    text = "скрыть архив";
+                    delete queries.is_archive;
+                } else {
+                    text = "показать архив";
+                    queries.is_archive = "true";
+                }
+                const qs = querystring.encode(queries);
+                const newLink = `${origin}/${pathname}?${qs}`;
+                return <button onClick={() => {
+                    window.open(newLink, "_self");
+                }} className="btn btn-outline-dark float-left">{text}</button>
+            } catch (error) {
+
+            }
+        })()}
     </div>
 }
