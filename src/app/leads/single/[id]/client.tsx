@@ -132,7 +132,8 @@ export default function Client(props: {
                                                                 const phoneItem = clientMeta.find(item => item.data_type === "phone");
                                                                 if (!phoneItem) return <>телефон не указан</>
                                                                 return <GenerateWALink phoneNumber={phoneItem.data} />;
-                                                            })()}</td></tr>
+                                                            })()}
+                                                        </td></tr>
                                                 </tbody>
                                             </table>
                                         </td>
@@ -155,7 +156,7 @@ export default function Client(props: {
                                         <div>{!payment.confirmed ? <div className="d-flex ms-2">
                                             <ConfirmPayment paymentId={payment.id} />
                                             <DeclinePayment paymentId={payment.id} />
-                                        </div> : <><FaCheck  className="text-body-success" /></>}</div>
+                                        </div> : <><FaCheck className="text-body-success" /></>}</div>
                                     </li>)}
 
                                 <li className="list-group-item">{(() => {

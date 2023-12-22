@@ -4,8 +4,11 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Comment from "./Comment";
-import { GenerateWALink } from "../single/[id]/generateWALink";
 import fetchLeads from "./fetchLeads";
+import TableHeader from "./TableHeader";
+import Urgency from "./Urgency";
+import Phone from "./Phone";
+import TotalSum from "./TotalSum";
 
 export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean, searchParams: any }) {
     const [leads, setLeads] = useState(props.leads)
@@ -25,79 +28,32 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
 
     return <>
         {leads ? <table className="table table-bordered">
-            <thead className="sticky-top">
-                <tr className="bordered">
-                    <th>ID</th>
-                    <th>Описание</th>
-                    <th>Статус</th>
-                    <th>Клиент</th>
-                    <th>Создан</th>
-                    <th>Дедлайн</th>
-                    {/* <th>Срочность</th> */}
-                    {props.is_manager && <th>Оплата, ₽</th>}
-                    {props.searchParams?.is_archive && <th>выполнен</th>}
-                </tr>
-            </thead>
+            <TableHeader is_archive={!!props.searchParams?.is_archive} />
             <tbody>
                 {leads.map(lead => <tr key={lead.id} onClick={() => {
                     toast('вывод окна деталей заказа');
                 }}>
-                    <td>
-                        {lead.id}
-                    </td> {/*lead id*/}
-                    <td>{lead.description}</td>{/*description*/}
-                    <td>
-                        <div onClick={e => e.stopPropagation()}>
-                            <Comment currentText={lead.comment} lead_id={lead.id} />
-                        </div>
-                    </td>{/*description*/}
+                    <td>{lead.id}</td>
+                    <td>{lead.description}</td>
+                    <td><div onClick={e => e.stopPropagation()}><Comment currentText={lead.comment} lead_id={lead.id} /></div></td>
                     <td>
                         <div>{lead.clientData.full_name}</div>
-                        <div>{(() => {
-                            const phone = lead.clientData.meta.find(item => item.data_type === "phone")?.data;
-                            return <div onClick={e => e.stopPropagation()} className="d-inline">
-                                <GenerateWALink phoneNumber={String(phone)} />
-                            </div>
-                        })()}</div>
+                        <div><Phone phone={String(lead.clientData.meta.find(item => item.data_type === "phone")?.data)} /></div>
                     </td>
-                    <td>
-                        {dayjs(lead.created_date).format("DD.MM.YYYY")}
-                    </td>{/*created_date*/}
+                    <td>{dayjs(lead.created_date).format("DD.MM.YYYY")}</td>
                     <td>
                         {dayjs(lead.deadline).format("DD.MM.YYYY")}
-                        <div>
-                            {(() => {
-                                const date1 = dayjs(lead.deadline).set("hour", 0).set("minute", 0).add(1, "hours");
-                                const date2 = dayjs().set("hour", 0).set("minute", 0);
-                                const diffInDays = date1.diff(date2, 'day');
-                                const limit = 1;
-
-                                if (lead.done_at) return <span className="badge text-bg-success">выполнено</span>
-                                if (diffInDays <= limit) return <span className="badge text-bg-danger">срочно</span>
-                                if (diffInDays > limit) return <span className="badge text-bg-warning">в работе</span>
-                                return <>{diffInDays}</>
-                            })()}
-                        </div>
-                    </td>{/*deadline*/}
+                        <div><Urgency deadline={lead.deadline} done_at={lead.done_at} /></div>
+                    </td>
                     {props.is_manager && <td>
-                        {(() => {
-                            let totalSum = 0;
-                            if (lead.payments?.length) {
-                                totalSum = lead.payments
-                                    .map(({ sum }) => sum)
-                                    .reduce((a, b) => a + b);
-                            }
-                            totalSum = 1200;
-                            return <div className={`fw-bold ` + ((lead.sum - totalSum) ? "" : "text-success")}>
-                                {totalSum} из <span>{lead.sum}</span>
-                            </div>
-                        })()}
-                    </td>}{/*payments list*/}
+                        <TotalSum payments={lead.payments || []} leadSum={lead.sum} />
+                    </td>}
                     {props.searchParams?.is_archive && <td>
                         <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "нет"}</span>
-                    </td>}{/*дата выполнения*/}
+                    </td>}
                 </tr>)}
             </tbody>
         </table> : <>нет заказов...</>}
     </>
 }
+

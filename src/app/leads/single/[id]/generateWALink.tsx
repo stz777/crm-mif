@@ -5,6 +5,6 @@ export function GenerateWALink(props: { phoneNumber: string }) {
     } else if (толькоЦифры.length === 10) {
         return <a href={`https://wa.me/${'7' + толькоЦифры.slice(1)}`}> {props.phoneNumber} </a>;
     } else {
-        return <>Некорректный номер телефона {props.phoneNumber}</>;
+        return <>Некорректный номер телефона {props.phoneNumber} {JSON.stringify(props.phoneNumber)}</>;
     }
 }
