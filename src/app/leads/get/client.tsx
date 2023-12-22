@@ -27,37 +27,41 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
         {leads ? <table className="table table-bordered">
             <thead className="sticky-top">
                 <tr className="bordered">
-                    <th >ID</th>
-                    <th >Описание</th>
-                    <th >Статус</th>
-                    <th >Клиент</th>
-                    <th >Создан</th>
-                    <th >Дедлайн</th>
+                    <th>ID</th>
+                    <th>Описание</th>
+                    <th>Статус</th>
+                    <th>Клиент</th>
+                    <th>Создан</th>
+                    <th>Дедлайн</th>
                     {/* <th>Срочность</th> */}
                     {props.is_manager && <th>Оплата, ₽</th>}
                     {props.searchParams?.is_archive && <th>выполнен</th>}
                 </tr>
             </thead>
             <tbody>
-                {leads.map(lead => <tr key={lead.id}>
+                {leads.map(lead => <tr key={lead.id} onClick={() => {
+                    toast('вывод окна деталей заказа');
+                }}>
                     <td>
                         {lead.id}
-                        {/* <Link href={`/leads/single/${lead.id}`} className="text-nowrap"></Link> */}
                     </td> {/*lead id*/}
                     <td>{lead.description}</td>{/*description*/}
                     <td>
-                        <Comment currentText={lead.comment} lead_id={lead.id} />
+                        <div onClick={e => e.stopPropagation()}>
+                            <Comment currentText={lead.comment} lead_id={lead.id} />
+                        </div>
                     </td>{/*description*/}
                     <td>
                         <div>{lead.clientData.full_name}</div>
                         <div>{(() => {
                             const phone = lead.clientData.meta.find(item => item.data_type === "phone")?.data;
-                            return <GenerateWALink phoneNumber={String(phone)} />
+                            return <div onClick={e => e.stopPropagation()} className="d-inline">
+                                <GenerateWALink phoneNumber={String(phone)} />
+                            </div>
                         })()}</div>
                     </td>
                     <td>
                         {dayjs(lead.created_date).format("DD.MM.YYYY")}
-
                     </td>{/*created_date*/}
                     <td>
                         {dayjs(lead.deadline).format("DD.MM.YYYY")}
