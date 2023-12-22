@@ -1,9 +1,9 @@
 "use client"
-import { ReactElement, ReactNode, ReactPortal, PromiseLikeOfReactNode } from "react";
+import { ReactElement, ReactNode, ReactPortal, PromiseLikeOfReactNode, JSXElementConstructor } from "react";
 export default function SideModal(props: {
-    isOpen: boolean,
-    closeHandle: () => void,
-    children: ReactElement<any> | Iterable<ReactNode> | ReactPortal | PromiseLikeOfReactNode | null | undefined;
+    isOpen: boolean;
+    children: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | PromiseLikeOfReactNode | null | undefined;
+    closeHandle: () => void;
 }) {
     if (!props.isOpen) return null;
     return <>
