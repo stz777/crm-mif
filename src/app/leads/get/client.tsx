@@ -2,15 +2,16 @@
 import { LeadInterface } from "@/app/components/types/lead";
 import dayjs from 'dayjs'
 import { JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import Comment from "./Comment";
 import fetchLeads from "./fetchLeads";
 import TableHeader from "./TableHeader";
 import Urgency from "./Urgency";
 import Phone from "./Phone";
-import TotalSum from "./TotalSum";
+import SumComparison from "./SumComparison";
 import SideModal from "@/components/SideModal/SideModal";
 import { useForm } from "react-hook-form";
+import { FaRubleSign } from "react-icons/fa";
+import paymentsReducer from "./paymentsReducer";
 
 export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean, searchParams: any }) {
     const [leads, setLeads] = useState(props.leads);
@@ -49,7 +50,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
                                 <div><Urgency deadline={lead.deadline} done_at={lead.done_at} /></div>
                             </td>
                             {props.is_manager && <td>
-                                <TotalSum payments={lead.payments || []} leadSum={lead.sum} />
+                                <SumComparison payments={lead.payments || []} leadSum={lead.sum} />
                             </td>}
                             {props.searchParams?.is_archive && <td>
                                 <span className="text-nowrap">{lead.done_at ? dayjs(lead.done_at).format("DD.MM.YYYY HH:mm") : "нет"}</span>
@@ -105,10 +106,23 @@ function LeadDetails(props: { lead: LeadInterface }) {
                     </div>
                 </Wrapper>
                 <Wrapper title="Ответственные">
-                    <></>
+                    {props.lead.employees.map((employee, i) =>
+                        <div key={employee.id} className={`${i ? "mb-2" : ""}`}>{employee.username}</div>
+                    )}
                 </Wrapper>
+                <div className="border-bottom my-3"></div>
+                <h4>Клиент</h4>
+                <Wrapper title="Имя">
+                    {props.lead.clientData.full_name}
+                </Wrapper>
+                <Wrapper title="WhatsApp">
+                    <Phone phone={String(props.lead.clientData.meta.find(item => item.data_type === "phone")?.data)} />
+                </Wrapper>
+                <div className="border-bottom my-3"></div>
+                <h4>Оплата</h4>
+                <Wrapper title="Сумма заказа"><strong>{props.lead.sum}</strong> <FaRubleSign /></Wrapper>
+                <Wrapper title="Оплачено"><strong>{paymentsReducer(props.lead.payments || [])}</strong> <FaRubleSign /></Wrapper>
             </div>
-            {/* <pre>{JSON.stringify(props, null, 2)}</pre> */}
         </div>
     </>
 }
@@ -129,7 +143,7 @@ function Wrapper(props: {
     children: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | PromiseLikeOfReactNode | null | undefined;
 }) {
     return <>
-        <div className="d-flex mb-2">
+        <div className="d-flex mb-3">
             <div style={{ width: 220 }}>{props.title}</div>
             <div>{props.children}</div>
         </div>

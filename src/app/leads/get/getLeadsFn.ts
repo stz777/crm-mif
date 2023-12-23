@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import getClientByLeadId from "@/app/db/leads/getLeadFullData/getClientByLeadId";
 import { getPaymentsByLeadId } from "./getPaymentsByLeadId";
 import { getRoleByLeadId } from "./getRoleByLeadId";
+import getEmployeesByLeadId from "@/app/db/leads/getLeadFullData/getEmployeesByLeadId";
 
 interface SearchParametersInterface {
     id?: number
@@ -78,6 +79,7 @@ export async function getLeads(
                 payments: await getPaymentsByLeadId(leadId),
                 expensesPerLead: await getExpensesByLeadId(leadId),
                 clientData: await getClientByLeadId(leadId),
+                employees: await getEmployeesByLeadId(leadId)
             })
         }
     }
