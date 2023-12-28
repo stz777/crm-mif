@@ -80,7 +80,6 @@ const onSubmit = (data: any, resetForm: any, is_boss: any) => {
         }
 
     }
-    formdata
     fetch(
         "/api/payments/create",
         {
