@@ -1,22 +1,20 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
-import "./styles.css"; // Подключение вашего CSS файла
+import "./styles.css";
 import SearchIcon from "./search.svg";
-// import { toast } from "react-toastify";
 import CreateLead from "./components/create-lead/Root";
 import querystring from "querystring";
+import { useState } from "react";
 
 export default function ControlPanel(props: { searchParams: any }) {
   return (
     <>
-      <pre>{JSON.stringify(props.searchParams, null)}</pre>
       <div className="d-flex justify-content-between">
         <div className="d-flex">
           <CreateLead />
           <div className="d-flex">
-            <Search />
+            <Search searchParams={props.searchParams} />
             <Image
               src={SearchIcon}
               alt=""
@@ -30,50 +28,55 @@ export default function ControlPanel(props: { searchParams: any }) {
             />
           </div>
         </div>
+
         {(() => {
-          try {
-            const { origin, pathname, search } = window.location;
-            const queries = querystring.decode(search.replace("?", "")); //.split("&").map(string=>string.split())
-            let text = "";
-            if (queries.is_archive) {
-              text = "скрыть архив";
-              delete queries.is_archive;
-            } else {
-              text = "показать архив";
-              queries.is_archive = "true";
-            }
-            const qs = querystring.encode(queries);
-            const newLink = `${origin}/${pathname}?${qs}`;
-            return (
-              <button
-                onClick={() => {
-                  window.open(newLink, "_self");
-                }}
-                className="btn btn-outline-dark float-left"
-              >
-                {text}
-              </button>
-            );
-          } catch (error) {}
+          const { searchParams } = props;
+          return (
+            <button
+              onClick={() => {
+                if (searchParams.is_archive) {
+                  delete searchParams.is_archive;
+                } else {
+                  searchParams.is_archive = "true";
+                }
+                const { pathname, origin } = window.location;
+                const qs = querystring.encode(searchParams);
+                const linkParts = [pathname, `?${qs}`];
+                const link = `${origin}/${pathname}?${qs}`;
+                window.location.href = link
+              }}
+              className="btn btn-outline-dark float-left"
+            >
+              {searchParams.is_archive ? "скрыть" : "показать"} архив
+            </button>
+          );
         })()}
       </div>
     </>
   );
 }
 
-function Search() {
+function Search(props: { searchParams: { is_archive?: "true", keyword: string }; }) {
   const router = useRouter();
-
+  const [value, setValue] = useState(props.searchParams.keyword || "");
   return (
-    <input
-      type="text"
-      style={{ width: 250 }}
-      className="form-control"
-      placeholder="Поиск"
-      onChange={(e) => {
-        // console.log("e", e.target.value);
-        router.push(`/?keyword=${e.target.value}`);
-      }}
-    />
+    <>
+      <input
+        type="text"
+        style={{ width: 250 }}
+        className="form-control"
+        placeholder="Поиск"
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value);
+          const params: { keyword?: string, is_archive?: "true" } = {};
+          if (e.target.value.length) params.keyword = e.target.value;
+          if (props.searchParams.is_archive === "true") params.is_archive = "true";
+          const fromEntriedParams = Object.entries(params).map(x => x.join("=")).join("&");
+          const qs = fromEntriedParams.length ? `?${fromEntriedParams}` : "";
+          router.push(`/${qs}`);
+        }}
+      />
+    </>
   );
 }

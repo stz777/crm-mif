@@ -25,15 +25,7 @@ export default async function getEmployeesByLeadId(leadId: number): Promise<Empl
                     resolve([])
                 }
                 if (!result.length) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#md8dndkdmd3",
-                                error: "Запросили сотрудника, которого нет",
-                                values: { leadId }
-                            }, null, 2),
-                        "5050441344"
-                    )
+                    // console.error("Err #md8dndkdmd3 Запросили сотрудника, которого нет")
                     resolve([])
                 } else {
                     resolve(result)
