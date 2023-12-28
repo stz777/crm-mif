@@ -6,6 +6,6 @@ export default async function getCheckByPaymentId(
 ): Promise<PaymentCheckInterface | null> {
   return pool
     .promise()
-    .query("SELECT * FROM payment_checks WHERE id = ?", [payment])
+    .query("SELECT * FROM payment_checks WHERE payment_id = ?", [payment])
     .then(([res]: any) => res.pop() || null);
 }

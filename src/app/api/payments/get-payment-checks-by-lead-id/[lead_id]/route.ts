@@ -28,7 +28,7 @@ export async function GET(
 
   return NextResponse.json({
     success: true,
-    payments,
-    pymentsWithEmployeeAndCheck,
+    payments: pymentsWithEmployeeAndCheck,
+    path: process.env.IMAGES_FOLDER,
   });
 }

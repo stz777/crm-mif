@@ -57,7 +57,7 @@ export async function POST(
         `${process.env.SERVER}`
       );
 
-      await saveImageToDB(Number(lead_id), filename);
+      await saveImageToDB(Number(paymentId), filename);
 
       const buffer = await value.arrayBuffer();
       const filePath = `${String(process.env.IMAGES_FOLDER)}/${filename}`;

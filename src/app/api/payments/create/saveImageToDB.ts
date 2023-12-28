@@ -1,11 +1,11 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 
-export default async function saveImageToDB(lead_id: number, file_name: string) {
+export default async function saveImageToDB(payment_id: number, file_name: string) {
     return new Promise((resolve) => {
       pool.query(
-        "INSERT INTO payment_checks (lead_id, file_name) VALUES(?,?)",
-        [lead_id, file_name],
+        "INSERT INTO payment_checks (payment_id, file_name) VALUES(?,?)",
+        [payment_id, file_name],
         function (err, res: any) {
           if (err) {
             sendMessageToTg(
@@ -14,7 +14,7 @@ export default async function saveImageToDB(lead_id: number, file_name: string) 
                   errorNo: "#md8ch3nmkx9",
                   error: err,
                   values: {
-                    lead_id,
+                    payment_id,
                     file_name,
                   },
                 },
@@ -33,7 +33,7 @@ export default async function saveImageToDB(lead_id: number, file_name: string) 
                   errorNo: "#dn2nnfls",
                   error: "Хуйня какая-то произошла",
                   values: {
-                    lead_id,
+                    payment_id,
                     file_name,
                   },
                 },

@@ -1,6 +1,6 @@
 import { LeadInterface } from "@/app/components/types/lead";
 import dayjs from "dayjs";
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLikeOfReactNode } from "react";
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLikeOfReactNode, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaRubleSign } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -8,7 +8,7 @@ import Phone from "./Phone";
 import Urgency from "./Urgency";
 import paymentsReducer from "./paymentsReducer";
 import Comment from "./Comment";
-
+import { PaymentWithEmployeeAndCheck } from "@/types/payments/PaymentWithEmployeeAndCheck";
 
 export default function LeadDetails(props: { lead: LeadInterface }) {
     return <>
@@ -53,12 +53,43 @@ export default function LeadDetails(props: { lead: LeadInterface }) {
                 <PaymentForm leadId={props.lead.id} />
                 <div className="border-bottom my-3"></div>
                 <h4>Чеки</h4>
-                {props.lead.payments?.map(payment => <Wrapper title={String(payment.done_by)} key={payment.id}>
-                    {payment.sum}
-                </Wrapper>)}
+                <PaymentChecksViewer lead_id={props.lead.id} />
             </div>
         </div>
     </>
+}
+
+
+function PaymentChecksViewer(props: { lead_id: number }) {
+    const [payments, setPayments] = useState<PaymentWithEmployeeAndCheck[]>([]);
+    const [path, setPath] = useState("");
+    useEffect(() => {
+        (async () => {
+            const { path, payments } = await getPayments(props.lead_id)
+            setPayments(payments);
+            setPath(path);
+        })()
+    }, [])
+    return <>
+        <table className="table">
+            <tbody>
+                {payments.map(payment => <tr key={payment.id}>
+                    <td>{payment.id}</td>
+                    <td>{payment.employee.username}</td>
+                    <td>{payment.sum}</td>
+                    <td className="text-end">{(payment.check?.file_name) ?
+                        <a target="blank" href={"/images//" + payment.check.file_name}>чек</a>
+                        : "нет чека"}</td>
+                </tr>)}
+            </tbody>
+        </table>
+    </>
+}
+
+async function getPayments(lead_id: number): Promise<{ success: boolean, payments: PaymentWithEmployeeAndCheck[], path: string }> {
+    return fetch(`/api/payments/get-payment-checks-by-lead-id/${lead_id}`)
+        .then(x => x.json())
+        .then((x: any) => x)
 }
 
 
@@ -81,9 +112,6 @@ function PaymentForm(props: { leadId: number }) {
         </form>
     </>
 }
-
-
-
 
 const onSubmit = (data: any, resetForm: any) => {
     const formdata = new FormData();
