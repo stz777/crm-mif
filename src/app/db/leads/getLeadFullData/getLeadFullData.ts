@@ -1,10 +1,10 @@
 import getClentMeta from "@/app/db/clients/getClentMeta";
-import { getPaymentsByLeadId } from "@/app/db/payments_by_lead/getPaymentsByLeadId";
 import getExpensesByLeadId from "./getExpensesByLeadId";
 import getClientByLeadId from "./getClientByLeadId";
 import getEmployeesByLeadId from "./getEmployeesByLeadId";
 import getLead from "./getLead";
 import getMessagesByLeadId from "./getMessagesByLeadId";
+import { getPaymentsByLeadId } from "@/app/leads/get/getPaymentsByLeadId";
 
 export default async function getLeadFullData(lead_id: number) {
 
