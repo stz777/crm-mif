@@ -31,12 +31,6 @@ export default function CreateClientForm() {
             onSubmit={handleSubmit((e: any) => onSubmit(e, reset))}
             style={{ maxWidth: "1000px" }}
         >
-            <div onClick={() => {
-                console.log(
-                    getValues("emails")
-                );
-
-            }}>view</div>
             <table className="table-borderless">
                 <tbody>
                     <ClientFields
