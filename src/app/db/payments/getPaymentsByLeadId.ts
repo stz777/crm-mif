@@ -5,7 +5,7 @@ import { pool } from "../connect";
 export async function getPaymentsByLeadId(leadId: number): Promise<PaymentInterface[]> {
     return await new Promise(r => {
         pool.query(
-            `SELECT * FROM payments WHERE lead_id = ${leadId}`,
+            `SELECT * FROM payments WHERE lead_id = ${leadId} ORDER BY id DESC`,
             function (err: any, res: PaymentInterface[]) {
                 if (err) {
                     sendMessageToTg(

@@ -37,7 +37,9 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
             <LeadTr lead={lead} key={lead.id}>
               <td>{lead.id}</td>
               <td>{lead.description}</td>
-              <td><div onClick={e => e.stopPropagation()}><Comment currentText={lead.comment} lead_id={lead.id} /></div></td>
+              <td onClick={e => e.stopPropagation()}><div>
+                <Comment currentText={lead.comment} lead_id={lead.id} />
+              </div></td>
               <td>
                 <div>{lead.clientData.full_name}</div>
                 <div><Phone phone={String(lead.clientData.meta.find(item => item.data_type === "phone")?.data)} /></div>

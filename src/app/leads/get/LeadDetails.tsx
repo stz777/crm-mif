@@ -2,7 +2,7 @@ import { LeadInterface } from "@/app/components/types/lead";
 import dayjs from "dayjs";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLikeOfReactNode, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { FaRubleSign } from "react-icons/fa";
+import { FaRubleSign, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Phone from "./Phone";
 import Urgency from "./Urgency";
@@ -64,17 +64,24 @@ function PaymentChecksViewer(props: { lead_id: number }) {
     const [payments, setPayments] = useState<PaymentWithEmployeeAndCheck[]>([]);
     const [path, setPath] = useState("");
     useEffect(() => {
-        (async () => {
+        (async function req() {
+            console.log('updated');
+
             const { path, payments } = await getPayments(props.lead_id)
             setPayments(payments);
             setPath(path);
+            await new Promise(r => {
+                setTimeout(async () => {
+                    req();
+                    r(true);
+                }, 3000);
+            })
         })()
     }, [])
     return <>
         <table className="table">
             <tbody>
                 {payments.map(payment => <tr key={payment.id}>
-                    <td>{payment.id}</td>
                     <td>{payment.employee.username}</td>
                     <td>{payment.sum}</td>
                     <td className="text-end">{(payment.check?.file_name) ?
@@ -94,23 +101,40 @@ async function getPayments(lead_id: number): Promise<{ success: boolean, payment
 
 
 function PaymentForm(props: { leadId: number }) {
-    const { register, handleSubmit, reset }: any = useForm<any>({
+    const { register, handleSubmit, reset, watch } = useForm<any>({
         defaultValues: {
             lead_id: props.leadId
         }
     })
-    return <>
+    const inputValue: any = watch('image');
+    // console.log('inputValue', inputValue?.length && inputValue[0]);
+
+    return <div>
         <form onSubmit={handleSubmit((e: any) => onSubmit(e, reset))} className="mb-2">
-            <Wrapper title="Новая оплата">
-                <input {...register("sum", { required: true })} className="form-control" />
-            </Wrapper>
-            <Wrapper title="Чек">
-                <input type="file" id="image" {...register("image")} className="d-none" />
-                <label htmlFor="image" className="btn btn-secondary">Выберите файл</label>
-            </Wrapper>
+            <div>
+                <Wrapper title="Новая оплата">
+                    <input {...register("sum", { required: true })} className="form-control" />
+                </Wrapper>
+                <Wrapper title="Чек">
+                    <div>
+                        {(inputValue?.length)
+                            ? <>
+                                <div className="mb-2">Прикреплен файл: {inputValue[0].name}</div>
+                                <div onClick={() => {
+                                    reset()
+                                }} className="btn btn-sm btn-outline-danger">Отмена <FaTrash /></div>
+                            </>
+                            : <>
+                                <input type="file" id="image" {...register("image")} className="d-none" />
+                                <label htmlFor="image" className="btn btn-secondary">Выберите файл</label>
+                            </>}
+                    </div>
+                </Wrapper>
+
+            </div>
             <button className="btn btn-primary">Провести платеж</button>
         </form>
-    </>
+    </div>
 }
 
 const onSubmit = (data: any, resetForm: any) => {
