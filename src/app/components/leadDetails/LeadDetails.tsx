@@ -52,7 +52,7 @@ export default function LeadDetails(props: { lead: LeadInterface }) {
                 <h4>Оплата</h4>
                 <Wrapper title="Сумма заказа"><strong>{props.lead.sum}</strong> <FaRubleSign /></Wrapper>
                 <Wrapper title="Оплачено"><strong>{paymentsReducer(props.lead.payments || [])}</strong> <FaRubleSign /></Wrapper>
-                <PaymentForm leadId={props.lead.id} />
+                {!props.lead.done_at && <PaymentForm leadId={props.lead.id} />}
                 <div className="border-bottom my-3"></div>
                 <h4>Чеки</h4>
                 <PaymentChecksViewer lead_id={props.lead.id} />
