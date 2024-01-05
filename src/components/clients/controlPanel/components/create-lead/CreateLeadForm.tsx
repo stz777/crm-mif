@@ -15,7 +15,6 @@ export function CreateLeadForm(
     const client = useStore($selectedClient);
     const [viewPayment, setViewPayment] = useState(false);
 
-    
     const { register, handleSubmit, control } = useForm<any>({
         defaultValues: {
             title: "",
@@ -24,7 +23,7 @@ export function CreateLeadForm(
     });
 
     if (client === null) return <>Ошибка #b94n5</>
-    
+
     const { meta } = client;
 
     const phone = meta.find(item => item.data_type === "phone")?.data;
@@ -54,7 +53,7 @@ export function CreateLeadForm(
                     /></td></tr>
                     <tr><td>Сумма заказа</td><td><input {...register("sum", { required: true })} autoComplete="off" className="form-control" /></td></tr>
 
-                    <tr><td><strong onClick={() => setViewPayment(!viewPayment)}>Показать поля для оплаты</strong></td></tr>
+                    <tr><td><strong className="btn btn-sm btn-secondary" onClick={() => setViewPayment(!viewPayment)}>{viewPayment ? "Скрыть" : "Показать"} поля для оплаты</strong></td></tr>
 
                     {viewPayment && <>
                         <tr><td>Оплачено</td><td><input  {...register("payment", { required: true })} autoComplete="off" className="form-control" /></td></tr>
@@ -68,7 +67,7 @@ export function CreateLeadForm(
 
                 </tbody>
             </table>
-            <button className="btn btn-sm btn-outline-dark">Сохранить</button>
+            <button className="btn btn-sm btn-primary">Создать</button>
         </form>
     </div>
 }
