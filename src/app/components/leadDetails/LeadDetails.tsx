@@ -4,16 +4,16 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLik
 import { useForm } from "react-hook-form";
 import { FaRubleSign, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
-import Phone from "./Phone";
-import Urgency from "./Urgency";
-import paymentsReducer from "./paymentsReducer";
-import Comment from "./Comment";
 import { PaymentWithEmployeeAndCheck } from "@/types/payments/PaymentWithEmployeeAndCheck";
+import Comment from "@/app/leads/get/Comment";
+import Phone from "@/app/leads/get/Phone";
+import Urgency from "@/app/leads/get/Urgency";
+import paymentsReducer from "@/app/leads/get/paymentsReducer";
 
 export default function LeadDetails(props: { lead: LeadInterface }) {
     return <>
         <div className="d-flex align-items-center border-bottom px-4 py-3 ">
-            <div className="h3" >Детали заказа</div>
+            <div className="h3">Детали заказа</div>
             <span className="ms-3 text-secondary" style={{ fontSize: "0.8em" }}>ID: {props.lead.id}</span>
         </div>
         <div className="px-4">

@@ -9,7 +9,7 @@ import Urgency from "./Urgency";
 import Phone from "./Phone";
 import SumComparison from "./SumComparison";
 import SideModal from "@/components/SideModal/SideModal";
-import LeadDetails from "./LeadDetails";
+import LeadDetails from "../../components/leadDetails/LeadDetails";
 
 export default function Client(props: { leads: LeadInterface[], is_manager: boolean, is_boss: boolean, searchParams: any }) {
   const [leads, setLeads] = useState(props.leads);
