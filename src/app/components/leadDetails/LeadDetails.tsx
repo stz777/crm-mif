@@ -16,7 +16,7 @@ export default function LeadDetails(props: { lead: LeadInterface }) {
     return <>
         <div className="d-flex align-items-center border-bottom px-4 py-3 ">
             <div className="h3">Детали заказа</div>
-            <span className="ms-3 text-secondary" style={{ fontSize: "0.8em" }}>ID: {props.lead.id}</span>
+            <span className="ms-3 text-secondary" style={{ fontSize: "0.9em" }}>ID: {props.lead.id}</span>
         </div>
         <div className="px-4">
             <div>
