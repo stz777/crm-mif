@@ -87,7 +87,6 @@ export default function Client(props: {
                                                 </tr>)}
                                             </tbody>
                                         </table>}
-
                                     </tr>
                                     <tr>
                                         <td>настроить права</td>
@@ -96,7 +95,6 @@ export default function Client(props: {
                                             is_boss={props.is_boss}
                                         /></td>
                                     </tr>
-
                                     <tr>
                                         <td>
                                             срочность
