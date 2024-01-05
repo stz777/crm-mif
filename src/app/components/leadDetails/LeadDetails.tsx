@@ -8,6 +8,9 @@ import paymentsReducer from "@/app/leads/get/paymentsReducer";
 import PaymentChecksViewer from "./components/PaymentChecksViewer";
 import PaymentForm from "./components/PaymentForm";
 import Wrapper from "./components/Wrapper";
+import { Employee } from "../types/employee";
+import { useState } from "react";
+import { RightsManagement } from "./components/righsManagement/rightsManagement";
 
 export default function LeadDetails(props: { lead: LeadInterface }) {
     return <>
@@ -32,11 +35,7 @@ export default function LeadDetails(props: { lead: LeadInterface }) {
                         <Urgency deadline={props.lead.deadline} done_at={props.lead.done_at} />
                     </div>
                 </Wrapper>
-                <Wrapper title="Ответственные">
-                    {props.lead.employees.map((employee, i) =>
-                        <div key={employee.id} className={`${i ? "mb-2" : ""}`}>{employee.username}</div>
-                    )}
-                </Wrapper>
+                <EmployeesController default_employees={props.lead.employees} lead_id={props.lead.id} />
                 <div className="border-bottom my-3"></div>
                 <h4>Клиент</h4>
                 <Wrapper title="Имя">
@@ -55,5 +54,18 @@ export default function LeadDetails(props: { lead: LeadInterface }) {
                 <PaymentChecksViewer lead_id={props.lead.id} />
             </div>
         </div>
+    </>
+}
+
+function EmployeesController(props: { default_employees: Employee[], lead_id: number }) {
+    const [viewEdit, setViewEdit] = useState(false);
+    return <>
+        <Wrapper title="Ответственные">
+            {props.default_employees.map((employee, i) =>
+                <div key={employee.id} className={`${i ? "mb-2" : ""}`}>{employee.username}</div>
+            )}
+            {!viewEdit && <button className="btn btn-sm btn-outline-dark mt-2" onClick={() => setViewEdit(true)}>настроить права</button>}
+        </Wrapper>
+        {viewEdit && <RightsManagement leadId={props.lead_id} is_boss={true} closeFn={() => setViewEdit(false)} />}
     </>
 }
