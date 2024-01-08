@@ -7,8 +7,8 @@ import getEployeeByID from "@/app/db/employees/getEployeeById";
 import slugify from "slugify";
 import checkImageIsExists from "../../clients/create/checkImageIsExists";
 import insertPayment from "../../clients/create/insertPayment";
-import noticeEmployees from "../../clients/create/noticeEmployees";
-import saveMessage from "../../clients/create/saveMessage";
+// import noticeEmployees from "../../clients/create/noticeEmployees";
+// import saveMessage from "../../clients/create/saveMessage";
 import createNewRole from "../update_employee_rights/createNewRole";
 import fs from "fs";
 import saveImageToDB from "../../payments/create/saveImageToDB";
@@ -53,12 +53,12 @@ export async function POST(
       );
     }
 
-    const messageId = await saveMessage(
-      `Оплата по заказу: ${data.get("payment")}₽`,
-      "lead",
-      leadId,
-      user.id
-    );
+    // const messageId = await saveMessage(
+    //   `Оплата по заказу: ${data.get("payment")}₽`,
+    //   "lead",
+    //   leadId,
+    //   user.id
+    // );
 
     for (let index = 0; index < items.length; index++) {
       const [name, value]: any = items[index];
@@ -78,9 +78,9 @@ export async function POST(
           filename = newfilename;
         }
 
-        if (!messageId) break;
+        // if (!messageId) break;
 
-        noticeEmployees("lead", leadId, user.username, `${process.env.SERVER}`);
+        // noticeEmployees("lead", leadId, user.username, `${process.env.SERVER}`);
 
         await saveImageToDB(Number(paymentId), filename);
 
