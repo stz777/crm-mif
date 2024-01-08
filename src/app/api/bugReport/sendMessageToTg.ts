@@ -14,7 +14,6 @@ export async function sendMessageToTg(message: string, chat_id?: string) {
     }),
   })
     .then((response) => {
-      console.log("response", response);
       if (!response.ok) {
         throw new Error(`Server responded with status ${response.status}`);
       }
