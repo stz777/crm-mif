@@ -7,10 +7,11 @@ import { useEffect } from "react";
 import { useStore } from "effector-react";
 import { $insertedPhone } from "./store/insertedPhone";
 import { reset } from "./store/modalState";
+import { FaTrash } from "react-icons/fa";
 
 export default function CreateClientForm() {
     const insertedPhone = useStore($insertedPhone);
-    const { register, handleSubmit, control, reset, getValues, setValue } = useForm<any>();
+    const { register, handleSubmit, control, reset, watch, setValue, resetField } = useForm<any>();
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
@@ -23,6 +24,11 @@ export default function CreateClientForm() {
         control,
         name: "telegram",
     });
+
+    const inputValue: any = watch('image');
+
+
+
     useEffect(() => {
         appendPhone({ phone: insertedPhone })
     }, [insertedPhone])
@@ -58,10 +64,17 @@ export default function CreateClientForm() {
                     />
                     <FieldWrapper title="Чек"
                         field={<>
-                            <input type="file" id="image" {...register("image")} className="d-none" />
-                            <label htmlFor="image">
-                                <div className="btn btn-dark">Выбрать файл</div>
-                            </label>
+                            {(inputValue?.length)
+                                ? <>
+                                    <div className="mb-2">Прикреплен файл: {inputValue[0].name}</div>
+                                    <div onClick={() => {
+                                        resetField("image");
+                                    }} className="btn btn-sm btn-outline-danger">Отмена <FaTrash /></div>
+                                </>
+                                : <>
+                                    <input type="file" id="image" {...register("image")} className="d-none" />
+                                    <label htmlFor="image" className="btn btn-secondary">Выберите файл</label>
+                                </>}
                         </>}
                     />
                 </tbody>
