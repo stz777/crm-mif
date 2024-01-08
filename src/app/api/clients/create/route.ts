@@ -10,9 +10,9 @@ import fs from "fs";
 import checkImageIsExists from './checkImageIsExists';
 import insertPayment from './insertPayment';
 import noticeEmployees from './noticeEmployees';
-import saveImageToDB from './saveImageToDB';
 import saveMessage from './saveMessage';
 import checkPhoneIsExists from './checkPhoneIsExists';
+import saveImageToDB from '../../payments/create/saveImageToDB';
 
 export async function POST(req: Request) {
     const auth = cookies().get('auth');
@@ -114,7 +114,7 @@ export async function POST(req: Request) {
                     `${process.env.SERVER}`
                 );
 
-                await saveImageToDB(filename, messageId)
+                await saveImageToDB(Number(paymentId), filename)
 
                 const buffer = await value.arrayBuffer();
                 const filePath = `${String(process.env.IMAGES_FOLDER)}/${filename}`;
