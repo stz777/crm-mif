@@ -7,8 +7,6 @@ export default function PaymentChecksViewer(props: { lead_id: number }) {
     const [path, setPath] = useState("");
     useEffect(() => {
         (async function req() {
-            console.log('updated');
-
             const { path, payments } = await getPayments(props.lead_id)
             setPayments(payments);
             setPath(path);
