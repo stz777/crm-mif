@@ -7,6 +7,7 @@ import { registerLocale } from "react-datepicker";
 import ru from 'date-fns/locale/ru';
 import DatePicker from "react-datepicker";
 import { reset } from "./store/modalState";
+import { FaTrash } from "react-icons/fa";
 
 registerLocale('ru', ru);
 
@@ -15,7 +16,7 @@ export function CreateLeadForm(
     const client = useStore($selectedClient);
     const [viewPayment, setViewPayment] = useState(false);
 
-    const { register, handleSubmit, control } = useForm<any>({
+    const { register, handleSubmit, control, watch, resetField } = useForm<any>({
         defaultValues: {
             title: "",
             client: client?.id,
@@ -27,6 +28,9 @@ export function CreateLeadForm(
     const { meta } = client;
 
     const phone = meta.find(item => item.data_type === "phone")?.data;
+
+    const inputValue: any = watch('image');
+
 
     return <div>
         <form onSubmit={handleSubmit((e: any) => onSubmit(e))}>
@@ -58,10 +62,17 @@ export function CreateLeadForm(
                     {viewPayment && <>
                         <tr><td>Оплачено</td><td><input  {...register("payment", { required: true })} autoComplete="off" className="form-control" /></td></tr>
                         <tr><td>Изображение</td><td>
-                            <input type="file" id="image" {...register("image")} className="d-none" />
-                            <label htmlFor="image">
-                                <div className="btn btn-dark">Выбрать файл</div>
-                            </label>
+                            {(inputValue?.length)
+                                ? <>
+                                    <div className="mb-2">Прикреплен файл: {inputValue[0].name}</div>
+                                    <div onClick={() => {
+                                        resetField("image");
+                                    }} className="btn btn-sm btn-outline-danger">Отмена <FaTrash /></div>
+                                </>
+                                : <>
+                                    <input type="file" id="image" {...register("image")} className="d-none" />
+                                    <label htmlFor="image" className="btn btn-secondary">Выберите файл</label>
+                                </>}
                         </td></tr>
                     </>}
 
