@@ -26,7 +26,7 @@ export default function Client(props: { leads: LeadInterface[], is_manager: bool
       await refreshData();
     })();
     return () => { mount = false; }
-  }, [leads])
+  }, [leads, props.searchParams])
 
   return <>
     {leads ? <div>
