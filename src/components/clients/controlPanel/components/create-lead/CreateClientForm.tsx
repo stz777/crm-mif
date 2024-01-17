@@ -92,7 +92,8 @@ const onSubmit = (data: any, resetForm: any) => {
     for (const key in data) {
         const element = data[key];
         if (key === "phones") {
-            formdata.append("phones", JSON.stringify(element));
+            const upgradedPhones = element.map((x: any) => ({ phone: "+7" + x.phone.replace(/[^+0-9]/igm, "") }));
+            formdata.append("phones", JSON.stringify(upgradedPhones));
             continue;
         }
         if (key === "emails") {
@@ -103,7 +104,6 @@ const onSubmit = (data: any, resetForm: any) => {
             formdata.append("telegram", JSON.stringify(element));
             continue;
         }
-
         if (key === "image") {
             for (let i = 0; i < element.length; i++) {
                 formdata.append('images', element[i]);
