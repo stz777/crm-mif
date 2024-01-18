@@ -12,6 +12,7 @@ export default async function Page(props: { searchParams: ClientsSearchInterface
     if (!user) return redirect("/");
     if (!user.is_manager) return redirect("/");
     const clients = await getClients(props.searchParams);
+
     return <>
         <Client searchParams={props.searchParams} defaultClients={clients} />
     </>

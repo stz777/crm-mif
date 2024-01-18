@@ -16,21 +16,21 @@ export default function Client(props: { searchParams: ClientsSearchInterface, de
     useEffect(() => {
         let mount = true;
         (async function refreshData() {
-          if (!mount) return;
-          await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
-          const response = await fetchClients(props.searchParams);
-          if (JSON.stringify(clients) !== JSON.stringify(response.clients)) {
-            setClients(response.clients);
-          }
-          await refreshData();
+            if (!mount) return;
+            await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
+            const response = await fetchClients(props.searchParams);
+            if (JSON.stringify(clients) !== JSON.stringify(response.clients)) {
+                setClients(response.clients);
+            }
+            await refreshData();
         })();
         return () => { mount = false; }
-      }, [clients, props.searchParams])
+    }, [clients, props.searchParams])
 
     return <>
         <h1>Клиенты</h1>
         <div className="mt-4">
-            <ClientsHeader />
+            <ClientsHeader searchParams={props.searchParams} />
             <Filter searchParams={props.searchParams} />
             <table className="table  w-auto">
                 <thead>

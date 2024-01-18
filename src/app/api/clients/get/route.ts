@@ -1,4 +1,4 @@
-import { getClients } from "@/app/clients/get/getClients";
+import { getClients } from "@/app/clients/getClients";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
