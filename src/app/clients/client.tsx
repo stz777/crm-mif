@@ -7,50 +7,54 @@ import { JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode,
 import clientMetaTypeTranslator from "./clientMetaTypeTranslator"
 import ClientMetaValueViewer from "./ClientMetaValueViewer"
 import SideModal from "@/components/SideModal/SideModal"
+import ClientsHeader from "./header/ClientsHeader"
 
 export default function Client(props: { searchParams: ClientsSearchInterface, defaultClients: ClientInterface[] }) {
     const [clients, setClients] = useState(props.defaultClients);
     return <>
         <h1>Клиенты</h1>
-        <Filter searchParams={props.searchParams} />
-        <table className="table  w-auto">
-            <thead>
-                <tr className="sticky-top">
-                    <th>ID</th>
-                    <th>Наименование</th>
-                    <th>Контакты</th>
-                    <th>Адрес</th>
-                    <th />
-                </tr>
-            </thead>
-            <tbody>
-                {clients.map((client, i) => <LeadTr key={client.id} client={client}>
-                    <td>{client.id}</td>
-                    <td>{client.full_name}</td>
-                    <td>
-                        <table>
-                            <tbody>
-                                {client.meta.map((meta) => <tr key={meta.id}>
-                                    <td>
-                                        {clientMetaTypeTranslator[meta.data_type] || meta.data_type}
-                                    </td>
-                                    <td>
-                                        <ClientMetaValueViewer type={meta.data_type} data={meta.data} />
-                                    </td>
-                                </tr>)}
-                            </tbody>
-                        </table>
-                    </td>
-                    <td>{client.address}</td>
-                    <td>
-                        <div className="d-flex">
-                            <div className="me-2"><Link className="btn btn-outline-dark btn-sm text-nowrap" href={`/leads/create/${client.id}`}>Создать заказ</Link></div>
-                            <div><Link className="btn btn-outline-dark btn-sm text-nowrap" href={`/clients/edit/${client.id}`}>Редактировать клиента</Link></div>
-                        </div>
-                    </td>
-                </LeadTr>)}
-            </tbody>
-        </table>
+        <div className="mt-4">
+            <ClientsHeader />
+            <Filter searchParams={props.searchParams} />
+            <table className="table  w-auto">
+                <thead>
+                    <tr className="sticky-top">
+                        <th>ID</th>
+                        <th>Наименование</th>
+                        <th>Контакты</th>
+                        <th>Адрес</th>
+                        <th />
+                    </tr>
+                </thead>
+                <tbody>
+                    {clients.map((client, i) => <LeadTr key={client.id} client={client}>
+                        <td>{client.id}</td>
+                        <td>{client.full_name}</td>
+                        <td>
+                            <table>
+                                <tbody>
+                                    {client.meta.map((meta) => <tr key={meta.id}>
+                                        <td>
+                                            {clientMetaTypeTranslator[meta.data_type] || meta.data_type}
+                                        </td>
+                                        <td>
+                                            <ClientMetaValueViewer type={meta.data_type} data={meta.data} />
+                                        </td>
+                                    </tr>)}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>{client.address}</td>
+                        <td>
+                            <div className="d-flex">
+                                <div className="me-2"><Link className="btn btn-outline-dark btn-sm text-nowrap" href={`/leads/create/${client.id}`}>Создать заказ</Link></div>
+                                <div><Link className="btn btn-outline-dark btn-sm text-nowrap" href={`/clients/edit/${client.id}`}>Редактировать клиента</Link></div>
+                            </div>
+                        </td>
+                    </LeadTr>)}
+                </tbody>
+            </table>
+        </div>
     </>
 }
 
