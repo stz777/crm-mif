@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { ClientInterface, ClientsSearchInterface } from "../components/types/clients"
-import Filter from "./filter"
 import { JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react"
 import clientMetaTypeTranslator from "./clientMetaTypeTranslator"
 import ClientMetaValueViewer from "./ClientMetaValueViewer"
@@ -28,10 +27,9 @@ export default function Client(props: { searchParams: ClientsSearchInterface, de
     }, [clients, props.searchParams])
 
     return <>
-        <h1>Клиенты</h1>
+        <h1>Клиенты</h1> 
         <div className="mt-4">
             <ClientsHeader searchParams={props.searchParams} />
-            <Filter searchParams={props.searchParams} />
             <table className="table  w-auto">
                 <thead>
                     <tr className="sticky-top">
