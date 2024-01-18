@@ -45,7 +45,7 @@ function RightsForm({ role, employeeId, leadId, is_boss }: { role: string | null
 
     const roles = [
         ['Нет прав', "no_rights"],
-        ['Исполнитель', 'executor'],
+        ['Менеджер', 'inspector'],
 
     ];
     // if (Boolean(is_boss)) {
