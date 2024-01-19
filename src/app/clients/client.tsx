@@ -50,13 +50,13 @@ export default function Client(props: { searchParams: ClientsSearchInterface, de
                         <td>{client.id}</td>
                         <td>{client.full_name}</td>
                         <td>
-                            <table>
+                            <table className="w-100">
                                 <tbody>
                                     {client.meta.map((meta) => <tr key={meta.id}>
-                                        <td>
-                                            {clientMetaTypeTranslator[meta.data_type] || meta.data_type}
+                                        <td style={{width:50}}>
+                                            <span className="me-4">{clientMetaTypeTranslator[meta.data_type] || meta.data_type}</span>
                                         </td>
-                                        <td>
+                                        <td className="text-left">
                                             <ClientMetaValueViewer type={meta.data_type} data={meta.data} />
                                         </td>
                                     </tr>)}
