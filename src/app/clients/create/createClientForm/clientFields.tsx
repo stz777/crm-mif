@@ -56,7 +56,7 @@ function ClientFields(props: {
         />
         <FieldWrapper title="Телеграм"
             field={<>
-                <input className="form-control" {...props.register(`telegram.0.email`)} autoComplete="off" />
+                <input className="form-control" {...props.register(`telegram.0.telegram`)} autoComplete="off" />
             </>}
         />
         <FieldWrapper title="Адрес"
