@@ -2,7 +2,7 @@
 
 import SideModal from "@/components/SideModal/SideModal";
 import { ExpensesCategoryInterface } from "@/types/expenses/expensesCategoryInterface";
-import { useEffect, useState } from "react"
+import {  useState } from "react"
 import CreateCategoryForm from "./CreateCategoryForm";
 import CategoryNameEditor from "./CategoryNameEditor";
 
