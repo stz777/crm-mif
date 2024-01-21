@@ -1,11 +1,12 @@
 "use client"
 
 import SideModal from "@/components/SideModal/SideModal";
+import { ExpensesCategoryInterface } from "@/types/expenses/expensesCategoryInterface";
 import { useState } from "react"
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-export default function CategoriesEditor() {
+export default function CategoriesEditor(props: { expensesCategories: ExpensesCategoryInterface[] }) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     return <>
         <button className="btn btn-outline-dark" onClick={() => setModalIsOpen(true)}>Создание/редактирование категорий</button>
@@ -15,30 +16,59 @@ export default function CategoriesEditor() {
                     <h3>Создание/редактирование категорий</h3>
                 </div>
                 <div className="px-4">
-                    <CreateCategoryForm />
+                    {props.expensesCategories.map(category => <div>
+                        <CategoryNameEditor
+                            key={category.id}
+                            expensesCategoryId={category.id}
+                            expensesCategoryName={category.name}
+                        />
+                    </div>)}
+                    <div className="mt-4">
+                        <CreateCategoryForm />
+                    </div>
                 </div>
             </>
         </SideModal>
     </>
 }
 
+
+function CategoryNameEditor(props: { expensesCategoryId: number, expensesCategoryName: string }) {
+
+    return <>
+        <div className="p-2 border mb-3">{props.expensesCategoryName} ({props.expensesCategoryId})</div>
+    </>
+}
+
 function CreateCategoryForm() {
+
     const [isOpen, setIsOpen] = useState(false);
+
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm<any>()
+        reset,
+    } = useForm<any>();
 
-    if (!isOpen) return <div onClick={() => {
+    if (!isOpen) return <button className="btn btn-outline-dark btn-sm" onClick={() => {
         setIsOpen(true);
-    }}>Добавить категорию</div>
+    }}>Добавить категорию</button>
 
     return (
         <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="fw-bold">Создание категории расходов</div>
+            <form onSubmit={handleSubmit(x => {
+                onSubmit(x);
+                reset();
+            })}>
                 <div className="mb-2"><input {...register("name", { required: true })} placeholder="Название категории" className="form-control" autoComplete="off" /></div>
-                <button className="btn btn-sm btn-outline-dark">Сохранить</button>
+                <div className="d-flex">
+                    <button className="btn btn-sm btn-outline-dark">Сохранить</button>
+                    <div className="btn btn-sm btn-outline-danger ms-2" onClick={() => {
+                        setIsOpen(false);
+                        reset();
+                    }}>отмена</div>
+                </div>
             </form>
         </div>
     )
