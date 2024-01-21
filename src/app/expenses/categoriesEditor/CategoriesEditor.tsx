@@ -2,12 +2,16 @@
 
 import SideModal from "@/components/SideModal/SideModal";
 import { ExpensesCategoryInterface } from "@/types/expenses/expensesCategoryInterface";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
+import CreateCategoryForm from "./CreateCategoryForm";
 import { toast } from "react-toastify";
 
 export default function CategoriesEditor(props: { expensesCategories: ExpensesCategoryInterface[] }) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    useEffect(() => {
+
+    }, [])
     return <>
         <button className="btn btn-outline-dark" onClick={() => setModalIsOpen(true)}>Создание/редактирование категорий</button>
         <SideModal isOpen={modalIsOpen} closeHandle={() => setModalIsOpen(false)}>
@@ -16,7 +20,7 @@ export default function CategoriesEditor(props: { expensesCategories: ExpensesCa
                     <h3>Создание/редактирование категорий</h3>
                 </div>
                 <div className="px-4">
-                    {props.expensesCategories.map(category => <div>
+                    {props.expensesCategories.map(category => <div key={category.id}>
                         <CategoryNameEditor
                             key={category.id}
                             expensesCategoryId={category.id}
@@ -32,63 +36,78 @@ export default function CategoriesEditor(props: { expensesCategories: ExpensesCa
     </>
 }
 
-
 function CategoryNameEditor(props: { expensesCategoryId: number, expensesCategoryName: string }) {
+    const { register, handleSubmit, control, reset, setValue, getValues } = useForm<any>({
+        defaultValues: {
+            id: props.expensesCategoryId,
+            name: props.expensesCategoryName,
+        }
+    });
+    const [isChanged, setIsChanged] = useState(false);
+
+
+    useEffect(() => {
+        setIsChanged(false);
+    }, [props])
 
     return <>
-        <div className="p-2 border mb-3">{props.expensesCategoryName} ({props.expensesCategoryId})</div>
+        <form
+            onSubmit={handleSubmit(() => null)}
+            style={{ maxWidth: "1000px" }}
+        >
+            <div className="d-flex mb-3">
+                <input type="text" className="form-control"
+                    {...register(`name`, {
+                        onChange: (e: any) => {
+                            const newString = e.target.value;
+                            console.log('newString', newString, props.expensesCategoryName);
+                            if (newString !== props.expensesCategoryName) {
+                                setIsChanged(true);
+                            } else {
+                                setIsChanged(false);
+                            }
+                        }
+                    })}
+                    autoComplete="off" />
+
+                {isChanged && <>
+
+                    <button className="btn btn-sm btn-outline-success" onClick={async () => {
+                        const updated = await fetchUpdateExpensesCategoryName(props.expensesCategoryId, getValues('name'))
+                        if (updated) {
+                            toast.success('Название категории изменено');
+                        }
+
+                    }}>изменить</button>
+
+                    <button className="btn btn-sm btn-outline-danger" onClick={() => {
+                        reset();
+                        setIsChanged(false);
+                    }}>отменить</button>
+
+                </>}
+
+            </div>
+
+        </form>
+        {/* <div className="p-2 border mb-3">{props.expensesCategoryName} ({props.expensesCategoryId})</div> */}
     </>
 }
 
-function CreateCategoryForm() {
-
-    const [isOpen, setIsOpen] = useState(false);
-
-    const {
-        register,
-        handleSubmit,
-        reset,
-    } = useForm<any>();
-
-    if (!isOpen) return <button className="btn btn-outline-dark btn-sm" onClick={() => {
-        setIsOpen(true);
-    }}>Добавить категорию</button>
-
-    return (
-        <div>
-            <div className="fw-bold">Создание категории расходов</div>
-            <form onSubmit={handleSubmit(x => {
-                onSubmit(x);
-                reset();
-            })}>
-                <div className="mb-2"><input {...register("name", { required: true })} placeholder="Название категории" className="form-control" autoComplete="off" /></div>
-                <div className="d-flex">
-                    <button className="btn btn-sm btn-outline-dark">Сохранить</button>
-                    <div className="btn btn-sm btn-outline-danger ms-2" onClick={() => {
-                        setIsOpen(false);
-                        reset();
-                    }}>отмена</div>
-                </div>
-            </form>
-        </div>
-    )
-}
-
-function onSubmit(values: any) {
-    fetch(
-        "/api/expenses-categories/create",
+function fetchUpdateExpensesCategoryName(category_id: number, category_name: string) {
+    return fetch("/api/expenses-categories/edit-name",
         {
-            method: "post",
-            body: JSON.stringify(values)
-        }
-    )
+            method: "POST",
+            body: JSON.stringify({
+                category_id,
+                category_name
+            })
+        })
         .then(x => x.json())
         .then(x => {
-            console.log('x', x);
-            if (x.success) {
-                toast.success("Категория создана");
-            } else {
-                toast.error("Ошибка! Возможно категория с таким названием уже существует. #v0v84");
-            }
+            console.log('xxx', x);
+
+            return x.success;
         })
+
 }
