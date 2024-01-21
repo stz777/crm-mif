@@ -48,7 +48,7 @@ export default function ExpenseCreator(props: { expensesCategories: ExpensesCate
                                         <input {...register("sum", { required: true })} autoComplete="off" className="form-control" />
                                     </th>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <td>Чек</td>
                                     <td>
                                         {(inputValue?.length)
@@ -63,7 +63,7 @@ export default function ExpenseCreator(props: { expensesCategories: ExpensesCate
                                                 <label htmlFor="image" className="btn btn-secondary">Выберите файл</label>
                                             </>}
                                     </td>
-                                </tr>
+                                </tr> */}
                             </tbody>
                         </table>
                         <button className="btn btn-primary">Сохранить</button>

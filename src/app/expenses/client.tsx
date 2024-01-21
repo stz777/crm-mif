@@ -4,6 +4,8 @@ import { ExpensesCategoryInterface } from "@/types/expenses/expensesCategoryInte
 import CategoriesEditor from "./categoriesEditor/CategoriesEditor";
 import { useEffect, useState } from "react";
 import ExpenseCreator from "./expenseCreator/ExpenseCreator";
+import dayjs from "dayjs";
+import fetchExpenses from "./fetchExpenses";
 
 export default function Client(props: {
     expensesCategories: ExpensesCategoryInterface[],
@@ -34,23 +36,25 @@ export default function Client(props: {
         <CategoriesEditor expensesCategories={expensesCategories} />
         <ExpenseCreator expensesCategories={expensesCategories} />
         <h1>Расходы</h1>
-        <div>категории</div>
-        <pre>{JSON.stringify(expensesCategories, null, 2)}</pre>
-        <div>расходы</div>
-        <pre>{JSON.stringify(expenses, null, 2)}</pre>
+        <table className="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Описание</th>
+                    <th>Категория</th>
+                    <th>Дата</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                {expenses.map(expense => <tr key={expense.id}>
+                    <td>{expense.id}</td>
+                    <td>{expense.description}</td>
+                    <td>{expense.category_id}</td>
+                    <td>{dayjs(expense.created_date).format("DD.MM.YYYY")}</td>
+                    <td>{expense.sum}</td>
+                </tr>)}
+            </tbody>
+        </table>
     </>
-}
-
-async function fetchExpenses(searchParams: any) {
-    return fetch(
-        "/api/expenses/get",
-        {
-            method: "post",
-            body: JSON.stringify(searchParams)
-        }
-    )
-        .then(x => x.json())
-        .then(x => {
-            return x;
-        })
 }
