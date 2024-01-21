@@ -3,6 +3,7 @@ import { ExpenseInterface } from "@/types/expenses/expenseInterface";
 import { ExpensesCategoryInterface } from "@/types/expenses/expensesCategoryInterface";
 import CategoriesEditor from "./categoriesEditor/CategoriesEditor";
 import { useEffect, useState } from "react";
+import ExpenseCreator from "./expenseCreator/ExpenseCreator";
 
 export default function Client(props: {
     expensesCategories: ExpensesCategoryInterface[],
@@ -30,7 +31,8 @@ export default function Client(props: {
     }, [expenses, expensesCategories, props.searchParams])
 
     return <>
-        <CategoriesEditor expensesCategories={expensesCategories}/>
+        <CategoriesEditor expensesCategories={expensesCategories} />
+        <ExpenseCreator expensesCategories={expensesCategories} />
         <h1>Расходы</h1>
         <div>категории</div>
         <pre>{JSON.stringify(expensesCategories, null, 2)}</pre>
