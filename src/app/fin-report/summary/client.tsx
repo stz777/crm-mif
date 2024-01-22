@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { ExpensesPePerPurchaseTaskInterface, PaymentInterface } from "../../components/types/lead";
+import {  PaymentInterface } from "../../components/types/lead";
 import dayjs from "dayjs";
 import { ReportSearchInterface } from "./page";
 import { ExpenseInterface } from "@/types/expenses/expenseInterface";
+import Filter from "./filter";
 
 export default function Client(props: {
     reportData: {
         payments: PaymentInterface[]
-        expenses_per_purchase_task: ExpensesPePerPurchaseTaskInterface[],
         expenses: ExpenseInterface[]
     },
     searchParams: ReportSearchInterface
@@ -45,17 +45,12 @@ export default function Client(props: {
         totalExpenses = 0;
     }
 
-    let totalExpensesPerPurchaseTaskInterface;
-    if (reportData?.expenses_per_purchase_task?.length) {
-        totalExpensesPerPurchaseTaskInterface = reportData.expenses_per_purchase_task.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
-    } else {
-        totalExpensesPerPurchaseTaskInterface = 0;
-    }
-    const total_balance = totalPayments - totalExpensesPerPurchaseTaskInterface;
     const total_profit = totalPayments - totalExpenses;
 
     return <>
-        <h1>Отчет (сводка)</h1>
+        <h1>Отчеты</h1>
+        <div className="mt-4"></div>
+        <Filter searchParams={props.searchParams} />
         {(() => {
             const monthes = Array.from({ length: 12 }, (_, i) => i + 1);
             return <table className="table table-bordered table-striped" >
@@ -65,8 +60,6 @@ export default function Client(props: {
                         <th>доходы</th>
                         <th>расходы</th>
                         <th>прибыль</th>
-                        <th>закупки</th>
-                        <th>баланс</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,20 +75,13 @@ export default function Client(props: {
                             .map(expense => expense.sum);
                         const expensesPerMonthSum = (expenses?.length) ? expenses.reduce((a, b) => a + b) : 0;
 
-                        const totalExpensesPerPurchaseTaskPerMonth = reportData.expenses_per_purchase_task
-                            .filter(expense => dayjs(expense.created_date).format("M") === String(month))
-                            .map(expense => expense.sum);
-                        const totalExpensesPerPurchaseTaskPerMonthSum = (totalExpensesPerPurchaseTaskPerMonth?.length) ? totalExpensesPerPurchaseTaskPerMonth.reduce((a, b) => a + b) : 0;
                         const profit = paymentsPerMonthSum - expensesPerMonthSum;
-                        const balance = paymentsPerMonthSum - totalExpensesPerPurchaseTaskPerMonthSum;
 
                         return <tr key={month}>
                             <td>{months[month - 1]}</td>
                             <td>{paymentsPerMonthSum}</td>
                             <td>{expensesPerMonthSum}</td>
                             <td>{profit}</td>
-                            <td>{totalExpensesPerPurchaseTaskPerMonthSum}</td>
-                            <td>{balance}</td>
                         </tr>
                     })}
                     <tr>
@@ -103,8 +89,6 @@ export default function Client(props: {
                         <td>{totalPayments}</td>
                         <td>{totalExpenses}</td>
                         <td>{total_profit}</td>
-                        <td>{totalExpensesPerPurchaseTaskInterface}</td>
-                        <td>{total_balance}</td>
                     </tr>
                 </tbody>
             </table>

@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { getUserByToken } from "../components/getUserByToken";
 import getFinReportdata from "./summary/getFinReportdata";
 import { ReportSearchInterface } from "./summary/page";
-import Filter from "./summary/filter";
 import Client from "./summary/client";
 
 export default async function Page(props: { searchParams: ReportSearchInterface }) {
@@ -14,8 +13,6 @@ export default async function Page(props: { searchParams: ReportSearchInterface 
     if (!user.is_boss) return redirect("/");
     const data = await getFinReportdata(props.searchParams);
     return <>
-        <h1>Отчеты</h1>
-        <Filter searchParams={props.searchParams} />
         <Client reportData={data} searchParams={props.searchParams} />
     </>
 }

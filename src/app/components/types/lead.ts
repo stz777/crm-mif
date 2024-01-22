@@ -11,7 +11,6 @@ export interface LeadInterface {
     comment: string
     sum: number
     payments?: PaymentInterface[]
-    expensesPerLead?: ExpensesPerLeadInterface[]
     clientData: ClientInterface
     employees: Employee[]
 }
@@ -23,18 +22,4 @@ export interface PaymentInterface {
     created_date: string
     confirmed: boolean
     sum: number
-}
-
-export interface ExpensesPerLeadInterface {
-    id: number
-    sum: number
-    comment: string
-    created_date: string
-}
-
-export interface ExpensesPePerPurchaseTaskInterface {
-    id: number
-    sum: number
-    comment: string
-    created_date: string
 }
