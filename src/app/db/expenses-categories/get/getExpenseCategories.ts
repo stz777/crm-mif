@@ -1,9 +1,7 @@
 import { ExpensesCategoryInterface } from "@/types/expenses/expensesCategoryInterface";
 import { pool } from "../../connect";
 
-export default async function getExpenseCategories(
-  searchParams: any
-): Promise<ExpensesCategoryInterface[]> {
+export default async function getExpenseCategories(): Promise<ExpensesCategoryInterface[]> {
   return pool
     .promise()
     .query("SELECT * FROM expenses_categories")

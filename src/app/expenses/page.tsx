@@ -4,8 +4,8 @@ import getExpenseCategories from "../db/expenses-categories/get/getExpenseCatego
 
 export default async function Page(props: { searchParams: any; }) {
     const { searchParams } = props;
-    const expensesCategories = await getExpenseCategories(searchParams);
-    const expenses = await getExpenses();
+    const expensesCategories = await getExpenseCategories();
+    const expenses = await getExpenses(searchParams);
     return <>
         <Client expensesCategories={expensesCategories} expenses={expenses} searchParams={searchParams} />
     </>

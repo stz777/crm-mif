@@ -6,11 +6,12 @@ import { useEffect, useState } from "react";
 import ExpenseCreator from "./expenseCreator/ExpenseCreator";
 import dayjs from "dayjs";
 import fetchExpenses from "./fetchExpenses";
+import Filter from "./filter/filter";
 
 export default function Client(props: {
     expensesCategories: ExpensesCategoryInterface[],
     expenses: ExpenseInterface[]
-    searchParams: any
+    searchParams: any,
 }) {
     const [expenses, setExpenses] = useState(props.expenses);
     const [expensesCategories, setExpensesCategories] = useState(props.expensesCategories);
@@ -33,8 +34,15 @@ export default function Client(props: {
     }, [expenses, expensesCategories, props.searchParams])
 
     return <>
-        <CategoriesEditor expensesCategories={expensesCategories} />
-        <ExpenseCreator expensesCategories={expensesCategories} />
+
+        <div className="d-flex justify-content-between">
+            <div className="d-flex">
+                <ExpenseCreator expensesCategories={expensesCategories} />
+                <Filter expensesCategories={expensesCategories} searchParams={props.searchParams} />
+            </div>
+            <CategoriesEditor expensesCategories={expensesCategories} />
+        </div>
+
         <h1>Расходы</h1>
         <table className="table">
             <thead>

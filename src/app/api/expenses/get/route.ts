@@ -5,8 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   const searchParams = await request.json();
 
-  const expensesCategories = await getExpenseCategories(searchParams);
-  const expenses = await getExpenses();
+  const expensesCategories = await getExpenseCategories();
+  const expenses = await getExpenses(searchParams);
 
   return NextResponse.json({
     success: true,
