@@ -4,22 +4,20 @@ import SideModal from "@/components/SideModal/SideModal";
 import { ExpensesCategoryInterface } from "@/types/expenses/expensesCategoryInterface";
 import { useState } from "react"
 import { useForm } from "react-hook-form";
-import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 export default function ExpenseCreator(props: { expensesCategories: ExpensesCategoryInterface[] }) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const { register, handleSubmit, resetField, watch, reset } = useForm<any>();
-    const inputValue: any = watch('image');
+    const { register, handleSubmit, reset } = useForm<any>();
     return <>
-        <button className="btn btn-outline-dark" onClick={() => setModalIsOpen(true)}>Добавить расход</button>
+        <button className="btn btn-primary text-nowrap" onClick={() => setModalIsOpen(true)}>Добавить расход</button>
         <SideModal isOpen={modalIsOpen} closeHandle={() => {
             setModalIsOpen(false);
             reset();
         }}>
             <>
                 <div className="d-flex align-items-center border-bottom px-4 py-3 ">
-                    <h3>Создание/редактирование категорий</h3>
+                    <h3>Добавление нового расхода</h3>
                 </div>
                 <div className="px-4">
                     <form onSubmit={handleSubmit((e: any) => onSubmit(e, reset))}>

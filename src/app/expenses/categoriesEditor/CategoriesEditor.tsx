@@ -9,7 +9,7 @@ import CategoryNameEditor from "./CategoryNameEditor";
 export default function CategoriesEditor(props: { expensesCategories: ExpensesCategoryInterface[] }) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     return <>
-        <button className="btn btn-outline-dark" onClick={() => setModalIsOpen(true)}>Создание/редактирование категорий</button>
+        <button className="btn btn-outline-dark text-nowrap" onClick={() => setModalIsOpen(true)}>Создание/редактирование категорий</button>
         <SideModal isOpen={modalIsOpen} closeHandle={() => setModalIsOpen(false)}>
             <>
                 <div className="d-flex align-items-center border-bottom px-4 py-3 ">

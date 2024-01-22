@@ -37,7 +37,7 @@ export default function Client(props: {
         <div className="d-flex justify-content-between">
             <div className="d-flex">
                 <ExpenseCreator expensesCategories={expensesCategories} />
-                <Filter expensesCategories={expensesCategories} searchParams={props.searchParams} />
+                <div className="mx-3"><Filter expensesCategories={expensesCategories} searchParams={props.searchParams} /></div>
             </div>
             <CategoriesEditor expensesCategories={expensesCategories} />
         </div>

@@ -47,7 +47,7 @@ export default function Filter(props: {
                         const url = window.location.pathname + qs;
                         router.push(url);
                     }
-                })} defaultValue="" className="form-select" aria-label="Default select example">
+                })} defaultValue="" className="form-select me-2" aria-label="Default select example">
                     <option value="">
                         Выберите категорию
                     </option>
@@ -64,7 +64,7 @@ export default function Filter(props: {
                             selected={field.value}
                             onChange={(date) => field.onChange(date)}
                             placeholderText="от"
-                            className="form-control"
+                            className="form-control me-2"
                         />
                     )}
                 />
@@ -78,7 +78,7 @@ export default function Filter(props: {
                             dateFormat="dd.MM.yyyy"
                             selected={field.value}
                             onChange={(date) => field.onChange(date)} placeholderText="до"
-                            className="form-control"
+                            className="form-control me-2"
                         />
                     )}
                 />

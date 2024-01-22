@@ -13,7 +13,6 @@ export async function getClients(
   const ids = [];
   
   if (searchParams?.keyword) {
-    console.log("searchParams", searchParams.keyword);
     if (/[0-9]+/.test(searchParams.keyword)) {
       ids.push(searchParams.keyword);
       ids.push(...(await getClientsByPhoneInserts(searchParams.keyword)));
