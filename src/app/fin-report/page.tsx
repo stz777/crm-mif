@@ -12,9 +12,7 @@ export default async function Page(props: { searchParams: ReportSearchInterface 
     const user = await getUserByToken(auth?.value);
     if (!user) return redirect("/");
     if (!user.is_boss) return redirect("/");
-
     const data = await getFinReportdata(props.searchParams);
-
     return <>
         <h1>Отчеты</h1>
         <Filter searchParams={props.searchParams} />

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../../components/types/lead";
+import { ExpensesPePerPurchaseTaskInterface, PaymentInterface } from "../../components/types/lead";
 import dayjs from "dayjs";
 import { ReportSearchInterface } from "./page";
 import { ExpenseInterface } from "@/types/expenses/expenseInterface";
@@ -10,7 +10,6 @@ import { ExpenseInterface } from "@/types/expenses/expenseInterface";
 export default function Client(props: {
     reportData: {
         payments: PaymentInterface[]
-        expensesPerLead: ExpensesPerLeadInterface[]
         expenses_per_purchase_task: ExpensesPePerPurchaseTaskInterface[],
         expenses: ExpenseInterface[]
     },
@@ -39,11 +38,11 @@ export default function Client(props: {
         totalPayments = 0;
     }
 
-    let totalExpensesPerLeads;
-    if (reportData?.expensesPerLead?.length) {
-        totalExpensesPerLeads = reportData.expensesPerLead.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
+    let totalExpenses;
+    if (reportData?.expenses?.length) {
+        totalExpenses = reportData.expenses.map((payment: any) => payment.sum).reduce((a: any, b: any) => a + b);
     } else {
-        totalExpensesPerLeads = 0;
+        totalExpenses = 0;
     }
 
     let totalExpensesPerPurchaseTaskInterface;
@@ -53,7 +52,7 @@ export default function Client(props: {
         totalExpensesPerPurchaseTaskInterface = 0;
     }
     const total_balance = totalPayments - totalExpensesPerPurchaseTaskInterface;
-    const total_profit = totalPayments - totalExpensesPerLeads;
+    const total_profit = totalPayments - totalExpenses;
 
     return <>
         <h1>Отчет (сводка)</h1>
@@ -102,7 +101,7 @@ export default function Client(props: {
                     <tr>
                         <th>Общее</th>
                         <td>{totalPayments}</td>
-                        <td>{totalExpensesPerLeads}</td>
+                        <td>{totalExpenses}</td>
                         <td>{total_profit}</td>
                         <td>{totalExpensesPerPurchaseTaskInterface}</td>
                         <td>{total_balance}</td>
