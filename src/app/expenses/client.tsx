@@ -15,7 +15,6 @@ export default function Client(props: {
 }) {
     const [expenses, setExpenses] = useState(props.expenses);
     const [expensesCategories, setExpensesCategories] = useState(props.expensesCategories);
-
     useEffect(() => {
         let mount = true;
         (async function refreshData() {
