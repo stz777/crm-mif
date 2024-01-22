@@ -34,7 +34,7 @@ export default function Filter(props: {
             onSubmit={handleSubmit(e => onSubmit(e, router))}
             style={{ maxWidth: "1000px" }}>
             <div className="d-flex">
-                <select style={{ maxWidth: "300px" }} {...register("category", {
+                <select style={{ maxWidth: "250px" }} {...register("category", {
                     onChange: (e) => {
                         const currentParams = props.searchParams;
                         if (e.target.value === "") {
