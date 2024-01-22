@@ -11,8 +11,8 @@ export default async function SideMenu() {
     return <div>
         {menuItems.map((item, i) =>
             <div key={i} className={`list-group-item ${!i && "list-group-item-light"}`}>
-                <div className="d-flex">
-                    <Link href={item.link} className="text-decoration-none text-dark d-block py-3 px-3">{item.icon} <span className="ms-1">{item.title}</span></Link>
+                <div >
+                    <Link href={item.link} className="text-decoration-none text-dark d-block py-3 px-3 d-flex flex-nowrap">{item.icon} <span className="ms-1">{item.title}</span></Link>
                 </div>
             </div>)
         }
