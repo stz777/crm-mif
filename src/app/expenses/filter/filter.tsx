@@ -53,35 +53,39 @@ export default function Filter(props: {
                     </option>
                     {props.expensesCategories.map(category => <option value={category.id} key={category.id}>{category.name}</option>)}
                 </select>
-                <Controller
-                    control={control}
-                    name="date_from"
-                    render={({ field }) => (
-                        <DatePicker
-                            locale="ru"
-                            {...field}
-                            dateFormat="dd.MM.yyyy"
-                            selected={field.value}
-                            onChange={(date) => field.onChange(date)}
-                            placeholderText="от"
-                            className="form-control me-2"
-                        />
-                    )}
-                />
-                <Controller
-                    control={control}
-                    name="date_to"
-                    render={({ field }) => (
-                        <DatePicker
-                            locale="ru"
-                            {...field}
-                            dateFormat="dd.MM.yyyy"
-                            selected={field.value}
-                            onChange={(date) => field.onChange(date)} placeholderText="до"
-                            className="form-control me-2"
-                        />
-                    )}
-                />
+                <div className="me-2">
+                    <Controller
+                        control={control}
+                        name="date_from"
+                        render={({ field }) => (
+                            <DatePicker
+                                locale="ru"
+                                {...field}
+                                dateFormat="dd.MM.yyyy"
+                                selected={field.value}
+                                onChange={(date) => field.onChange(date)}
+                                placeholderText="от"
+                                className="form-control"
+                            />
+                        )}
+                    />
+                </div>
+                <div className="me-2">
+                    <Controller
+                        control={control}
+                        name="date_to"
+                        render={({ field }) => (
+                            <DatePicker
+                                locale="ru"
+                                {...field}
+                                dateFormat="dd.MM.yyyy"
+                                selected={field.value}
+                                onChange={(date) => field.onChange(date)} placeholderText="до"
+                                className="form-control "
+                            />
+                        )}
+                    />
+                </div>
                 <button className="btn btn-primary">показать</button>
             </div>
         </form>

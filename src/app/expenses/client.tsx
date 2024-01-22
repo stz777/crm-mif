@@ -33,7 +33,8 @@ export default function Client(props: {
     }, [expenses, expensesCategories, props.searchParams])
 
     return <>
-
+        <h1>Расходы</h1>
+        <div className="mt-4"></div>
         <div className="d-flex justify-content-between">
             <div className="d-flex">
                 <ExpenseCreator expensesCategories={expensesCategories} />
@@ -41,8 +42,7 @@ export default function Client(props: {
             </div>
             <CategoriesEditor expensesCategories={expensesCategories} />
         </div>
-
-        <h1>Расходы</h1>
+        <div className="my-5"></div>
         <table className="table">
             <thead>
                 <tr>
