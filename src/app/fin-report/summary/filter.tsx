@@ -2,6 +2,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ReportSearchInterface } from "./page";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
 type Inputs = {
     year: string,
@@ -10,9 +11,16 @@ type Inputs = {
 export default function Filter(props: { searchParams: ReportSearchInterface }) {
     const route = useRouter();
 
+    const startYear = 2023;
+    const nowYear = Number(dayjs().format("YYYY"));
+
+    const years = [startYear].concat(Array.from({ length: nowYear - startYear }, (_, i) => startYear + i + 1)).reverse();
+
     const { searchParams } = props;
 
-    let defaultValues: any = {};
+    let defaultValues: any = {
+        year: String(nowYear)
+    };
 
     if (Object.keys(searchParams)?.length) {
         for (const key in searchParams) {
@@ -40,7 +48,9 @@ export default function Filter(props: { searchParams: ReportSearchInterface }) {
                     <div className="d-flex">
                         <div className="me-2">
                             <h6>Год</h6>
-                            <input  {...register("year")} autoComplete="off" />
+                            <select {...register("year", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                                {years.map(year => <option key={year} value={String(year)}>{year}</option>)}
+                            </select>
                         </div>
                     </div>
                     <button className="btn btn-sm btn-outline-dark mt-2 me-2">фильтр</button>

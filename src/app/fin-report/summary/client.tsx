@@ -5,12 +5,14 @@ import { toast } from "react-toastify";
 import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../../components/types/lead";
 import dayjs from "dayjs";
 import { ReportSearchInterface } from "./page";
+import { ExpenseInterface } from "@/types/expenses/expenseInterface";
 
 export default function Client(props: {
     reportData: {
         payments: PaymentInterface[]
         expensesPerLead: ExpensesPerLeadInterface[]
-        expenses_per_purchase_task: ExpensesPePerPurchaseTaskInterface[]
+        expenses_per_purchase_task: ExpensesPePerPurchaseTaskInterface[],
+        expenses: ExpenseInterface[]
     },
     searchParams: ReportSearchInterface
 
@@ -76,22 +78,22 @@ export default function Client(props: {
                             .map(payment => payment.sum);
                         const paymentsPerMonthSum = (paymentsPerMonth?.length) ? paymentsPerMonth.reduce((a, b) => a + b) : 0;
 
-                        const expensesPerLeadsPerMonth = reportData.expensesPerLead
+                        const expenses = props.reportData.expenses
                             .filter(expense => dayjs(expense.created_date).format("M") === String(month))
                             .map(expense => expense.sum);
-                        const expensesPerLeadsPerMonthSum = (expensesPerLeadsPerMonth?.length) ? expensesPerLeadsPerMonth.reduce((a, b) => a + b) : 0;
+                        const expensesPerMonthSum = (expenses?.length) ? expenses.reduce((a, b) => a + b) : 0;
 
                         const totalExpensesPerPurchaseTaskPerMonth = reportData.expenses_per_purchase_task
                             .filter(expense => dayjs(expense.created_date).format("M") === String(month))
                             .map(expense => expense.sum);
                         const totalExpensesPerPurchaseTaskPerMonthSum = (totalExpensesPerPurchaseTaskPerMonth?.length) ? totalExpensesPerPurchaseTaskPerMonth.reduce((a, b) => a + b) : 0;
-                        const profit = paymentsPerMonthSum - expensesPerLeadsPerMonthSum;
+                        const profit = paymentsPerMonthSum - expensesPerMonthSum;
                         const balance = paymentsPerMonthSum - totalExpensesPerPurchaseTaskPerMonthSum;
 
                         return <tr key={month}>
                             <td>{months[month - 1]}</td>
                             <td>{paymentsPerMonthSum}</td>
-                            <td>{expensesPerLeadsPerMonthSum}</td>
+                            <td>{expensesPerMonthSum}</td>
                             <td>{profit}</td>
                             <td>{totalExpensesPerPurchaseTaskPerMonthSum}</td>
                             <td>{balance}</td>

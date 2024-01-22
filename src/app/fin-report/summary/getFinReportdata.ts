@@ -1,3 +1,4 @@
+import getExpenses from "@/app/db/expenses/get/getExpensesFromDB";
 import { sendMessageToTg } from "../../api/bugReport/sendMessageToTg";
 import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../../components/types/lead";
 import { pool } from "../../db/connect";
@@ -6,11 +7,13 @@ import { ReportSearchInterface } from "./page";
 export default async function getFinReportdata(searchParams: ReportSearchInterface) {
     const payments = await getPayments(searchParams);
     const expensesPerLead = await getExpensesPerLead(searchParams);
+    const expenses = await getExpenses({});
     const expenses_per_purchase_task = await getExpensesPerPurchaseTask(searchParams)
     return {
         payments,
         expensesPerLead,
-        expenses_per_purchase_task
+        expenses_per_purchase_task,
+        expenses
     };
 }
 
