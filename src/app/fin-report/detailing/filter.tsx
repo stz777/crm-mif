@@ -1,103 +1,93 @@
 "use client"
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+// import { ReportSearchInterface } from "./page";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
+import DatePicker from "react-datepicker";
 
-type Inputs = {
-    year: string,
-    month: string,
-};
+type Inputs = any;
 
+export default function Filter(props: { searchParams: any }) {
+    const router: any = useRouter();
 
+    const startYear = 2023;
+    const nowYear = Number(dayjs().format("YYYY"));
 
-interface ReportSearchInterface {
-    year: string,
-    month: string,
-};
-
-export default function Filter(props: { searchParams: ReportSearchInterface }) {
-    const route = useRouter();
+    const years = [startYear].concat(Array.from({ length: nowYear - startYear }, (_, i) => startYear + i + 1)).reverse();
 
     const { searchParams } = props;
 
-    let defaultValues: any = {};
+    let defaultValues: any = {
+        year: String(nowYear)
+    };
 
     if (Object.keys(searchParams)?.length) {
         for (const key in searchParams) {
             if (key === "year") {
                 defaultValues.year = searchParams['year']
-                defaultValues.month = searchParams['month']
             }
         }
     }
 
-    const { register, handleSubmit, reset } = useForm<Inputs>({
+    const { register, handleSubmit, control } = useForm<Inputs>({
         defaultValues: defaultValues
     });
 
-    const onSubmit: SubmitHandler<Inputs> = data => {
-        const { pathname } = window.location;
-        const qs = Object.entries(data).filter(v => !!v[1]).map(v => `${v[0]}=${v[1]}`).join("&");
-        const newLink = `${pathname}?${qs}`;
-        route.push(newLink);
-    }
 
-    const years = getYearList(2023);
 
     return (<>
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="card">
-                <div className="card-body">
-                    <div className="d-flex">
-                        <div className="me-2">
-                            <select {...register("year", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
-                                <option value="" disabled>
-                                    Выберите год
-                                </option>
-                                {years.map(
-                                    year => <option value={year} key={year}>{year}</option>
-                                )}
-                            </select>
-                        </div>
-                        <div className="me-2">
-                            <select {...register("month", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
-                                <option value="" disabled>
-                                    Выберите месяц
-                                </option>
-                                {months.map(
-                                    (month, i) => <option value={i + 1} key={month}>{month}</option>
-                                )}
-                            </select>
-                        </div>
-                    </div>
-                    <button className="btn btn-sm btn-outline-dark mt-2 me-2">получить отчет</button>
+        <form onSubmit={handleSubmit(v => onSubmit(v, router))}>
+            <div className="d-flex">
+                <div className="me-2" style={{ width: "150px" }}>
+                    <Controller
+                        control={control}
+                        name="date_from"
+                        render={({ field }) => (
+                            <DatePicker
+                                locale="ru"
+                                {...field}
+                                dateFormat="dd.MM.yyyy"
+                                selected={field.value}
+                                onChange={(date) => field.onChange(date)}
+                                placeholderText="от"
+                                className="form-control"
+                            />
+                        )}
+                    />
                 </div>
+                <div className="me-2" style={{ width: "150px" }}>
+                    <Controller
+                        control={control}
+                        name="date_to"
+                        render={({ field }) => (
+                            <DatePicker
+                                locale="ru"
+                                {...field}
+                                dateFormat="dd.MM.yyyy"
+                                selected={field.value}
+                                onChange={(date) => field.onChange(date)} placeholderText="до"
+                                className="form-control "
+                            />
+                        )}
+                    />
+                </div>
+                <button className="btn btn-primary">показать</button>
             </div>
-        </form>
+        </form >
     </>
     );
 }
 
-function getYearList(startYear: number) {
-    var currentYear = new Date().getFullYear();
-    var yearList = [];
-    for (var year = startYear; year <= currentYear; year++) {
-        yearList.push(year);
+const onSubmit: SubmitHandler<Inputs> = (values: any, router: any) => {
+    if (values.date_from) {
+        values.date_from = dayjs(values.date_from).format("DD.MM.YYYY")
     }
-    return yearList.reverse();
+    if (values.date_to) {
+        values.date_to = dayjs(values.date_to).format("DD.MM.YYYY")
+    }
+    const fromEntriedParams = Object.entries(values)
+        .filter(x => !!x).map(x => x.join("=")).join("&");
+    const qs = fromEntriedParams.length ? `?${fromEntriedParams}` : "";
+    const url = window.location.pathname + qs;
+    router.push(url);
 }
-
-
-const months = [
-    "январь",
-    "февраль",
-    "март",
-    "апрель",
-    "май",
-    "июнь",
-    "июль",
-    "август",
-    "сентябрь",
-    "октябрь",
-    "ноябрь",
-    "декабрь"
-];
