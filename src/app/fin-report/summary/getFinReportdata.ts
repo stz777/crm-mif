@@ -1,6 +1,6 @@
 import getExpenses from "@/app/db/expenses/get/getExpensesFromDB";
 import { sendMessageToTg } from "../../api/bugReport/sendMessageToTg";
-import { ExpensesPePerPurchaseTaskInterface, ExpensesPerLeadInterface, PaymentInterface } from "../../components/types/lead";
+import {   PaymentInterface } from "../../components/types/lead";
 import { pool } from "../../db/connect";
 import { ReportSearchInterface } from "./page";
 

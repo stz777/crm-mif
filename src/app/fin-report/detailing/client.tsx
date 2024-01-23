@@ -2,7 +2,7 @@
 import { toast } from "react-toastify";
 import Filter from "./filter";
 import { useEffect, useState } from "react";
-import { PaymentInterface, ExpensesPePerPurchaseTaskInterface } from "@/app/components/types/lead";
+import { PaymentInterface } from "@/app/components/types/lead";
 import dayjs from "dayjs";
 
 export default function Client(props: {
@@ -115,12 +115,12 @@ function Payments(props: { payments: PaymentInterface[] }) {
     </>
 }
 
-function Expenses(props: { expenses: ExpensesPePerPurchaseTaskInterface[] }) {
+function Expenses(props: { expenses: any }) {
 
     let total = 0;
 
     if (props.expenses.length) {
-        total = props.expenses.map(item => item.sum).reduce((a, b) => a + b)
+        // total = props.expenses.map(item => item.sum).reduce((a, b) => a + b)
     }
 
     return <>
@@ -136,10 +136,10 @@ function Expenses(props: { expenses: ExpensesPePerPurchaseTaskInterface[] }) {
                     <th>всего </th>
                     <td>{total}</td>
                 </tr>
-                {props.expenses.map(payment => <tr key={payment.id}>
+                {/* {props.expenses.map(payment => <tr key={payment.id}>
                     <td className="text-nowrap">{dayjs(payment.created_date).format("DD.MM.YYYY hh:mm")}</td>
                     <td>{payment.sum}</td>
-                </tr>)}
+                </tr>)} */}
             </tbody>
         </table>
     </>

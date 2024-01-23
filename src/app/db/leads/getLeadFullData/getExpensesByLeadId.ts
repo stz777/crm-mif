@@ -1,8 +1,8 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
-import { ExpensesPerLeadInterface, PaymentInterface } from "@/app/components/types/lead";
+// import { ExpensesPerLeadInterface, PaymentInterface } from "@/app/components/types/lead";
 import { pool } from "@/app/db/connect";
 
-export default async function getExpensesByLeadId(lead_id: number): Promise<ExpensesPerLeadInterface[]> {
+export default async function getExpensesByLeadId(lead_id: number): Promise<any> {
     return await new Promise(r => {
         pool.query(
             `SELECT * FROM expenses_per_lead WHERE lead_id = ?`,
