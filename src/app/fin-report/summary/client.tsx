@@ -1,10 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { PaymentInterface } from "../../components/types/lead";
 import dayjs from "dayjs";
-import { ReportSearchInterface } from "./page";
 import { ExpenseInterface } from "@/types/expenses/expenseInterface";
 import Filter from "./filter";
 import Link from "next/link";
@@ -14,8 +11,7 @@ export default function Client(props: {
         payments: PaymentInterface[]
         expenses: ExpenseInterface[]
     },
-    searchParams: ReportSearchInterface
-
+    searchParams: any
 }) {
     const reportData = props.reportData;
     // const [reportData, setReportData] = useState(props.reportData)
@@ -90,64 +86,6 @@ export default function Client(props: {
         })()}
     </>
 }
-
-
-
-
-async function fetchGetReportData(searchParams: ReportSearchInterface) {
-    return fetch(
-        "/api/report/get",
-        {
-            method: "POST",
-            body: JSON.stringify({
-                searchParams
-            })
-        }
-    ).then(
-        response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error(response.statusText);
-            }
-        }
-    ).then(data => {
-        if (data.success) {
-            if (!data.reportData) {
-                toast.error("Что-то пошло не так #dnsnNSd3k");
-            }
-            return data;
-        } else {
-            toast.error("Что-то пошло не так");
-        }
-    })
-        .catch(error => {
-            const statusText = String(error);
-            fetch(
-                `/api/bugReport`,
-                {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        text: {
-                            err: "#dsadn3nNj",
-                            data: {
-                                statusText,
-                                values: {}
-                            }
-                        }
-                    })
-                }
-            )
-                .then(x => x.json())
-                .then(x => {
-                    console.log(x);
-                })
-        })
-}
-
 
 const months = [
     "январь",

@@ -26,5 +26,5 @@ const menuItems: { title: string, icon: any, link: string, }[] = [
     { title: "Поставщики", icon: images.suppliers, link: "/suppliers" },
     { title: "Клиенты", icon: images.clients, link: "/clients" },
     { title: "Сотрудники", icon: images.employees, link: "/employees" },
-    { title: "Отчеты", icon: images.report, link: "/fin-report" },
+    { title: "Отчеты", icon: images.report, link: "/fin-report/summary" },
 ]
