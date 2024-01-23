@@ -1,6 +1,6 @@
 "use client"
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ReportSearchInterface } from "./page";
+// import { ReportSearchInterface } from "./page";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 
@@ -8,7 +8,7 @@ type Inputs = {
     year: string,
 };
 
-export default function Filter(props: { searchParams: ReportSearchInterface }) {
+export default function Filter(props: { searchParams: any }) {
     const route = useRouter();
 
     const startYear = 2023;

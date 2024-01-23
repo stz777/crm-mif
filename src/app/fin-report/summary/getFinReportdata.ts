@@ -2,11 +2,11 @@ import getExpenses from "@/app/db/expenses/get/getExpensesFromDB";
 import { sendMessageToTg } from "../../api/bugReport/sendMessageToTg";
 import { PaymentInterface } from "../../components/types/lead";
 import { pool } from "../../db/connect";
-import { ReportSearchInterface } from "./page";
+// import { ReportSearchInterface } from "./page";
 import dayjs from "dayjs";
 
 export default async function getFinReportdata(
-  searchParams: ReportSearchInterface
+  searchParams: any
 ) {
   const payments = await getPayments(searchParams);
   const expenses = await getExpenses(
