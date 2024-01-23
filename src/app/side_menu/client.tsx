@@ -20,11 +20,11 @@ export default function Client(props: { currentPath: string }) {
 
 const menuItems: { title: string, icon: any, link: string, }[] = [
     { title: "Заказы", icon: images.leads, link: "/" },
-    { title: "Задачи", icon: images.tasks, link: "/tasks" },
+    // { title: "Задачи", icon: images.tasks, link: "/tasks" },
     { title: "Расходы", icon: images.expenses, link: "/expenses" },
-    { title: "Склад", icon: images.stock, link: "/stock" },
-    { title: "Поставщики", icon: images.suppliers, link: "/suppliers" },
+    // { title: "Склад", icon: images.stock, link: "/stock" },
+    // { title: "Поставщики", icon: images.suppliers, link: "/suppliers" },
     { title: "Клиенты", icon: images.clients, link: "/clients" },
-    { title: "Сотрудники", icon: images.employees, link: "/employees" },
+    // { title: "Сотрудники", icon: images.employees, link: "/employees" },
     { title: "Отчеты", icon: images.report, link: "/fin-report/summary" },
 ]
