@@ -1,9 +1,12 @@
 "use client"
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-// import { ReportSearchInterface } from "./page";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import ru from 'date-fns/locale/ru';
+dayjs.extend(customParseFormat);
+registerLocale('ru', ru);
 
 type Inputs = any;
 
@@ -15,21 +18,18 @@ export default function Filter(props: { searchParams: any }) {
 
     const years = [startYear].concat(Array.from({ length: nowYear - startYear }, (_, i) => startYear + i + 1)).reverse();
 
-    const { searchParams } = props;
-
-    let defaultValues: any = {
-        year: String(nowYear)
-    };
-
-    if (Object.keys(searchParams)?.length) {
-        for (const key in searchParams) {
-            if (key === "year") {
-                defaultValues.year = searchParams['year']
-            }
-        }
+    const defaultValues: any = {};
+    if (props.searchParams.date_from) {
+        const date: any = dayjs(props.searchParams.date_from, "DD.MM.YYYY");
+        let a = new Date(date);
+        defaultValues.date_from = a;
     }
-
-    const { register, handleSubmit, control } = useForm<Inputs>({
+    if (props.searchParams.date_to) {
+        const date: any = dayjs(props.searchParams.date_to, "DD.MM.YYYY");
+        let a = new Date(date);
+        defaultValues.date_to = a;
+    }
+    const { handleSubmit, control } = useForm<Inputs>({
         defaultValues: defaultValues
     });
 
@@ -51,6 +51,7 @@ export default function Filter(props: { searchParams: any }) {
                                 onChange={(date) => field.onChange(date)}
                                 placeholderText="от"
                                 className="form-control"
+                                autoComplete="off"
                             />
                         )}
                     />
@@ -67,6 +68,7 @@ export default function Filter(props: { searchParams: any }) {
                                 selected={field.value}
                                 onChange={(date) => field.onChange(date)} placeholderText="до"
                                 className="form-control "
+                                autoComplete="off"
                             />
                         )}
                     />

@@ -1,58 +1,50 @@
 import getExpenses from "@/app/db/expenses/get/getExpensesFromDB";
-import { sendMessageToTg } from "../../api/bugReport/sendMessageToTg";
 import { PaymentInterface } from "../../components/types/lead";
 import { pool } from "../../db/connect";
-import { ReportSearchInterface } from "./page";
 import dayjs from "dayjs";
 
-export default async function getFinReportdata(
-  searchParams: ReportSearchInterface
-) {
+export default async function getFinReportdata(searchParams: any) {
   const payments = await getPayments(searchParams);
-  const expenses = await getExpenses(
-    searchParams.year
-      ? {
-          date_from: dayjs(searchParams.year, "YYYY").startOf('year').format("DD.MM.YYYY"),
-          date_to: dayjs(searchParams.year, "YYYY").endOf('year').format("DD.MM.YYYY"),
-        }
-      : {}
-  );
+  const expenses = await getExpenses(searchParams);
   return {
     payments,
     expenses,
   };
 }
 
-async function getPayments(props: {
-  year?: number;
-}): Promise<PaymentInterface[]> {
-  return await new Promise((resolve) => {
-    const whereArray: [string, string, string][] = [];
-    if (props?.year) {
-      whereArray.push(["YEAR(created_date)", "=", String(props.year)]);
-    }
-    const whereString = !whereArray.length
-      ? ""
-      : "WHERE " +
-        whereArray.map(([i1, i2, i3]) => `${i1} ${i2} ${i3}`).join(" AND ");
+async function getPayments(searchParams: any): Promise<PaymentInterface[]> {
+  const whereArr: string[] = [];
 
-    const qs = `SELECT * FROM payments ${whereString} `;
+  if (searchParams.date_from) {
+    const date = dayjs(searchParams.date_from, "DD.MM.YYYY");
+    const day = dayjs(date).format("DD");
+    whereArr.push(`DAY(created_date) >= ${day}`);
+    const month = date.format("MM");
+    whereArr.push(`MONTH(created_date) >= ${month}`);
+    const year = date.format("YYYY");
+    whereArr.push(`YEAR(created_date) >= ${year}`);
+  }
 
-    pool.query(qs, function (err: any, res: PaymentInterface[]) {
-      if (err) {
-        sendMessageToTg(
-          JSON.stringify(
-            {
-              error: err,
-              code: "#kd9d7dh3mnhH",
-            },
-            null,
-            2
-          ),
-          "5050441344"
-        );
-      }
-      resolve(res ? res : []);
+  if (searchParams.date_to) {
+    const date = dayjs(searchParams.date_to, "DD.MM.YYYY");
+    const day = dayjs(date).format("DD");
+    whereArr.push(`DAY(created_date) <= ${day}`);
+    const month = date.format("MM");
+    whereArr.push(`MONTH(created_date) <= ${month}`);
+    const year = date.format("YYYY");
+    whereArr.push(`YEAR(created_date) <= ${year}`);
+  }
+
+  const whereStr = whereArr.length ? ` WHERE ${whereArr.join(" AND ")}` : "";
+
+  const qs = `SELECT * FROM payments ${whereStr} ORDER BY id DESC`;
+
+  return pool
+    .promise()
+    .query(qs)
+    .then(([payments]: any) => payments)
+    .catch((error) => {
+      console.error("error #fjfud", error);
+      return [];
     });
-  });
 }
