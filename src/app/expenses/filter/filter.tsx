@@ -14,12 +14,12 @@ export default function Filter(props: {
 }) {
     const defaultValues: any = {};
     if (props.searchParams.date_from) {
-        const date = dayjs(props.searchParams.date_from, "DD.MM.YYYY");
+        const date: any = dayjs(props.searchParams.date_from, "DD.MM.YYYY");
         let a = new Date(date);
         defaultValues.date_from = a;
     }
     if (props.searchParams.date_to) {
-        const date = dayjs(props.searchParams.date_to, "DD.MM.YYYY");
+        const date: any = dayjs(props.searchParams.date_to, "DD.MM.YYYY");
         let a = new Date(date);
         defaultValues.date_to = a;
     }

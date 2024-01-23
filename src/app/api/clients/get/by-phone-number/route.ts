@@ -9,8 +9,9 @@ export async function POST(request: Request) {
             error: "#vjf9n"
         })
     }
-
-    const clients = await getClients({ phone: data.phone });
+ 
+    const clients = await getClients({});
+    // const clients = await getClients({ phone: data.phone });
 
     return NextResponse.json({
         success: true,

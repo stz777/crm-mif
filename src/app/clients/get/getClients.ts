@@ -6,9 +6,9 @@ export async function getClients(searchParams: ClientsSearchInterface): Promise<
 
     const whereArray: [string, string, string][] = [];
 
-    if (searchParams.phone) {
-        whereArray.push(["id", "IN", `(SELECT client FROM clients_meta WHERE data_type = 'phone' AND data LIKE '%${searchParams.phone}%')`])
-    }
+    // if (searchParams.phone) {
+    //     whereArray.push(["id", "IN", `(SELECT client FROM clients_meta WHERE data_type = 'phone' AND data LIKE '%${searchParams.phone}%')`])
+    // }
 
     const whereString = !whereArray.length
         ? ""
