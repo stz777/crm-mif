@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import {  PaymentInterface } from "../../components/types/lead";
+import { PaymentInterface } from "../../components/types/lead";
 import dayjs from "dayjs";
 import { ReportSearchInterface } from "./page";
 import { ExpenseInterface } from "@/types/expenses/expenseInterface";
 import Filter from "./filter";
+import Link from "next/link";
 
 export default function Client(props: {
     reportData: {
@@ -16,20 +17,8 @@ export default function Client(props: {
     searchParams: ReportSearchInterface
 
 }) {
-
-    const [reportData, setReportData] = useState(props.reportData)
-
-    useEffect(() => {
-        let mount = true;
-        (async function refresh() {
-            if (!mount) return;
-            await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
-            const response = await fetchGetReportData(props.searchParams);
-            if (JSON.stringify(reportData) !== JSON.stringify(response.reportData)) setReportData(response.reportData)
-            await refresh();
-        })();
-        return () => { mount = false; }
-    }, [props, reportData])
+    const reportData = props.reportData;
+    // const [reportData, setReportData] = useState(props.reportData)
 
     let totalPayments;
     if (reportData?.payments?.length) {
@@ -50,16 +39,22 @@ export default function Client(props: {
     return <>
         <h1>Отчеты</h1>
         <div className="mt-4"></div>
-        <Filter searchParams={props.searchParams} />
+        <div className="d-flex justify-content-between">
+            <div><Filter searchParams={props.searchParams} /></div>
+            <div className="d-flex align-items-center border rounded">
+                <div className="p-2 border rounded bg-primary text-white">Сводка</div>
+                <Link href={"/fin-report/detailing"} className="p-2 text-dark text-decoration-none">Детализация</Link>
+            </div>
+        </div>
         {(() => {
             const monthes = Array.from({ length: 12 }, (_, i) => i + 1);
-            return <table className="table table-bordered table-striped" >
+            return <table className="table" >
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>доходы</th>
-                        <th>расходы</th>
-                        <th>прибыль</th>
+                        <th>Месяц</th>
+                        <th>Доходы</th>
+                        <th>Расходы</th>
+                        <th>Прибыль</th>
                     </tr>
                 </thead>
                 <tbody>

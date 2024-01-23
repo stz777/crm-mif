@@ -30,7 +30,7 @@ export default function Filter(props: { searchParams: ReportSearchInterface }) {
         }
     }
 
-    const { register, handleSubmit, reset } = useForm<Inputs>({
+    const { register, handleSubmit } = useForm<Inputs>({
         defaultValues: defaultValues
     });
 
@@ -43,24 +43,11 @@ export default function Filter(props: { searchParams: ReportSearchInterface }) {
 
     return (<>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="card">
-                <div className="card-body">
-                    <div className="d-flex">
-                        <div className="me-2">
-                            <h6>Год</h6>
-                            <select {...register("year", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
-                                {years.map(year => <option key={year} value={String(year)}>{year}</option>)}
-                            </select>
-                        </div>
-                    </div>
-                    <button className="btn btn-sm btn-outline-dark mt-2 me-2">фильтр</button>
-                    <div className="btn btn-sm btn-outline-dark mt-2"
-                        onClick={() => {
-                            reset();
-                            route.push(window.location.pathname);
-                        }}
-                    >сбросить</div>
-                </div>
+            <div className="d-flex">
+                <select {...register("year", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                    {years.map(year => <option key={year} value={String(year)}>{year}</option>)}
+                </select>
+                <button className="btn btn-primary ms-2">Показать</button>
             </div>
         </form>
     </>

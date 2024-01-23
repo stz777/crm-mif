@@ -1,46 +1,58 @@
 import getExpenses from "@/app/db/expenses/get/getExpensesFromDB";
 import { sendMessageToTg } from "../../api/bugReport/sendMessageToTg";
-import {   PaymentInterface } from "../../components/types/lead";
+import { PaymentInterface } from "../../components/types/lead";
 import { pool } from "../../db/connect";
 import { ReportSearchInterface } from "./page";
+import dayjs from "dayjs";
 
-export default async function getFinReportdata(searchParams: ReportSearchInterface) {
-    const payments = await getPayments(searchParams);
-    const expenses = await getExpenses({});
-    return {
-        payments,
-        expenses
-    };
+export default async function getFinReportdata(
+  searchParams: ReportSearchInterface
+) {
+  const payments = await getPayments(searchParams);
+  const expenses = await getExpenses(
+    searchParams.year
+      ? {
+          date_from: dayjs(searchParams.year, "YYYY").startOf('year').format("DD.MM.YYYY"),
+          date_to: dayjs(searchParams.year, "YYYY").endOf('year').format("DD.MM.YYYY"),
+        }
+      : {}
+  );
+  return {
+    payments,
+    expenses,
+  };
 }
 
-async function getPayments(props: { year?: number }): Promise<PaymentInterface[]> {
+async function getPayments(props: {
+  year?: number;
+}): Promise<PaymentInterface[]> {
+  return await new Promise((resolve) => {
+    const whereArray: [string, string, string][] = [];
+    if (props?.year) {
+      whereArray.push(["YEAR(created_date)", "=", String(props.year)]);
+    }
+    const whereString = !whereArray.length
+      ? ""
+      : "WHERE " +
+        whereArray.map(([i1, i2, i3]) => `${i1} ${i2} ${i3}`).join(" AND ");
 
-    return await new Promise(resolve => {
+    const qs = `SELECT * FROM payments ${whereString} `;
 
-        const whereArray: [string, string, string][] = [];
-        if (props?.year) {
-            whereArray.push(["YEAR(created_date)", "=", String(props.year)])
-        }
-        const whereString = !whereArray.length
-            ? ""
-            : ("WHERE " + whereArray.map(([i1, i2, i3]) => `${i1} ${i2} ${i3}`).join(" AND "));
-
-        const qs = `SELECT * FROM payments ${whereString} `;
-
-        pool.query(
-            qs,
-            function (err: any, res: PaymentInterface[]) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify({
-                            error: err,
-                            code: "#kd9d7dh3mnhH"
-                        }, null, 2),
-                        "5050441344"
-                    )
-                }
-                resolve(res ? res : []);
-            }
-        )
-    })
+    pool.query(qs, function (err: any, res: PaymentInterface[]) {
+      if (err) {
+        sendMessageToTg(
+          JSON.stringify(
+            {
+              error: err,
+              code: "#kd9d7dh3mnhH",
+            },
+            null,
+            2
+          ),
+          "5050441344"
+        );
+      }
+      resolve(res ? res : []);
+    });
+  });
 }
