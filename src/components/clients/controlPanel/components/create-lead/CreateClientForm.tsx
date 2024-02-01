@@ -59,7 +59,7 @@ export default function CreateClientForm() {
                     />
                     <FieldWrapper title="Оплачено"
                         field={<>
-                            <input className="form-control"  {...register("payment", { required: true })} autoComplete="off" />
+                            <input className="form-control"  {...register("payment",)} autoComplete="off" />
                         </>}
                     />
                     <FieldWrapper title="Чек"
@@ -84,8 +84,22 @@ export default function CreateClientForm() {
     );
 }
 
-
 const onSubmit = (data: any, resetForm: any) => {
+    if (!data.phones?.length) {
+        toast.error('Нужно заполнить поле "телефон"');
+        return;
+    } else {
+
+        for (let index = 0; index < data.phones.length; index++) {
+            const { phone } = data.phones[index];//
+            const numbers = phone.replace(/[^0-9]/igm,"");
+            console.log('phone', [phone, phone.length, numbers, numbers.length]);
+            if(numbers.length<10){
+                toast.error('Нужно корректно заполнить поле "телефон"');
+                return;
+            }
+        }
+    }
 
     const formdata = new FormData();
 
@@ -119,23 +133,42 @@ const onSubmit = (data: any, resetForm: any) => {
         return;
     }
 
-    if (!data?.payment) {
-        toast.error('Заполните поле "оплачено"');
-        return;
-    }
-    if (!data?.sum) {
-        toast.error('Заполните поле "сумма заказа"');
-        return;
-    }
-    if (!data?.description) {
-        toast.error('Заполните поле "описание"');
+    const leadFields = [
+        data?.payment,
+        data?.sum,
+        data?.description,
+        data.deadline
+    ];
+
+    const leadFieldsLength = leadFields.length;
+    const completedLength = leadFields.filter(x => x).length;
+
+    if (completedLength > 0 && leadFieldsLength) {
+        toast.error('Требуется заполнить все поля оплаты или оставить их пустыми"');
         return;
     }
 
-    if (!data.deadline) {
-        toast.error('Заполните поле "дедлайн');
-        return;
-    }
+    // if(
+
+    // )
+
+    // if (!data?.payment) {
+    //     toast.error('Заполните поле "оплачено"');
+    //     return;
+    // }
+    // if (!data?.sum) {
+    //     toast.error('Заполните поле "сумма заказа"');
+    //     return;
+    // }
+    // if (!data?.description) {
+    //     toast.error('Заполните поле "описание"');
+    //     return;
+    // }
+
+    // if (!data.deadline) {
+    //     toast.error('Заполните поле "дедлайн');
+    //     return;
+    // }
 
     // if (
     //     !is_boss
