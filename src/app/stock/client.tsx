@@ -4,14 +4,18 @@ import SideModal from "@/components/SideModal/SideModal";
 import { JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { StockInterface } from "../components/types/stock";
 
-export default function Client() {
+export default function Client(props: { materials: StockInterface[] }) {
     return <>
         <h1>Склад</h1>
         <div className="d-flex justify-content-between">
             <div className="d-flex">
                 <CreateMaterial />
             </div>
+        </div>
+        <div>
+            <pre>{JSON.stringify(props, null, 2)}</pre>
         </div>
     </>
 }
