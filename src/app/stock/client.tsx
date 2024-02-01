@@ -1,9 +1,6 @@
 "use client"
 
 import SideModal from "@/components/SideModal/SideModal";
-import { $componentState } from "@/components/clients/controlPanel/components/create-lead/store/componentState";
-import { $modalIsOpen, setModalIsOpen } from "@/components/clients/controlPanel/components/create-lead/store/modalState";
-import { useStore } from "effector-react";
 import { JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -14,53 +11,13 @@ export default function Client() {
         <div className="d-flex justify-content-between">
             <div className="d-flex">
                 <CreateMaterial />
-                {/* <CreateLead />
-                <div className="d-flex">
-                    <Search searchParams={props.searchParams} />
-                    <Image
-                        src={SearchIcon}
-                        alt=""
-                        style={{
-                            marginTop: "13px",
-                            marginLeft: "-28px",
-                        }}
-                        className="me-2"
-                        width={15}
-                        height={15}
-                    />
-                </div> */}
             </div>
-            {/* {(() => {
-                const { searchParams } = props;
-                return (
-                    <button
-                        onClick={() => {
-                            if (searchParams.is_archive) {
-                                delete searchParams.is_archive;
-                            } else {
-                                searchParams.is_archive = "true";
-                            }
-                            const { pathname, origin } = window.location;
-                            const qs = querystring.encode(searchParams);
-                            const linkParts = [pathname, `?${qs}`];
-                            const link = `${origin}/${pathname}?${qs}`;
-                            window.location.href = link
-                        }}
-                        className="btn btn-outline-dark float-left"
-                    >
-                        {searchParams.is_archive ? "скрыть" : "показать"} архив
-                    </button>
-                );
-            })()} */}
         </div>
     </>
 }
 
 function CreateMaterial() {
-    // const modalIsOpen = useStore($modalIsOpen);
     const [isOpen, setIsOpen] = useState(false);
-
-
     const {
         register,
         handleSubmit,
@@ -78,7 +35,8 @@ function CreateMaterial() {
             .then(x => x.json())
             .then(x => {
                 if (x.success) {
-                    toast.success("Категория создана");
+                    toast.success("Материал создан");
+                    reset();
                 } else {
                     toast.error("Что-то пошло не так #ff5f84");
                 }
@@ -100,7 +58,6 @@ function CreateMaterial() {
                 <div>
                     <form onSubmit={handleSubmit(x => {
                         onSubmit(x);
-
                     })}>
                         <Wrapper title="Наименование">
                             <input {...register("material", { required: true })} className="form-control" autoComplete="off" />
@@ -124,7 +81,6 @@ function CreateMaterial() {
         </SideModal>
     </>
 }
-
 
 function Wrapper(props: {
     title: string;
