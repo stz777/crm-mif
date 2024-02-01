@@ -1,6 +1,7 @@
+import Client from "./client";
+
 export default async function Page() {
     return <>
-        <h1>Склад</h1>
-        
+        <Client />
     </>
 }
