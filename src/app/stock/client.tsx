@@ -103,7 +103,7 @@ function CreateMaterial() {
 
                     })}>
                         <Wrapper title="Наименование">
-                            <input {...register("name", { required: true })} className="form-control" autoComplete="off" />
+                            <input {...register("material", { required: true })} className="form-control" autoComplete="off" />
                         </Wrapper>
                         <Wrapper title="Количество">
                             <input {...register("count", {
