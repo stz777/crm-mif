@@ -4,7 +4,6 @@ export default async function insertMaterialToStockDB(
   material: string,
   count: number
 ): Promise<number> {
-  console.log(material, count);
   return pool
     .promise()
     .query("INSERT INTO stock (material, count) VALUES (?,?)", [
@@ -12,7 +11,6 @@ export default async function insertMaterialToStockDB(
       count,
     ])
     .then(([data]: any) => {
-      console.log("data");
       return data.insertId;
     })
     .catch((error: any) => {

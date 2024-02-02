@@ -1,8 +1,25 @@
 "use client"
+import { useEffect, useState } from "react";
 import { StockInterface } from "../components/types/stock";
 import CreateMaterial from "./CreateMaterial";
+import fetchStock from "./fetchStock";
 
 export default function Client(props: { materials: StockInterface[] }) {
+    const [stock, setStock] = useState(props.materials);
+    useEffect(() => {
+        let mount = true;
+        (async function refreshData() {
+            if (!mount) return;
+            await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
+            const response = await fetchStock();
+            if (JSON.stringify(stock) !== JSON.stringify(response.stock)) {
+                setStock(response.stock);
+            }
+            await refreshData();
+        })();
+        return () => { mount = false; }
+    }, [stock,])
+
     return <>
         <h1>Склад</h1>
         <div className="d-flex justify-content-between">
@@ -20,7 +37,7 @@ export default function Client(props: { materials: StockInterface[] }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.materials.map(material => <tr key={material.id}>
+                    {stock.map(material => <tr key={material.id}>
                         <td>{material.id}</td>
                         <td>{material.material}</td>
                         <td>{material.count}</td>
