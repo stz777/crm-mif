@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { StockInterface } from "../components/types/stock";
 import CreateMaterial from "./CreateMaterial";
 import fetchStock from "./fetchStock";
+import AddWriteOff from "./AddWriteOff";
 
 export default function Client(props: { materials: StockInterface[] }) {
     const [stock, setStock] = useState(props.materials);
@@ -41,6 +42,17 @@ export default function Client(props: { materials: StockInterface[] }) {
                         <td>{material.id}</td>
                         <td>{material.material}</td>
                         <td>{material.count}</td>
+                        <td className="text-right">
+                            <div className="d-flex justify-content-end">
+                                <div className="me-2">
+                                    <AddWriteOff material={material} />
+                                    {/* <button className="btn btn-outline-dark btn-sm">Списать</button> */}
+                                </div>
+                                <div><button className="btn btn-outline-dark btn-sm">Пополнить</button></div>
+                            </div>
+
+
+                        </td>
                     </tr>)}
                     <tr></tr>
                 </tbody>
