@@ -10,7 +10,11 @@ export default function AddWriteOff(props: { material: StockInterface }) {
         register,
         handleSubmit,
         reset,
-    } = useForm<any>();
+    } = useForm<any>({
+        defaultValues: {
+            materialId: props.material.id
+        }
+    });
 
     function onSubmit(values: any) {
         fetch(
@@ -25,8 +29,13 @@ export default function AddWriteOff(props: { material: StockInterface }) {
                 if (x.success) {
                     toast.success("Списание проведено");
                     reset();
+                    setIsOpen(false);
                 } else {
-                    toast.error("Что-то пошло не так #njg3kk");
+                    if (x.error) {
+                        toast.error(`Что-то пошло не так: ${x.error}`);
+                    } else {
+                        toast.error("Что-то пошло не так #njg3kk");
+                    }
                 }
             })
             .catch(err => {
@@ -55,7 +64,7 @@ export default function AddWriteOff(props: { material: StockInterface }) {
                                 })} className="form-control" autoComplete="off" />
                             </Wrapper>
                             <Wrapper title="Комментарий">
-                                <textarea {...register("cmment", {
+                                <textarea {...register("comment", {
                                     required: true,
                                 })} className="form-control" autoComplete="off" />
                             </Wrapper>
