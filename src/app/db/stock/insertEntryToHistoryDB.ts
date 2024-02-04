@@ -3,14 +3,15 @@ import { pool } from "../connect";
 export default async function insertEntryToHistoryDB(
   materialId: number,
   count: number,
+  done_by: number,
   is_adjunction: number,
   comment: string
 ): Promise<number> {
   return pool
     .promise()
     .query(
-      "INSERT INTO stock_history (material, count, is_adjunction, comment) VALUES (?,?,?,?)",
-      [materialId, count, is_adjunction, comment]
+      "INSERT INTO stock_history (material, count,done_by, is_adjunction, comment) VALUES (?,?,?,?,?)",
+      [materialId, count, done_by,is_adjunction, comment]
     )
     .then(([res]: any) => {
       return res.insertId;

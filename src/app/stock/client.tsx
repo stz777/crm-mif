@@ -5,6 +5,7 @@ import CreateMaterial from "./CreateMaterial";
 import fetchStock from "./fetchStock";
 import AddWriteOff from "./AddWriteOff";
 import AddReplenishment from "./AddReplenishment";
+import Link from "next/link";
 
 export default function Client(props: { materials: StockInterface[] }) {
     const [stock, setStock] = useState(props.materials);
@@ -25,9 +26,10 @@ export default function Client(props: { materials: StockInterface[] }) {
     return <>
         <h1>Склад</h1>
         <div className="d-flex justify-content-between">
-            <div className="d-flex">
+            {/* <div className="d-flex"> */}
                 <CreateMaterial />
-            </div>
+                <Link href={"/stock/history"} className="btn btn-outline-dark">Показать историю</Link>
+            {/* </div> */}
         </div>
         <div>
             <table className="table">
