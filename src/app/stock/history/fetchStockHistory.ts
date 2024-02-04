@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
 export default async function fetchStockHistory() {
-  return fetch("/api/stock/get", {
+  return fetch("/api/stock/get-history", {
     method: "POST",
   })
     .then((response) => {
@@ -13,7 +13,7 @@ export default async function fetchStockHistory() {
     })
     .then((data) => {
       if (data.success) {
-        if (!data.stock) {
+        if (!data.stockHistory) {
           toast.error("Что-то пошло не так #m453n7z");
         }
         return data;

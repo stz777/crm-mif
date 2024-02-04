@@ -18,7 +18,7 @@ export default async function fetchStock() {
         }
         return data;
       } else {
-        toast.error("Что-то пошло не так #v568v7b");
+        toast.error("Что-то пошло не так #v5m8v7b");
       }
     })
     .catch((error) => {
