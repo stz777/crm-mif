@@ -1,9 +1,17 @@
+import { getUserByToken } from "@/app/components/getUserByToken";
 import { pool } from "@/app/db/connect";
 import getStockFromDB from "@/app/db/stock/getStockFromDB";
 import insertEntryToHistoryDB from "@/app/db/stock/insertEntryToHistoryDB";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  const auth = cookies().get("auth");
+  if (!auth?.value) return new Response("Кто ты", { status: 401 });
+  const user = await getUserByToken(auth?.value);
+  if (!user) return new Response("Кто ты", { status: 401 });
+  if (!user.is_boss) return new Response("Кто ты", { status: 401 });
+
   const { materialId, count, comment } = await request.json();
   const allStock = await getStockFromDB();
   const countOfCurrentMaterial = allStock.find(
@@ -36,6 +44,7 @@ export async function POST(request: NextRequest) {
   const updateHistoryResult = await insertEntryToHistoryDB(
     materialId,
     count,
+    user.id,
     0,
     comment
   );

@@ -2,6 +2,7 @@
 import { StockHistory } from "@/app/components/types/stock";
 import { useEffect, useState } from "react";
 import fetchStockHistory from "./fetchStockHistory";
+import dayjs from "dayjs";
 // import { StockInterface } from "../components/types/stock";
 // import CreateMaterial from "./CreateMaterial";
 // import fetchStock from "./fetchStock";
@@ -31,7 +32,7 @@ export default function Client(props: {
 
     return <>
         <h1>Склад (История)</h1>
-        <pre>{JSON.stringify(props, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(props, null, 2)}</pre> */}
         {/* <div className="d-flex justify-content-between">
             <div className="d-flex">
                 <CreateMaterial />
@@ -50,9 +51,11 @@ export default function Client(props: {
                 </thead>
                 <tbody>
                     {stockHistory.map(historyItem => <tr key={historyItem.id}>
-                        <td>{historyItem.id}</td>
-                        <td>{historyItem.comment}</td>
-                        <td>{historyItem.count}</td>
+                        <td>{historyItem.material_name}</td>
+                        <td>{historyItem.username}</td>
+                        <td>{dayjs(historyItem.created_date).format("DD.MM.YYYY")}</td>
+                        <td>{historyItem.is_adjunction ? <span className="text-success">Пополнение</span> : <span className="text-danger">Списание</span>}</td>
+                        <td><span className={`text-${historyItem.is_adjunction ? "success" : "danger"}`}>{historyItem.is_adjunction ? "+" : "-"}{historyItem.count}</span></td>
                         {/* <td className="text-right">
                             <div className="d-flex justify-content-end">
                                 <div className="me-2">

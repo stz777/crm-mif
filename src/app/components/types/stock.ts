@@ -12,4 +12,6 @@ export interface StockHistory {
   count: number;
   comment: string;
   is_adjunction: number;
+  username: string;
+  material_name: string;
 }
