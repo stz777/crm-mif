@@ -13,12 +13,15 @@ export default async function Home(props: any) {
   if (!user) return redirect("/");
   const { searchParams } = props;
   const leads = await getLeads(searchParams);
- 
+
   return (
     <>
-      <PageTmp text="Заказы">
-        <ControlPanel searchParams={searchParams}/>
-        <div className="my-5"></div>
+      <PageTmp
+        title="Заказы"
+        filter={<>
+          <ControlPanel searchParams={searchParams} />
+        </>}
+      >
         <Client
           leads={leads}
           is_manager={!!user?.is_manager}
