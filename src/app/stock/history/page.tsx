@@ -1,9 +1,21 @@
 import Client from "./client";
-import getStockHistoryFromDB from "@/app/db/stock/getStockHistoryFromDB";
+import { SearchParamsInterface } from "./types";
+import PageTmp from "@/app/ui/tmp/page/PageTmp";
+import Filter from "./Filter";
+import Link from "next/link";
+import getStockHistoryFromDB from "./getStockHistoryFromDB";
 
-export default async function Page() {
-    const history = await getStockHistoryFromDB();
+export default async function Page(props: { searchParams: SearchParamsInterface; }) {
+    const history = await getStockHistoryFromDB(props.searchParams);
     return <>
-        <Client history={history} />
+        <PageTmp
+            title="Склад (История)"
+            filter={<div className="d-flex justify-content-between">
+                <div className="me-2"><Filter stockHistory={history} searchParams={props.searchParams} /></div>
+                <Link href={"/stock"} className="btn btn-outline-dark text-nowrap">Скрыть историю</Link>
+            </div>}
+        >
+            <Client history={history} searchParams={props.searchParams} />
+        </PageTmp>
     </>
 }

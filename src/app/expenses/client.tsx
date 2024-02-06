@@ -7,6 +7,7 @@ import ExpenseCreator from "./expenseCreator/ExpenseCreator";
 import dayjs from "dayjs";
 import fetchExpenses from "./fetchExpenses";
 import Filter from "./filter/filter";
+import PageTmp from "../ui/tmp/page/PageTmp";
 
 export default function Client(props: {
     expensesCategories: ExpensesCategoryInterface[],
@@ -33,35 +34,36 @@ export default function Client(props: {
     }, [expenses, expensesCategories, props.searchParams])
 
     return <>
-        <h1>Расходы</h1>
-        <div className="mt-4"></div>
-        <div className="d-flex justify-content-between">
-            <div className="d-flex">
-                <ExpenseCreator expensesCategories={expensesCategories} />
-                <div className="mx-3"><Filter expensesCategories={expensesCategories} searchParams={props.searchParams} /></div>
-            </div>
-            <CategoriesEditor expensesCategories={expensesCategories} />
-        </div>
-        <div className="my-5"></div>
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Описание</th>
-                    <th>Категория</th>
-                    <th>Дата</th>
-                    <th>Сумма</th>
-                </tr>
-            </thead>
-            <tbody>
-                {expenses.map(expense => <tr key={expense.id}>
-                    <td>{expense.id}</td>
-                    <td>{expense.description}</td>
-                    <td>{expense.category_id}</td>
-                    <td>{dayjs(expense.created_date).format("DD.MM.YYYY")}</td>
-                    <td>{expense.sum}</td>
-                </tr>)}
-            </tbody>
-        </table>
+        <PageTmp
+            title="Расходы"
+            filter={<div className="d-flex justify-content-between">
+                <div className="d-flex">
+                    <ExpenseCreator expensesCategories={expensesCategories} />
+                    <div className="mx-3"><Filter expensesCategories={expensesCategories} searchParams={props.searchParams} /></div>
+                </div>
+                <CategoriesEditor expensesCategories={expensesCategories} />
+            </div>}
+        >
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Описание</th>
+                        <th>Категория</th>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {expenses.map(expense => <tr key={expense.id}>
+                        <td>{expense.id}</td>
+                        <td>{expense.description}</td>
+                        <td>{expense.category_id}</td>
+                        <td>{dayjs(expense.created_date).format("DD.MM.YYYY")}</td>
+                        <td>{expense.sum}</td>
+                    </tr>)}
+                </tbody>
+            </table>
+        </PageTmp>
     </>
 }

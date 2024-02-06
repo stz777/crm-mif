@@ -7,6 +7,7 @@ import Logo from "@/media/images/logo.svg";
 import Image from 'next/image';
 import Link from 'next/link';
 import LogoutBTN from './api/auth/logout/logoutBTN';
+import "./styles.css";
 
 export default function RootLayout({
   children,
