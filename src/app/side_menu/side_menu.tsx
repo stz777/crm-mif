@@ -10,7 +10,7 @@ export default async function SideMenu() {
     if (!auth?.value) return;
     const user = await getUserByToken(auth?.value);
     if (!user) return null;
-    return <div>
+    return <div style={{ width: "180px" }}>
         <Client currentPath={currentPath} />
     </div>
 }
