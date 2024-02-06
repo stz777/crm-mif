@@ -16,15 +16,14 @@ export default function Filter(props: {
         const date: any = dayjs(props.searchParams.date_from, "DD.MM.YYYY");
         defaultValues.date_from = new Date(date);
     }
+    if (props?.searchParams.is_adjunction) {
+        defaultValues.is_adjunction = props.searchParams.is_adjunction ? String(props.searchParams.is_adjunction) : "";
+    }
     if (props?.searchParams.date_to) {
         const date: any = dayjs(props.searchParams.date_to, "DD.MM.YYYY");
         defaultValues.date_to = new Date(date);
     }
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<any>(
-        {
-            defaultValues
-        }
-    );
+    const { register, handleSubmit } = useForm<any>({ defaultValues });            
     const router = useRouter();
     return <>
         <form
