@@ -9,8 +9,6 @@ export default function Client(props: {
     history: StockHistory[],
     searchParams: SearchParamsInterface
 }) {
-    // const { searchParams } = props;
-
     const [stockHistory, setStockHistory] = useState(props.history);
 
     useEffect(() => {
@@ -19,7 +17,7 @@ export default function Client(props: {
         (async function refreshData() {
             if (!mount) return;
             await new Promise(resolve => { setTimeout(() => { resolve(1); }, 1000); });
-            const response = await fetchStockHistory();
+            const response = await fetchStockHistory(props.searchParams);
             if (JSON.stringify(stockHistory) !== JSON.stringify(response.stockHistory)) {
                 setStockHistory(response.stockHistory);
             }

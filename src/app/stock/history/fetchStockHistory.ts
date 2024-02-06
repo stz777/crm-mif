@@ -1,8 +1,12 @@
 import { toast } from "react-toastify";
+import { SearchParamsInterface } from "./types";
 
-export default async function fetchStockHistory() {
+export default async function fetchStockHistory(
+  searchParams: SearchParamsInterface
+) {
   return fetch("/api/stock/get-history", {
     method: "POST",
+    body: JSON.stringify(searchParams),
   })
     .then((response) => {
       if (response.ok) {
