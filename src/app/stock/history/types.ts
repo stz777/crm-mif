@@ -1,5 +1,5 @@
 export interface SearchParamsInterface {
-  materialId?: number;
+  is_adjunction?: number;
   date_from?: any;
   date_to?: any;
 }
