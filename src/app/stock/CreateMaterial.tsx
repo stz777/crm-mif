@@ -1,3 +1,4 @@
+"use client"
 import SideModal from "@/components/SideModal/SideModal";
 import { useState, ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLikeOfReactNode } from "react";
 import { useForm } from "react-hook-form";
