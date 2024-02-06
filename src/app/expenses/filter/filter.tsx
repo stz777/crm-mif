@@ -24,9 +24,9 @@ export default function Filter(props: {
         let a = new Date(date);
         defaultValues.date_to = a;
     }
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<any>(
+    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<ExpensesSearchParamsInterface>(
         {
-            defaultValues
+            defaultValues: props.searchParams
         }
     );
     const router = useRouter();
@@ -36,18 +36,6 @@ export default function Filter(props: {
             style={{ maxWidth: "1000px" }}>
             <div className="d-flex">
                 <select style={{ maxWidth: "250px" }} {...register("category", {
-                    onChange: (e) => {
-                        const currentParams = props.searchParams;
-                        if (e.target.value === "") {
-                            delete currentParams.category;
-                        } else {
-                            currentParams.category = e.target.value;
-                        }
-                        const fromEntriedParams = Object.entries(currentParams).map(x => x.join("=")).join("&");
-                        const qs = fromEntriedParams.length ? `?${fromEntriedParams}` : "";
-                        const url = window.location.pathname + qs;
-                        router.push(url);
-                    }
                 })} defaultValue="" className="form-select me-2" aria-label="Default select example">
                     <option value="">
                         Выберите категорию
@@ -58,7 +46,7 @@ export default function Filter(props: {
                     <Controller
                         control={control}
                         name="date_from"
-                        render={({ field }) => (
+                        render={({ field }: any) => (
                             <DatePicker
                                 locale="ru"
                                 {...field}
@@ -75,7 +63,7 @@ export default function Filter(props: {
                     <Controller
                         control={control}
                         name="date_to"
-                        render={({ field }) => (
+                        render={({ field }: any) => (
                             <DatePicker
                                 locale="ru"
                                 {...field}
