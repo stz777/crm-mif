@@ -23,12 +23,10 @@ export default function Filter(props: {
         const date: any = dayjs(props.searchParams.date_to, "DD.MM.YYYY");
         defaultValues.date_to = new Date(date);
     }
-    const { register, handleSubmit } = useForm<any>({ defaultValues });            
+    const { register, handleSubmit } = useForm<any>({ defaultValues });
     const router = useRouter();
     return <>
-        <form
-            onSubmit={handleSubmit(e => onSubmit(e, router))}
-            style={{ maxWidth: "1000px" }}>
+        <form onSubmit={handleSubmit(e => onSubmit(e, router))} style={{ maxWidth: "1000px" }}>
             <div className="d-flex">
                 <select style={{ maxWidth: "250px" }} {...register("is_adjunction")} defaultValue="" className="form-select me-2" aria-label="Default select example">
                     <option value="">Все операции</option>
