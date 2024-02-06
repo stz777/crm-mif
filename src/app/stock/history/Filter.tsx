@@ -31,15 +31,9 @@ export default function Filter(props: {
             style={{ maxWidth: "1000px" }}>
             <div className="d-flex">
                 <select style={{ maxWidth: "250px" }} {...register("is_adjunction")} defaultValue="" className="form-select me-2" aria-label="Default select example">
-                    <option value="">
-                        Все операции
-                    </option>
-                    <option value="0">
-                        Списания
-                    </option>
-                    <option value="1">
-                        Пополнения
-                    </option>
+                    <option value="">Все операции</option>
+                    <option value="0">Списания</option>
+                    <option value="1">Пополнения</option>
                 </select>
                 <button className="btn btn-primary">показать</button>
             </div>
