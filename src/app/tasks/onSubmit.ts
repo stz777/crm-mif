@@ -1,7 +1,8 @@
 // import { reset } from "@/components/clients/controlPanel/components/create-lead/store/modalState";
 import { toast } from "react-toastify";
+import { TaskFromDbInterface } from "./types";
 
-export default function onSubmit(data: any, resetForm: any) {
+export default function onSubmit(data: TaskFromDbInterface, resetForm: any) {
   console.log("onsubmit");
   // return;
   if (!data.deadline) {
@@ -9,9 +10,9 @@ export default function onSubmit(data: any, resetForm: any) {
     return;
   }
 
-  console.log(data);
+  // console.log(data);
 
-  return;
+  // return;
   // if (!data.phones?.length) {
   //   toast.error('Нужно заполнить поле "телефон"');
   //   return;
@@ -109,48 +110,30 @@ export default function onSubmit(data: any, resetForm: any) {
   //     toast.error('Прикрепите изображение к платежу');
   //     return;
   // }
+  // console.log("JSON.stringify(data)", JSON.stringify(data));
 
-  // fetch("/api/clients/create", {
-  //   method: "POST",
-  //   body: formdata,
-  // })
-  //   .then((response) => {
-  //     if (response.ok) {
-  //       return response.json();
-  //     } else {
-  //       throw new Error(response.statusText);
-  //     }
-  //   })
-  //   .then((data) => {
-  //     if (data.success) {
-  //       toast.success("Клиент создан");
-  //       setTimeout(() => {
-  //         resetForm();
-  //       }, 300);
-  //     } else {
-  //       toast.error("Что-то пошло не так " + data.error);
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     const statusText = String(error);
-  //     fetch(`/api/bugReport`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         text: {
-  //           err: "#admDfck3jm",
-  //           data: {
-  //             statusText,
-  //             values: data,
-  //           },
-  //         },
-  //       }),
+    fetch("/api/tasks/create", {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         return response.json();
+  //       } else {
+  //         throw new Error(response.statusText);
+  //       }
   //     })
-  //       .then((x) => x.json())
-  //       .then((x) => {
-  //         console.log(x);
-  //       });
-  //   });
+  //     .then((data) => {
+  //       if (data.success) {
+  //         toast.success("Клиент создан");
+  //         setTimeout(() => {
+  //           resetForm();
+  //         }, 300);
+  //       } else {
+  //         toast.error("Что-то пошло не так " + data.error);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error #fff8ds7", error);
+  //     });
 }

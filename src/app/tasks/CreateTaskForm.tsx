@@ -10,7 +10,6 @@ import Image from "next/image";
 import DatePicker from "react-datepicker";
 import getEmployees from "./getEmployees";
 
-
 export default function CreateTaskForm() {
     const modalIsOpen = useStore($modalIsOpen);
     const { register, handleSubmit, control, reset } = useForm<any>();
@@ -27,7 +26,7 @@ export default function CreateTaskForm() {
         </button>
         <SideModal isOpen={modalIsOpen} closeHandle={() => setModalIsOpen(false)}>
             <>
-                <div className="border-bottom px-4 py-3 h3">Создать клиента</div>
+                <div className="border-bottom px-4 py-3 h3">Создать задачу</div>
                 <div className="px-4">
                     <form
                         onSubmit={handleSubmit((e: any) => onSubmit(e, reset))}
