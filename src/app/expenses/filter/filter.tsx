@@ -5,12 +5,13 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import ru from 'date-fns/locale/ru';
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { ExpensesSearchParamsInterface } from "../types";
 dayjs.extend(customParseFormat);
 registerLocale('ru', ru);
 
 export default function Filter(props: {
     expensesCategories: ExpensesCategoryInterface[],
-    searchParams: any
+    searchParams: ExpensesSearchParamsInterface
 }) {
     const defaultValues: any = {};
     if (props.searchParams.date_from) {

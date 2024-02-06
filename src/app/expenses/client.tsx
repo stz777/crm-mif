@@ -8,11 +8,12 @@ import dayjs from "dayjs";
 import fetchExpenses from "./fetchExpenses";
 import Filter from "./filter/filter";
 import PageTmp from "../ui/tmp/page/PageTmp";
+import { ExpensesSearchParamsInterface } from "./types";
 
 export default function Client(props: {
     expensesCategories: ExpensesCategoryInterface[],
     expenses: ExpenseInterface[]
-    searchParams: any,
+    searchParams: ExpensesSearchParamsInterface,
 }) {
     const [expenses, setExpenses] = useState(props.expenses);
     const [expensesCategories, setExpensesCategories] = useState(props.expensesCategories);
