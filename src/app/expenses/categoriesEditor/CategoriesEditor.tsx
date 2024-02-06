@@ -21,8 +21,11 @@ export default function CategoriesEditor(props: { expensesCategories: ExpensesCa
                 </div>
                 <div className="px-4">
                     <div className="mb-3">
-                        <strong >Созданные категории: <FaRegQuestionCircle size={20} title="Для редактирования категории нужно на нее нажать и начать редактировать" /></strong>
-                    </div>                    {props.expensesCategories.map(category => <div key={category.id}>
+                        <strong>Созданные категории:
+                            <Notice />
+                        </strong>
+                    </div>
+                    {props.expensesCategories.map(category => <div key={category.id}>
                         <CategoryNameEditor
                             key={category.id}
                             expensesCategoryId={category.id}
@@ -33,5 +36,14 @@ export default function CategoriesEditor(props: { expensesCategories: ExpensesCa
 
             </>
         </SideModal>
+    </>
+}
+
+function Notice() {
+    const [isOpen, setIsopen] = useState(false);
+    return <>
+        <div className="d-inline">
+            <FaRegQuestionCircle size={20} title="Для редактирования категории нужно на нее нажать и начать редактировать" /></div>
+        {isOpen && <>Для редактирования категории нужно на нее нажать и начать редактировать</>}
     </>
 }
