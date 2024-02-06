@@ -1,6 +1,6 @@
 "use client"
 
-import { $modalIsOpen, reset, setModalIsOpen } from "@/components/clients/controlPanel/components/create-lead/store/modalState";
+import { $modalIsOpen, setModalIsOpen } from "@/components/clients/controlPanel/components/create-lead/store/modalState";
 import { useStore } from "effector-react";
 import Image from "next/image";
 import PlusCircleIcon from "@/components/clients/controlPanel/components/create-lead/media/plus_circle.svg"
@@ -10,6 +10,10 @@ import { Controller, useForm } from "react-hook-form";
 // import { toast } from "react-toastify";
 import onSubmit from "./onSubmit";
 import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+// import EmployeesCombinedInterface from "../leads/single/[id]/EmployeesCombinedInterface";
+import { Employee } from "../components/types/employee";
 
 export default function Client() {
     return <>
@@ -39,101 +43,77 @@ function CreateTaskForm() {
     const { register, handleSubmit, control, reset, watch, setValue, resetField } = useForm<any>();
 
 
+    const [employees, setEmployees] = useState<Employee[]>([]);
 
-    const inputValue: any = watch('image');
+    useEffect(() => {
+        fetch(
+            "/api/employees/get",
+            {
+                method: "POST",
+                body: JSON.stringify({})
+            }
+        )
+            .then(x => x.json())
+            .then(x => {
+                console.log('x', x);
+                if (!x.employees) {
+                    toast.error("Что-то пошло не так #9fjj3m");
+                    return;
+                }
+                setEmployees(x.employees);
+            })
+    }, [])
 
 
     return (
-        <form
-            onSubmit={handleSubmit((e: any) => onSubmit(e, reset))}
-            style={{ maxWidth: "1000px" }}
-        >
-            <table className="table">
-                <tbody>
-                    <tr>
-                        <td>Описание задачи</td>
-                        <td>
-                            <textarea className="form-control"  {...register("description")} autoComplete="off" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Ответственный</td>
-                        <td>
-                            <select {...register("role", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
-                                <option value="" disabled>
-                                    Выберите ответственного
-                                </option>
-                                {/* <option value="0">Исполнитель</option>
-                                <option value="1">Менеджер</option> */}
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Дедлайн</td>
-                        <td>
-                            <Controller
-                                control={control}
-                                name="deadline"
-                                render={({ field }) => (
-                                    <DatePicker
-                                        locale="ru"
-                                        {...field}
-                                        dateFormat="dd.MM.yyyy"
-                                        selected={field.value}
-                                        onChange={(date) => field.onChange(date)}
-                                        placeholderText="выберите дату"
-                                        className="form-control"
-                                    />
-                                )}
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            {/* CreateTaskForm */}
-            {/* <table className="table-borderless">
-                <tbody>
-                    <ClientFields
-                        register={register}
-                        phonesFields={phonesFields}
-                        removePhone={removePhone}
-                        appendPhone={appendPhone}
-                        emailFields={emailFields}
-                        removeEmail={removeEmail}
-                        appendEmail={appendEmail}
-                        telegramFields={telegramFields}
-                        removeTelegram={removeTelegram}
-                        appendTelegram={appendTelegram}
-                        setValue={setValue}
-                    />
-                    <tr><th><>Заказ</></th><td></td></tr>
-                    <LeadFields
-                        control={control}
-                        register={register}
-                    />
-                    <FieldWrapper title="Оплачено"
-                        field={<>
-                            <input className="form-control"  {...register("payment",)} autoComplete="off" />
-                        </>}
-                    />
-                    <FieldWrapper title="Чек"
-                        field={<>
-                            {(inputValue?.length)
-                                ? <>
-                                    <div className="mb-2">Прикреплен файл: {inputValue[0].name}</div>
-                                    <div onClick={() => {
-                                        resetField("image");
-                                    }} className="btn btn-sm btn-outline-danger">Отмена <FaTrash /></div>
-                                </>
-                                : <>
-                                    <input type="file" id="image" {...register("image")} className="d-none" />
-                                    <label htmlFor="image" className="btn btn-secondary">Выберите файл</label>
-                                </>}
-                        </>}
-                    />
-                </tbody>
-            </table> */}
-            <button className="btn btn-sm btn-outline-dark">Сохранить</button>
-        </form>
+        <>
+            <form
+                onSubmit={handleSubmit((e: any) => onSubmit(e, reset))}
+                style={{ maxWidth: "1000px" }}
+            >
+                <table className="table">
+                    <tbody>
+                        <tr>
+                            <td>Описание задачи</td>
+                            <td>
+                                <textarea className="form-control"  {...register("description")} autoComplete="off" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ответственный</td>
+                            <td>
+                                <select {...register("role", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                                    <option value="" disabled>
+                                        Выберите ответственного
+                                    </option>
+                                    {employees.filter(employee => !employee.is_boss).map(employee => <option key={employee.id}>{employee.username}</option>)}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Дедлайн</td>
+                            <td>
+                                <Controller
+                                    control={control}
+                                    name="deadline"
+                                    render={({ field }) => (
+                                        <DatePicker
+                                            locale="ru"
+                                            {...field}
+                                            dateFormat="dd.MM.yyyy"
+                                            selected={field.value}
+                                            onChange={(date) => field.onChange(date)}
+                                            placeholderText="выберите дату"
+                                            className="form-control"
+                                        />
+                                    )}
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button className="btn btn-sm btn-outline-dark">Сохранить</button>
+            </form>
+        </>
     );
 }
