@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import "./styles.css";
+
 import SearchIcon from "./search.svg";
 import CreateLead from "./components/create-lead/Root";
 import querystring from "querystring";

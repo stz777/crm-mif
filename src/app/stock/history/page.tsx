@@ -11,8 +11,8 @@ export default async function Page(props: { searchParams: SearchParamsInterface;
         <PageTmp
             title="Склад (История)"
             filter={<div className="d-flex justify-content-between">
-                <div><Filter stockHistory={history} searchParams={props.searchParams} /></div>
-                <Link href={"/stock"} className="btn btn-outline-dark">Скрыть историю</Link>
+                <div className="me-2"><Filter stockHistory={history} searchParams={props.searchParams} /></div>
+                <Link href={"/stock"} className="btn btn-outline-dark text-nowrap">Скрыть историю</Link>
             </div>}
         >
             <Client history={history} searchParams={props.searchParams} />
