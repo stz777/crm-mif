@@ -4,7 +4,7 @@ import getTasksFromDB from "../db/tasks/getTasksFromDB";
 import { SearchInterface } from "./types";
 
 export default async function Page(params: { searchParams: SearchInterface }) {
-    const tasks = await getTasksFromDB();
+    const tasks = await getTasksFromDB(params.searchParams);
     return <PageTmp title="Задачи">
         <Client tasks={tasks} searchParams={params.searchParams} />
     </PageTmp>

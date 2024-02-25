@@ -1,7 +1,18 @@
-import { TaskFromDBInterface } from "@/types/tasks/task";
+import { SearchInterface, TaskFromDBInterface } from "@/types/tasks/task";
 import { pool } from "../connect";
 
-export default async function getTasksFromDB(): Promise<TaskFromDBInterface[]> {
+export default async function getTasksFromDB(
+  searchParams: SearchInterface
+): Promise<TaskFromDBInterface[]> {
+  let whereArr = [];
+
+  if (searchParams.keyword) {
+    whereArr.push(`T.id = ${searchParams.keyword}`);
+    whereArr.push(`T.description like "%${searchParams.keyword}%"`);
+  }
+
+  const whereStr = whereArr.length ? " WHERE " + whereArr.join(" OR ") : "";
+
   return pool
     .promise()
     .query(
@@ -9,7 +20,8 @@ export default async function getTasksFromDB(): Promise<TaskFromDBInterface[]> {
   T.*, E.username as managerName
 from tasks as T
 left join employees as E on E.id = T.manager
-order by id desc`
+${whereStr}
+order by T.id desc`
     )
     .then(([x]: any) => x)
     .catch((error) => {
