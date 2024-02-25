@@ -6,10 +6,11 @@ export default async function getTasksFromDB(
 ): Promise<TaskFromDBInterface[]> {
   let whereArr = [];
 
-  if (searchParams.keyword) {
+  if (/^[0-9]+$/.test(String(searchParams?.keyword)))
     whereArr.push(`T.id = ${searchParams.keyword}`);
+
+  if (searchParams.keyword)
     whereArr.push(`T.description like "%${searchParams.keyword}%"`);
-  }
 
   const whereStr = whereArr.length ? " WHERE " + whereArr.join(" OR ") : "";
 
