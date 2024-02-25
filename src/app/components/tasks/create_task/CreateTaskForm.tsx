@@ -27,7 +27,7 @@ export default function CreateTaskForm() {
 
     return <>
         <>
-            <button className="btn btn-sm btn-outline-dark"
+            <button className="btn btn-sm btn-outline-dark text-nowrap"
                 onClick={handleShow}
             >Создать задачу</button>
 

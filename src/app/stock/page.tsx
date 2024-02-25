@@ -11,7 +11,7 @@ export default async function Page() {
             filter={<>
                 <div className="d-flex justify-content-between">
                     <CreateMaterial />
-                    <Link href={"/stock/history"} className="btn btn-outline-dark">Показать историю</Link>
+                    <Link href={"/stock/history"} className="btn btn-outline-dark text-nowrap">Показать историю</Link>
                 </div>
             </>}
         >
