@@ -14,7 +14,7 @@ export default function Filter(props: { searchParams: ClientsSearchInterface }) 
     if (Object.keys(searchParams)?.length) {
         for (const key in searchParams) {
             if (key === "phone") {
-                defaultValues.phone = searchParams['phone']
+                // defaultValues.phone = searchParams['phone']
             }
         }
     }

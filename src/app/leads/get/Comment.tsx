@@ -42,8 +42,9 @@ export default function Comment(props: { currentText: string, lead_id: number })
         return <>
             <div className="d-flex justify-content-between">
                 <div>{props.currentText}</div>
-                <span className="px-3"
-                    onClick={() => {
+                <span className="px-3" style={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                        e.stopPropagation();
                         setIsOpen(true);
                     }}
                 ><FaPen /></span>

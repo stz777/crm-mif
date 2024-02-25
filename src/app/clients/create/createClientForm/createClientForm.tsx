@@ -19,7 +19,7 @@ type FormValues = {
 export default function CreateClientForm(
     props: { is_boss: boolean }
 ) {
-    const { register, handleSubmit, control, reset } = useForm<FormValues>();
+    const { register, handleSubmit, control, reset, setValue } = useForm<FormValues>();
     const { fields: phonesFields, append: appendPhone, remove: removePhone } = useFieldArray({
         control,
         name: "phones",
@@ -50,6 +50,7 @@ export default function CreateClientForm(
                         telegramFields={telegramFields}
                         removeTelegram={removeTelegram}
                         appendTelegram={appendTelegram}
+                        setValue={setValue}
                     />
                     <tr><th><h4>Заказ</h4></th><td></td></tr>
                     <LeadFields
@@ -164,7 +165,7 @@ const onSubmit = (data: any, resetForm: any, is_boss: boolean) => {
                     },
                     body: JSON.stringify({
                         text: {
-                            err: "#admDfck3jm",
+                            err: "#admDfc5k3jm",
                             data: {
                                 statusText,
                                 values: data

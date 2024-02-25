@@ -1,4 +1,5 @@
 import { ClientInterface } from "./clients"
+import { Employee } from "./employee"
 
 export interface LeadInterface {
     id: number
@@ -10,8 +11,8 @@ export interface LeadInterface {
     comment: string
     sum: number
     payments?: PaymentInterface[]
-    expensesPerLead?: ExpensesPerLeadInterface[]
     clientData: ClientInterface
+    employees: Employee[]
 }
 
 export interface PaymentInterface {
@@ -21,18 +22,4 @@ export interface PaymentInterface {
     created_date: string
     confirmed: boolean
     sum: number
-}
-
-export interface ExpensesPerLeadInterface {
-    id: number
-    sum: number
-    comment: string
-    created_date: string
-}
-
-export interface ExpensesPePerPurchaseTaskInterface {
-    id: number
-    sum: number
-    comment: string
-    created_date: string
 }

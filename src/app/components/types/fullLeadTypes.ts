@@ -1,6 +1,6 @@
 import EmployeesCombinedInterface from "@/app/leads/single/[id]/EmployeesCombinedInterface";
 import { ClientInterface, ClientMetaInterface } from "./clients";
-import { LeadInterface, PaymentInterface, ExpensesPerLeadInterface } from "./lead";
+import { LeadInterface, PaymentInterface } from "./lead";
 import { MessageInterface, Media } from "./messages";
 
 export type MessageToLead = MessageInterface & {
@@ -16,6 +16,6 @@ export type LeadFullDatInterface = {
     client: ClientInterface | null;
     clientMeta: ClientMetaInterface[];
     payments: PaymentInterface[];
-    expenses: ExpensesPerLeadInterface[];
+    // expenses: ExpensesPerLeadInterface[];
     messages: MessageToLead[];
 }

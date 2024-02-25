@@ -52,7 +52,7 @@ export default function Client(props: {
         client,
         clientMeta,
         payments,
-        expenses,
+        // expenses,
         messages,
     } = data;
 
@@ -87,7 +87,6 @@ export default function Client(props: {
                                                 </tr>)}
                                             </tbody>
                                         </table>}
-
                                     </tr>
                                     <tr>
                                         <td>настроить права</td>
@@ -96,7 +95,6 @@ export default function Client(props: {
                                             is_boss={props.is_boss}
                                         /></td>
                                     </tr>
-
                                     <tr>
                                         <td>
                                             срочность
@@ -132,7 +130,8 @@ export default function Client(props: {
                                                                 const phoneItem = clientMeta.find(item => item.data_type === "phone");
                                                                 if (!phoneItem) return <>телефон не указан</>
                                                                 return <GenerateWALink phoneNumber={phoneItem.data} />;
-                                                            })()}</td></tr>
+                                                            })()}
+                                                        </td></tr>
                                                 </tbody>
                                             </table>
                                         </td>
@@ -155,7 +154,7 @@ export default function Client(props: {
                                         <div>{!payment.confirmed ? <div className="d-flex ms-2">
                                             <ConfirmPayment paymentId={payment.id} />
                                             <DeclinePayment paymentId={payment.id} />
-                                        </div> : <><FaCheck color="green" /></>}</div>
+                                        </div> : <><FaCheck className="text-body-success" /></>}</div>
                                     </li>)}
 
                                 <li className="list-group-item">{(() => {
@@ -179,20 +178,20 @@ export default function Client(props: {
                         </div>
                         <div className="card-body">
                             <ul className="list-group">
-                                {expenses?.map(expense =>
+                                {/* {expenses?.map(expense =>
                                     <li key={expense.id} className="list-group-item d-flex justify-content-between align-items-center">
                                         <div>{expense.sum}</div>
                                         <div>{expense.comment}</div>
-                                    </li>)}
+                                    </li>)} */}
 
                                 <li className="list-group-item">
                                     {(() => {
                                         let totalSum = 0;
-                                        if (expenses?.length) {
-                                            totalSum = expenses
-                                                .map(({ sum }) => sum)
-                                                .reduce((a, b) => a + b);
-                                        }
+                                        // if (expenses?.length) {
+                                        //     totalSum = expenses
+                                        //         .map(({ sum }) => sum)
+                                        //         .reduce((a, b) => a + b);
+                                        // }
                                         return <>
                                             <div className="fw-bold">Σ {totalSum}</div>
                                         </>
