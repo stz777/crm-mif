@@ -5,4 +5,10 @@ export interface TaskFromDBInterface {
   done_at: string | null;
   description: string;
   manager: number;
+  managerName: string;
+}
+
+export interface SearchInterface {
+  keyword?: string;
+  is_archive?: "true";
 }
