@@ -1,12 +1,12 @@
 "use client"
-
 import { TaskFromDBInterface } from "@/types/tasks/task";
 import CreateTaskForm from "./CreateTaskForm";
 import dayjs from "dayjs";
 import Filter from "./filter";
 import { SearchInterface } from "./types";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import fetchGetTaskData from "./fetchGetTaskData";
+import TaskStatus from "./TaskStatus";
 
 export default function Client(props: { tasks: TaskFromDBInterface[], searchParams: SearchInterface }) {
 
@@ -61,40 +61,4 @@ export default function Client(props: { tasks: TaskFromDBInterface[], searchPara
             </tbody>
         </table>
     </>
-}
-
-function TaskStatus(props: { deadline: any }) {
-    let isLate = dayjs().isAfter(props.deadline);
-    return <div>
-        <div style={{ width: 102 }} className={isLate ? "bg-danger p-1" : "bg-warning p-1"}>
-            {isLate ? "Просрочено" : "В работе"}
-        </div>
-    </div>
-}
-
-async function fetchGetTaskData(searchParams: SearchInterface) {
-    return await fetch(
-        `/api/tasks/get`,
-        {
-            method: "POST",
-            body: JSON.stringify(searchParams)
-        }
-    ).then(
-        response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error(response.statusText);
-            }
-        }
-    ).then((data: any) => {
-        if (data.success) {
-            return data.tasks;
-        } else {
-            toast.error("Что-то пошло не так #dmcds8s");
-        }
-    })
-        .catch(_ => {
-            toast.error("Что-то пошло не так #chd8y3");
-        });
 }
