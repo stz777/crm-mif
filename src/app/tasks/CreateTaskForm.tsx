@@ -12,7 +12,12 @@ import getEmployees from "./getEmployees";
 
 export default function CreateTaskForm() {
     const modalIsOpen = useStore($modalIsOpen);
-    const { register, handleSubmit, control, reset } = useForm<any>();
+    const { register, handleSubmit, control, reset } = useForm<any>({
+        // defaultValues: {
+        //     description: "описание задачи",
+        //     manager: "16",
+        // }
+    });
     const [employees, setEmployees] = useState<Employee[]>([]);
 
     useEffect(() => {
@@ -43,11 +48,11 @@ export default function CreateTaskForm() {
                                 <tr>
                                     <td>Ответственный</td>
                                     <td>
-                                        <select {...register("role", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
+                                        <select {...register("manager", { required: true })} defaultValue="" className="form-select" aria-label="Default select example">
                                             <option value="" disabled>
                                                 Выберите ответственного
                                             </option>
-                                            {employees.filter(employee => !employee.is_boss).map(employee => <option key={employee.id}>{employee.username}</option>)}
+                                            {employees.filter(employee => !employee.is_boss).map(employee => <option key={employee.id} value={String(employee.id)}>{employee.username}</option>)}
                                         </select>
                                     </td>
                                 </tr>

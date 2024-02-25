@@ -1,6 +1,7 @@
 // import { reset } from "@/components/clients/controlPanel/components/create-lead/store/modalState";
 import { toast } from "react-toastify";
 import { TaskFromDbInterface } from "./types";
+import dayjs from "dayjs";
 
 export default function onSubmit(data: TaskFromDbInterface, resetForm: any) {
   console.log("onsubmit");
@@ -112,28 +113,31 @@ export default function onSubmit(data: TaskFromDbInterface, resetForm: any) {
   // }
   // console.log("JSON.stringify(data)", JSON.stringify(data));
 
-    fetch("/api/tasks/create", {
-      method: "POST",
-      body: JSON.stringify(data),
+  fetch("/api/tasks/create", {
+    method: "POST",
+    body: JSON.stringify({
+      ...data,
+      deadline: dayjs(data.deadline).format("YYYY-MM-DD HH:mm:ss"),
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(response.statusText);
+      }
     })
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         return response.json();
-  //       } else {
-  //         throw new Error(response.statusText);
-  //       }
-  //     })
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("Клиент создан");
-  //         setTimeout(() => {
-  //           resetForm();
-  //         }, 300);
-  //       } else {
-  //         toast.error("Что-то пошло не так " + data.error);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error #fff8ds7", error);
-  //     });
+    .then((data) => {
+      if (data.success) {
+        toast.success("Задача создана");
+        setTimeout(() => {
+          resetForm();
+        }, 300);
+      } else {
+        toast.error("Что-то пошло не так " + data.error);
+      }
+    })
+    .catch((error) => {
+      console.error("Error #fff8ds7", error);
+    });
 }
