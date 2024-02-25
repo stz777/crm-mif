@@ -25,7 +25,7 @@ export default function CreateTaskForm() {
     }, [])
 
     return <>
-        <button className="btn btn-primary me-3" onClick={() => { setModalIsOpen(true); }} >
+        <button className="btn btn-primary me-3 text-nowrap" onClick={() => { setModalIsOpen(true); }} >
             <Image src={PlusCircleIcon} alt="" className="me-2" width={15} height={15} />
             Создать задачу
         </button>
