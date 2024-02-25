@@ -66,7 +66,7 @@ export default function Client(props: { tasks: TaskFromDBInterface[], searchPara
 function TaskStatus(props: { deadline: any }) {
     let isLate = dayjs().isAfter(props.deadline);
     return <div>
-        <div className={isLate ? "d-inline bg-danger p-1" : "d-inline bg-warning p-1"}>
+        <div style={{ width: 102 }} className={isLate ? "bg-danger p-1" : "bg-warning p-1"}>
             {isLate ? "Просрочено" : "В работе"}
         </div>
     </div>
