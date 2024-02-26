@@ -26,10 +26,10 @@ export default function CreateSupplier() {
                         onSubmit(x, reset);
                     })}>
                         <Wrapper title="Наименование">
-                            <input {...register("material", { required: true })} className="form-control" autoComplete="off" />
+                            <input {...register("name", { required: true })} className="form-control" autoComplete="off" />
                         </Wrapper>
                         <Wrapper title="Контакты">
-                            <textarea {...register("count", {
+                            <textarea {...register("contacts", {
                                 required: true,
                             })} className="form-control" autoComplete="off" />
                         </Wrapper>
