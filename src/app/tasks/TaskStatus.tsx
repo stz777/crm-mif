@@ -1,7 +1,9 @@
 import dayjs from "dayjs";
 
-export default function TaskStatus(props: { deadline: any }) {
+export default function TaskStatus(props: { deadline: any, done_at: string | null }) {
+  if (props.done_at) return null;
   let isLate = dayjs().isAfter(props.deadline);
+
   return (
     <div>
       <div

@@ -71,6 +71,7 @@ export default function CreateTaskForm() {
                                                     onChange={(date) => field.onChange(date)}
                                                     placeholderText="выберите дату"
                                                     className="form-control"
+                                                    autoComplete="off"
                                                 />
                                             )}
                                         />
