@@ -68,7 +68,7 @@ export default function Client(props: { tasks: TaskFromDBInterface[], searchPara
                 </tr>
             </thead>
             <tbody>
-                {props.tasks.map(task => <TaskTr task={task} key={task.id}>
+                {tasks.map(task => <TaskTr task={task} key={task.id}>
                     <td>{task.id}</td>
                     <td>{task.description}</td>
                     <td>{task.managerName}</td>
