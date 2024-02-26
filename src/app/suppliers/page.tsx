@@ -1,4 +1,5 @@
 import PageTmp from "../ui/tmp/page/PageTmp";
+import CreateSupplier from "./CreateSupplier";
 
 export default async function Page() {
     return <>
@@ -11,7 +12,10 @@ export default async function Page() {
         // </>}
         >
             {/* <Client materials={materials} /> */}
-            <>поставщики</>
+            <>
+                <CreateSupplier />
+            </>
         </PageTmp>
     </>
 }
+
