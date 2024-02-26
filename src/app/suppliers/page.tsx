@@ -1,21 +1,28 @@
+import { SupplierInterface } from "../components/types/supplierInterface";
+import { pool } from "../db/connect";
 import PageTmp from "../ui/tmp/page/PageTmp";
 import CreateSupplier from "./CreateSupplier";
+import Client from "./client";
 
 export default async function Page() {
+    const suppliers = await getSuppliers();
     return <>
-        <PageTmp title={"Поставщики"}
-        // filter={<>
-        //     <div className="d-flex justify-content-between">
-        //         <CreateMaterial />
-        //         <Link href={"/stock/history"} className="btn btn-outline-dark text-nowrap">Показать историю</Link>
-        //     </div>
-        // </>}
-        >
-            {/* <Client materials={materials} /> */}
-            <>
-                <CreateSupplier />
-            </>
+        <PageTmp title={"Поставщики"} filter={<CreateSupplier />} >
+            <Client suppliers={suppliers} />
         </PageTmp>
     </>
 }
 
+async function getSuppliers(): Promise<SupplierInterface[]> {
+    return pool.promise().query(
+        "SELECT * FROM suppliers"
+    )
+        .then(([x]: any) => {
+            return x;
+        })
+        .catch(error => {
+            console.error('error #c947', error);
+            return [];
+        })
+
+}
