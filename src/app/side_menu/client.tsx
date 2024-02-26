@@ -2,7 +2,7 @@
 import Link from "next/link"
 import images from "./icons/Images"
 import { useState } from "react"
-// import { FaHammer, FaToolbox } from "react-icons/fa";
+import { FaHammer, FaToolbox } from "react-icons/fa";
 
 export default function Client(props: { currentPath: string }) {
     const [currentPath, setCurrentPath] = useState(props.currentPath);
@@ -24,8 +24,9 @@ const menuItems: { title: any, icon: any, link: string, }[] = [
     { title: <>Задачи</>, icon: images.tasks, link: "/tasks" },
     { title: "Расходы", icon: images.expenses, link: "/expenses" },
     { title: "Склад", icon: images.stock, link: "/stock" },
-    // { title: "Поставщики", icon: images.suppliers, link: "/suppliers" },
-    { title: "Клиенты", icon: images.clients, link: "/clients" },
-    // { title: "Сотрудники", icon: images.employees, link: "/employees" },
-    { title: "Отчеты", icon: images.report, link: "/fin-report/summary" },
-]
+    {
+        title: <>Поставщики <FaHammer size={20} color="red"/></>, icon: images.suppliers, link: " /suppliers" },
+            {title: "Клиенты", icon: images.clients, link: "/clients" },
+    // {title: "Сотрудники", icon: images.employees, link: "/employees" },
+            {title: "Отчеты", icon: images.report, link: "/fin-report/summary" },
+            ]
