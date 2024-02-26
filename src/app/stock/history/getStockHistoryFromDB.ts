@@ -1,10 +1,11 @@
 import { pool } from "@/app/db/connect";
 import { SearchParamsInterface } from "./types";
 import formatDate from "./formatDate";
+import { StockHistory } from "@/app/components/types/stock";
 
 export default async function getStockHistoryFromDB(
   searchParams: SearchParamsInterface
-) {
+): Promise<StockHistory[]> {
   const arr = [];
 
   if (searchParams.is_adjunction)
