@@ -29,7 +29,7 @@ export default function Client(props: { tasks: TaskFromDBInterface[], searchPara
             }, 2000);
         })()
         return () => { mounted = false; }
-    }, []);
+    }, [props]);
 
     return <>
         <div className="d-flex justify-content-between">
@@ -65,6 +65,7 @@ export default function Client(props: { tasks: TaskFromDBInterface[], searchPara
                     <th>Ответственный</th>
                     <th>Дата создания</th>
                     <th>Дедлайн</th>
+                    {props.searchParams.is_archive && <th>Дата завершения</th>}
                 </tr>
             </thead>
             <tbody>
@@ -75,8 +76,9 @@ export default function Client(props: { tasks: TaskFromDBInterface[], searchPara
                     <td>{dayjs(task.created_date).format("DD.MM.YYYY")}</td>
                     <td>
                         {dayjs(task.deadline).format("DD.MM.YYYY")}
-                        <div className="mt-2"><TaskStatus deadline={task.deadline} /></div>
+                        {!props.searchParams.is_archive && <div className="mt-2"><TaskStatus deadline={task.deadline} done_at={task.done_at} /></div>}
                     </td>
+                    {props.searchParams.is_archive && <td>{dayjs(task.done_at).format("DD.MM.YYYY")}</td>}
                 </TaskTr>)}
             </tbody>
         </table>
@@ -116,8 +118,8 @@ function TaskDetails(props: { task: TaskFromDBInterface }) {
             <div><Wrapper title="Дата создания">
                 {dayjs(props.task.deadline).format("DD.MM.YYYY")}
             </Wrapper></div>
-            <div><Wrapper title="Статус выволнения">
-                <div className="mt-2"><TaskStatus deadline={props.task.deadline} /></div>
+            <div><Wrapper title="Статус выполнения">
+                <div className="mt-2"><TaskStatus deadline={props.task.deadline} done_at={props.task.done_at} /></div>
             </Wrapper></div>
             <div><Wrapper title="">
                 {props.task.done_at ? dayjs(props.task.created_date).format("DD.MM.YYYY") :

@@ -4,22 +4,23 @@ import { pool } from "../connect";
 export default async function getTasksFromDB(
   searchParams: SearchInterface
 ): Promise<TaskFromDBInterface[]> {
-  
   let whereArr = [];
 
-  if(searchParams.is_archive){
+  if (searchParams.is_archive) {
     whereArr.push(`T.done_at is not null`);
-  }else{
+  } else {
     whereArr.push(`T.done_at is null`);
   }
 
-  if (/^[0-9]+$/.test(String(searchParams?.keyword)))
+  if (/^[0-9]+$/.test(String(searchParams?.keyword))) {
     whereArr.push(`T.id = ${searchParams.keyword}`);
+  } else {
+    if (searchParams.keyword)
+      whereArr.push(`T.description like "%${searchParams.keyword}%"`);
+  }
 
-  if (searchParams.keyword)
-    whereArr.push(`T.description like "%${searchParams.keyword}%"`);
+  const whereStr = whereArr.length ? " WHERE " + whereArr.join(" AND ") : "";
 
-  const whereStr = whereArr.length ? " WHERE " + whereArr.join(" OR ") : "";
 
   return pool
     .promise()
