@@ -31,6 +31,7 @@ export default async function getStockHistoryFromDB(
 INNER JOIN employees ON employees.id = stock_history.done_by
 INNER JOIN stock ON stock.id = stock_history.material
 ${whereSubStr}
+order by id desc
 `;
 
   return pool
