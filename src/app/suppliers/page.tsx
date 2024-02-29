@@ -1,28 +1,14 @@
-import { SupplierInterface } from "../components/types/supplierInterface";
-import { pool } from "../db/connect";
+import getSuppliers from "../db/suppliers/getSuppliers";
 import PageTmp from "../ui/tmp/page/PageTmp";
 import CreateSupplier from "./CreateSupplier";
 import Client from "./client";
+import { SearchInterface } from "./types";
 
-export default async function Page() {
+export default async function Page(props: { searchParams: SearchInterface }) {
     const suppliers = await getSuppliers();
     return <>
         <PageTmp title={"Поставщики"} filter={<CreateSupplier />} >
-            <Client suppliers={suppliers} />
+            <Client suppliers={suppliers} searchParams={props.searchParams} />
         </PageTmp>
     </>
-}
-
-async function getSuppliers(): Promise<SupplierInterface[]> {
-    return pool.promise().query(
-        "SELECT * FROM suppliers"
-    )
-        .then(([x]: any) => {
-            return x;
-        })
-        .catch(error => {
-            console.error('error #c947', error);
-            return [];
-        })
-
 }
