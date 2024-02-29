@@ -1,5 +1,6 @@
 export interface SupplierInterface {
-    id: number
-    name: string
-    contacts: string
+  id: number;
+  name: string;
+  contacts: string;
+  materials: string;
 }

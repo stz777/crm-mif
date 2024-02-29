@@ -6,12 +6,21 @@ export default async function getTasksFromDB(
 ): Promise<TaskFromDBInterface[]> {
   let whereArr = [];
 
-  if (searchParams.keyword) {
-    whereArr.push(`T.id = ${searchParams.keyword}`);
-    whereArr.push(`T.description like "%${searchParams.keyword}%"`);
+  if (searchParams.is_archive) {
+    whereArr.push(`T.done_at is not null`);
+  } else {
+    whereArr.push(`T.done_at is null`);
   }
 
-  const whereStr = whereArr.length ? " WHERE " + whereArr.join(" OR ") : "";
+  if (/^[0-9]+$/.test(String(searchParams?.keyword))) {
+    whereArr.push(`T.id = ${searchParams.keyword}`);
+  } else {
+    if (searchParams.keyword)
+      whereArr.push(`T.description like "%${searchParams.keyword}%"`);
+  }
+
+  const whereStr = whereArr.length ? " WHERE " + whereArr.join(" AND ") : "";
+
 
   return pool
     .promise()

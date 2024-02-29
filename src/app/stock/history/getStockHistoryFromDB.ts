@@ -1,10 +1,11 @@
 import { pool } from "@/app/db/connect";
 import { SearchParamsInterface } from "./types";
 import formatDate from "./formatDate";
+import { StockHistory } from "@/app/components/types/stock";
 
 export default async function getStockHistoryFromDB(
   searchParams: SearchParamsInterface
-) {
+): Promise<StockHistory[]> {
   const arr = [];
 
   if (searchParams.is_adjunction)
@@ -30,6 +31,7 @@ export default async function getStockHistoryFromDB(
 INNER JOIN employees ON employees.id = stock_history.done_by
 INNER JOIN stock ON stock.id = stock_history.material
 ${whereSubStr}
+order by id desc
 `;
 
   return pool

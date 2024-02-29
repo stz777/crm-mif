@@ -34,6 +34,7 @@ export default function Client(props: {
                     <th>Сотрудник</th>
                     <th>Дата</th>
                     <th>Тип операции</th>
+                    <th>Комментарий</th>
                     <th>Кол-во штук</th>
                 </tr>
             </thead>
@@ -43,6 +44,7 @@ export default function Client(props: {
                     <td>{historyItem.username}</td>
                     <td>{dayjs(historyItem.created_date).format("DD.MM.YYYY")}</td>
                     <td>{historyItem.is_adjunction ? <span className="text-success">Пополнение</span> : <span className="text-danger">Списание</span>}</td>
+                    <td>{historyItem.comment}</td>
                     <td><span className={`text-${historyItem.is_adjunction ? "success" : "danger"}`}>{historyItem.is_adjunction ? "+" : "-"}{historyItem.count}</span></td>
                 </tr>)}
             </tbody>

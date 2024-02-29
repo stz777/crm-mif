@@ -156,7 +156,7 @@ async function fetchGetTaskData(task_id: number) {
                 toast.error("Что-то пошло не так #cndsd3n");
             }
         } else {
-            toast.error("Что-то пошло не так #dmcds8s");
+            toast.error("Что-то пошло не так #dmcddazs8s");
         }
     })
         .catch(_ => {
