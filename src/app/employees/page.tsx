@@ -1,9 +1,11 @@
 import { pool } from "../db/connect";
+import Client from "./client/client";
 import PageTmp from "../ui/tmp/page/PageTmp";
-import { EmployeeInterface, EmployeeMeta } from "./types";
+import { EmployeeMeta, SearchParamsInterface } from "./types";
+import getEmployeesFromDB from "./getEmployeesFromDB";
 
-export default async function Page() {
-    const employees = await getEmployees({});
+export default async function Page(params: { searchParams: SearchParamsInterface }) {
+    const employees = await getEmployeesFromDB({});
     const employeesWithMeta = await Promise.all(
         employees.map(async employee => ({
             ...employee,
@@ -11,58 +13,11 @@ export default async function Page() {
         }))
     );
     return <>
-        <PageTmp title="Сотрудник">
-            <>
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Имя / ФИО</th>
-                            <th>Должность</th>
-                            <th>Контакты</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            employeesWithMeta
-                                .map(employee =>
-                                    <tr>
-                                        <td>{employee.id}</td>
-                                        <td>{employee.username}
-                                        </td>
-                                        <td>
-                                            {(() => {
-                                                if (employee.is_boss) return <>Босс</>
-                                                if (employee.is_manager) return <>Менеджер</>
-                                                return "должность не установлена";
-                                            })()}
-                                        </td>
-                                        <td>
-                                            {employee.meta?.map(metaItem => <div className="my-2">
-                                                {metaItem.data_type}: {metaItem.data}
-                                            </div>)}
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-sm btn-outline-dark">Редактировать</button>
-                                        </td>
-                                    </tr>
-                                )
-                        }
-                    </tbody>
-                </table>
-            </>
+        <PageTmp title="Сотрудники">
+            {/* <Client /> */}
+            <Client employeesWithMeta={employeesWithMeta} searchParams={params.searchParams} />
         </PageTmp>
     </>
-}
-
-async function getEmployees(searchParams: SearchParamsInterface): Promise<EmployeeInterface[]> {
-    return pool.promise().query("select * from employees ")
-        .then(([x]: any) => x)
-        .catch(error => {
-            console.error('error #f64645', error);
-            return [];
-        })
 }
 
 async function getEmploeeMetaFromDB(searchParams: SearchParamsInterface): Promise<EmployeeMeta[]> {
@@ -74,8 +29,4 @@ async function getEmploeeMetaFromDB(searchParams: SearchParamsInterface): Promis
             console.error('error #kdd87', error);
             return [];
         })
-}
-
-interface SearchParamsInterface {
-
 }

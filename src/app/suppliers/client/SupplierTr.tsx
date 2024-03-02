@@ -15,7 +15,6 @@ export default function SupplierTr(props: {
     }
     return <>
         <tr onClick={() => {
-            alert(321313)
             setIsOpen(true);
         }}>
             {props.children}
