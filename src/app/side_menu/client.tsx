@@ -25,8 +25,9 @@ const menuItems: { title: any, icon: any, link: string, }[] = [
     { title: "Расходы", icon: images.expenses, link: "/expenses" },
     { title: "Склад", icon: images.stock, link: "/stock" },
     {
-        title: <>Поставщики <FaHammer size={20} color="red"/></>, icon: images.suppliers, link: " /suppliers" },
-            {title: "Клиенты", icon: images.clients, link: "/clients" },
-    // {title: "Сотрудники", icon: images.employees, link: "/employees" },
-            {title: "Отчеты", icon: images.report, link: "/fin-report/summary" },
-            ]
+        title: <>Поставщики </>, icon: images.suppliers, link: " /suppliers"
+    },
+    { title: "Клиенты", icon: images.clients, link: "/clients" },
+    { title: <>Сотрудники  <FaHammer size={20} color="red" /></>, icon: images.employees, link: "/employees" },
+    { title: <>Отчеты</>, icon: images.report, link: "/fin-report/summary" },
+]
