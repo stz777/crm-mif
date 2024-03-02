@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { EmployeeInterface } from "./types";
-import { toast } from "react-toastify";
 import SideModal from "@/components/SideModal/SideModal";
 
 export default function EmployeeTr(props: {
@@ -19,12 +18,10 @@ export default function EmployeeTr(props: {
             <td>
                 <SideModal isOpen={is_open}
                     closeHandle={() => {
-                        // alert();
-                        // closeModal();
+                        setIsOpen(false);
                     }}
                 >
                     <>
-
                         {/* <SupplierDetails employee={props.employee} close={closeModal} /> */}
                     </>
                 </SideModal>

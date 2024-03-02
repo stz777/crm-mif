@@ -14,6 +14,9 @@ export default function SideModal(props: {
         }} >
             {props.children}
         </div>
-        <div onClick={() => props.closeHandle()} className="w-100 h-100" style={{ position: "fixed", left: 0, top: 0, zIndex: 9998, background: "rgba(238, 238, 238, 0.5)" }} />
+        <div onClick={(e) => {
+            e.stopPropagation();
+            props.closeHandle()
+        }} className="w-100 h-100" style={{ position: "fixed", left: 0, top: 0, zIndex: 9998, background: "rgba(238, 238, 238, 0.5)" }} />
     </>
 }

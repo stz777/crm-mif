@@ -4,8 +4,7 @@ import { SearchParamsInterface } from "../types";
 import EmployeeTr from "../EmployeeTr";
 
 export default function Client(props: { employeesWithMeta: Employee[], searchParams: SearchParamsInterface }) {
-    return <>client
-        <pre>{JSON.stringify(props)}</pre>
+    return <>
         <table className="table table-bordered">
             <thead>
                 <tr>
