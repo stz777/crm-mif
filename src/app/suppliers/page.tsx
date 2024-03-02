@@ -1,7 +1,7 @@
 import getSuppliers from "../db/suppliers/getSuppliers";
 import PageTmp from "../ui/tmp/page/PageTmp";
 import CreateSupplier from "./CreateSupplier";
-import Client from "./client";
+import Client from "./client/client";
 import { SearchInterface } from "./types";
 
 export default async function Page(props: { searchParams: SearchInterface }) {
