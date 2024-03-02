@@ -44,7 +44,7 @@ export default async function Page() {
                                             </div>)}
                                         </td>
                                         <td>
-                                            <button className="btn btn-sm btn-outline-dark"></button>
+                                            <button className="btn btn-sm btn-outline-dark">Редактировать</button>
                                         </td>
                                     </tr>
                                 )
