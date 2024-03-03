@@ -2,8 +2,30 @@
 import { Employee } from "@/app/components/types/employee";
 import { SearchParamsInterface } from "../types";
 import EmployeeTr from "../EmployeeTr";
+import { useEffect, useState } from "react";
+import fetchGetTaskData from "./fetchGetTaskData";
 
 export default function Client(props: { employeesWithMeta: Employee[], searchParams: SearchParamsInterface }) {
+
+    const [employeesWithMeta, setEmployees] = useState(props.employeesWithMeta);
+
+    useEffect(() => {
+        let mounted = true;
+        (async function refresh() {
+            if (!mounted) return;
+            await new Promise(r => setTimeout(() => {
+                r(1)
+            }, 2000));
+            const newEmployeesData = await fetchGetTaskData(props.searchParams);
+            if (JSON.stringify(newEmployeesData) !== JSON.stringify(employeesWithMeta)) setEmployees(newEmployeesData);
+            setTimeout(() => {
+                refresh();
+            }, 2000);
+        })()
+        return () => { mounted = false; }
+    }, [props]);
+
+
     return <>
         <table className="table table-bordered">
             <thead>

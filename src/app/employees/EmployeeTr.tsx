@@ -11,7 +11,7 @@ export default function EmployeeTr(props: {
     const [is_open, setIsOpen] = useState(false);
     return <>
         <tr onClick={() => {
-            setIsOpen(true);
+            // setIsOpen(true);
 
         }}>
             {props.children}
