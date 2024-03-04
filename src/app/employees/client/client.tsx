@@ -4,6 +4,7 @@ import { SearchParamsInterface } from "../types";
 import EmployeeTr from "../EmployeeTr";
 import { useEffect, useState } from "react";
 import fetchGetTaskData from "./fetchGetTaskData";
+import EmployeeEditor from "./employeeEditor";
 
 export default function Client(props: { employeesWithMeta: Employee[], searchParams: SearchParamsInterface }) {
 
@@ -58,7 +59,8 @@ export default function Client(props: { employeesWithMeta: Employee[], searchPar
                                     </div>)}
                                 </td>
                                 <td>
-                                    <button className="btn btn-sm btn-outline-dark">Редактировать</button>
+                                    {/* <button className="btn btn-sm btn-outline-dark">Редактировать</button> */}
+                                    <EmployeeEditor employee={employee} />
                                 </td>
                             </EmployeeTr>
                         )
