@@ -104,10 +104,19 @@ function EmployeeDetails(props: { employee: EmployeeInterface }) {
                 if (props.employee.is_manager) return <>Менеджер</>
                 return "должность не установлена";
             })()}</Wrapper></div>
+            <div><Wrapper title="Контакты">
+                <table>
+                    <tbody>
+                        <tr><td className="pe-2">telegram:</td><td>{props.employee.telegram_id}</td></tr>
+                        {props.employee.meta?.map(metaItem => <tr key={metaItem.id} className="my-2">
+                            <td>{metaItem.data_type}:</td><td>{metaItem.data}</td>
+                        </tr>)}
+                    </tbody>
+                </table>
+            </Wrapper></div>
         </div>
     </>
 }
-
 
 function Wrapper(props: {
     title: string;
