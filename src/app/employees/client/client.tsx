@@ -57,6 +57,7 @@ export default function Client(props: { employeesWithMeta: Employee[], searchPar
                                     {employee.meta?.map(metaItem => <div key={metaItem.id} className="my-2">
                                         {metaItem.data_type}: {metaItem.data}
                                     </div>)}
+                                    <div>Telegram: {employee.telegram_id}</div>
                                 </td>
                                 <td>
                                     <EmployeeEditor employee={employee} />
