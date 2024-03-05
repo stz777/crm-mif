@@ -17,7 +17,7 @@ export default async function fetchGetTaskData(
     })
     .then((data: any) => {
       if (data.success) {
-        return data.tasks;
+        return data.employees;
       } else {
         toast.error("Что-то пошло не так #mc884");
       }

@@ -40,7 +40,7 @@ export default function Client(props: { employeesWithMeta: Employee[], searchPar
             </thead>
             <tbody>
                 {
-                    props.employeesWithMeta
+                    employeesWithMeta
                         .map(employee =>
                             <EmployeeTr key={employee.id} employee={employee}>
                                 <td>{employee.id}</td>
