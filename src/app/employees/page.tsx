@@ -2,7 +2,7 @@ import { pool } from "../db/connect";
 import Client from "./client/client";
 import PageTmp from "../ui/tmp/page/PageTmp";
 import { EmployeeMeta, SearchParamsInterface } from "./types";
-import getEmployeesFromDB from "./getEmployeesFromDB";
+import getEmployeesFromDB from "@/app/db/employees/getEmployeesFromDB";
 
 export default async function Page(params: { searchParams: SearchParamsInterface }) {
     const employees = await getEmployeesFromDB({});
@@ -14,7 +14,6 @@ export default async function Page(params: { searchParams: SearchParamsInterface
     );
     return <>
         <PageTmp title="Сотрудники">
-            {/* <Client /> */}
             <Client employeesWithMeta={employeesWithMeta} searchParams={params.searchParams} />
         </PageTmp>
     </>

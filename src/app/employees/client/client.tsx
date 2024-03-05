@@ -54,12 +54,11 @@ export default function Client(props: { employeesWithMeta: Employee[], searchPar
                                     })()}
                                 </td>
                                 <td>
-                                    {employee.meta?.map(metaItem => <div className="my-2">
+                                    {employee.meta?.map(metaItem => <div key={metaItem.id} className="my-2">
                                         {metaItem.data_type}: {metaItem.data}
                                     </div>)}
                                 </td>
                                 <td>
-                                    {/* <button className="btn btn-sm btn-outline-dark">Редактировать</button> */}
                                     <EmployeeEditor employee={employee} />
                                 </td>
                             </EmployeeTr>
