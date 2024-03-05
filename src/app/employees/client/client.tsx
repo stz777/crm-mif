@@ -59,7 +59,7 @@ export default function Client(props: { employeesWithMeta: Employee[], searchPar
                                     </div>)}
                                     <div>Telegram: {employee.telegram_id}</div>
                                 </td>
-                                <td>
+                                <td onClick={(e) => e.stopPropagation()}>
                                     <EmployeeEditor employee={employee} />
                                 </td>
                             </EmployeeTr>
@@ -84,14 +84,14 @@ function EmployeeTr(props: {
         </tr>
         <SideModal isOpen={is_open} closeHandle={() => setIsOpen(false)}>
             <>
-                <TaskDetails employee={props.employee} />
+                <EmployeeDetails employee={props.employee} />
             </>
         </SideModal>
     </>
 }
 
 
-function TaskDetails(props: { employee: EmployeeInterface }) {
+function EmployeeDetails(props: { employee: EmployeeInterface }) {
     return <>
         <div className="d-flex align-items-center border-bottom px-4 py-3 ">
             <div className="h3">Детали задачи</div>
