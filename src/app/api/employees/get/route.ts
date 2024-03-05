@@ -1,4 +1,5 @@
 import { getUserByToken } from "@/app/components/getUserByToken";
+import getEmploeeMetaFromDB from "@/app/db/employees/getEmploeeMetaFromDB";
 import getEmployeesFromDB from "@/app/db/employees/getEmployeesFromDB";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -12,8 +13,14 @@ export async function POST(request: any) {
 
   const searchParams = await request.json();
   const employees = await getEmployeesFromDB(searchParams);
+  const employeesWithMeta = await Promise.all(
+    employees.map(async (employee) => ({
+      ...employee,
+      meta: await getEmploeeMetaFromDB(employee.id),
+    }))
+  );
   return NextResponse.json({
     success: true,
-    employees,
+    employees: employeesWithMeta,
   });
 }
