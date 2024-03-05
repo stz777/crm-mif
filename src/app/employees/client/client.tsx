@@ -1,10 +1,10 @@
 "use client"
 import { Employee } from "@/app/components/types/employee";
-import { SearchParamsInterface } from "../types";
-import EmployeeTr from "../EmployeeTr";
+import { EmployeeInterface, SearchParamsInterface } from "../types";
 import { useEffect, useState } from "react";
 import fetchGetTaskData from "./fetchGetTaskData";
 import EmployeeEditor from "./employeeEditor";
+import SideModal from "@/components/SideModal/SideModal";
 
 export default function Client(props: { employeesWithMeta: Employee[], searchParams: SearchParamsInterface }) {
 
@@ -66,5 +66,56 @@ export default function Client(props: { employeesWithMeta: Employee[], searchPar
                 }
             </tbody>
         </table>
+    </>
+}
+
+
+function EmployeeTr(props: {
+    employee: EmployeeInterface,
+    children: any;
+}) {
+    const [is_open, setIsOpen] = useState(false);
+    return <>
+        <tr onClick={() => {
+            setIsOpen(true);
+        }}>
+            {props.children}
+        </tr>
+        <SideModal isOpen={is_open} closeHandle={() => setIsOpen(false)}>
+            <>
+                <TaskDetails employee={props.employee} />
+            </>
+        </SideModal>
+    </>
+}
+
+
+function TaskDetails(props: { employee: EmployeeInterface }) {
+    return <>
+        <div className="d-flex align-items-center border-bottom px-4 py-3 ">
+            <div className="h3">Детали задачи</div>
+            <span className="ms-3 text-secondary" style={{ fontSize: "0.9em" }}>ID: {props.employee.id}</span>
+        </div>
+        <div className="px-4">
+            <div><Wrapper title="ФИО">{props.employee.username}</Wrapper></div>
+            <div><Wrapper title="Должность">{(() => {
+                if (props.employee.is_boss) return <>Босс</>
+                if (props.employee.is_manager) return <>Менеджер</>
+                return "должность не установлена";
+            })()}</Wrapper></div>
+        </div>
+    </>
+}
+
+
+function Wrapper(props: {
+    title: string;
+    children: any;
+}) {
+    return <>
+        <div className="d-flex mb-3">
+            <div style={{ width: 220 }}>{props.title}</div>
+            <div>{props.children}</div>
+        </div>
     </>
 }
