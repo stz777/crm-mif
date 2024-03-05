@@ -40,14 +40,15 @@ export default function EmployeeEditor(props: {
     );
 
     return <>
-        <button className="btn btn-outline-dark" onClick={() => {
+        <button className="btn btn-outline-dark" onClick={(e) => {
+            e.stopPropagation();
             setIsOpen(true)
         }}>Редактировать</button>
         <SideModal isOpen={isOpen}
             closeHandle={() => {
                 setIsOpen(false);
             }}>
-            <div className="border-bottom px-4 py-3 h3">Создать сотрудника</div>
+            <div className="border-bottom px-4 py-3 h3">Редактировать сотрудника</div>
             <div className="px-4">
 
                 <form onSubmit={handleSubmit(e => onSubmit(e, reset))}>
@@ -118,7 +119,7 @@ export default function EmployeeEditor(props: {
                             />
                         </tbody>
                     </table>
- 
+
 
                     <button className="btn btn-sm btn-dark">Сохранить</button>
 
