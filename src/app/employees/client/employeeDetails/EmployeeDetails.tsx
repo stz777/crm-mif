@@ -1,5 +1,9 @@
+import { useEffect, useState } from "react";
 import { EmployeeInterface } from "../../types";
 import Wrapper from "./Wrapper";
+import fetchGetLeadsByEmployeeId from "./fetchLeads";
+import { LeadsByEmployeeInterface } from "@/app/api/employees/get-leads/[employeeId]/route";
+import dayjs from "dayjs";
 
 export function EmployeeDetails(props: { employee: EmployeeInterface }) {
     return <>
@@ -24,10 +28,43 @@ export function EmployeeDetails(props: { employee: EmployeeInterface }) {
                     </tbody>
                 </table>
             </Wrapper></div>
-            <h3>Заказы в работе</h3>
-            
+            <h4>Заказы в работе</h4>
+            <LeadsByEmployee employeeId={props.employee.id} />
         </div>
     </>
 }
 
-
+function LeadsByEmployee(props: { employeeId: number }) {
+    const [leads, setLeads] = useState<undefined | LeadsByEmployeeInterface[]>();
+    useEffect(() => {
+        (async () => {
+            const responsedLeads = await fetchGetLeadsByEmployeeId(props.employeeId);
+            if (responsedLeads) setLeads(responsedLeads)
+        })();
+    }, [])
+    if (!leads) return "Загрузка..."
+    return <>
+        <table className="table table-borderless">
+            <thead>
+                <tr>
+                    <th className="text-secondary">ID</th>
+                    <th className="text-secondary">Описание</th>
+                    <th className="text-secondary">Создан</th>
+                    <th className="text-secondary">Оплата, ₽</th>
+                </tr>
+            </thead>
+            <tbody>
+                {leads.map(lead => <tr key={lead.id}>
+                    <td>{lead.id}</td>
+                    <td>{lead.description}</td>
+                    <td>{dayjs(lead.create_date).format("DD.MM.YYYY")}</td>
+                    <td>
+                        <div className={`text-nowrap ${lead.payments === lead.sum ? "text-success" : ""}`}>
+                            {lead.sum}/{lead.payments}
+                        </div>
+                    </td>
+                </tr>)}
+            </tbody>
+        </table>
+    </>
+}
