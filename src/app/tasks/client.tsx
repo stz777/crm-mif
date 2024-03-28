@@ -10,6 +10,7 @@ import TaskStatus from "./TaskStatus";
 import querystring from "querystring";
 import SideModal from "@/components/SideModal/SideModal";
 import { toast } from "react-toastify";
+import CommentEditor from "./CommentEditor";
 
 export default function Client(props: { tasks: TaskFromDBInterface[], searchParams: SearchInterface }) {
 
@@ -115,7 +116,7 @@ function TaskDetails(props: { task: TaskFromDBInterface }) {
         </div>
         <div className="px-4">
             <div><Wrapper title="Описание">{props.task.description}</Wrapper></div>
-            <div><Wrapper title="Комментарий">{props.task.comment}</Wrapper></div>
+            <div><Wrapper title="Комментарий"> <CommentEditor comment={props.task.comment} taskId={props.task.id} /> {/*props.task.comment*/}</Wrapper></div>
             <div><Wrapper title="Ответственный">{props.task.managerName}</Wrapper></div>
             <div><Wrapper title="Дата создания">{dayjs(props.task.created_date).format("DD.MM.YYYY")}</Wrapper></div>
             <div><Wrapper title="Дата создания">
