@@ -62,6 +62,7 @@ export default function Client(props: { tasks: TaskFromDBInterface[], searchPara
                 <tr>
                     <th>ID</th>
                     <th>Описание</th>
+                    <th>Комментарий</th>
                     <th>Ответственный</th>
                     <th>Дата создания</th>
                     <th>Дедлайн</th>
@@ -72,6 +73,7 @@ export default function Client(props: { tasks: TaskFromDBInterface[], searchPara
                 {tasks.map(task => <TaskTr task={task} key={task.id}>
                     <td>{task.id}</td>
                     <td>{task.description}</td>
+                    <td>{task.comment}</td>
                     <td>{task.managerName}</td>
                     <td>{dayjs(task.created_date).format("DD.MM.YYYY")}</td>
                     <td>
