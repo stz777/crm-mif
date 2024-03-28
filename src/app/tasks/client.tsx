@@ -115,6 +115,7 @@ function TaskDetails(props: { task: TaskFromDBInterface }) {
         </div>
         <div className="px-4">
             <div><Wrapper title="Описание">{props.task.description}</Wrapper></div>
+            <div><Wrapper title="Комментарий">{props.task.comment}</Wrapper></div>
             <div><Wrapper title="Ответственный">{props.task.managerName}</Wrapper></div>
             <div><Wrapper title="Дата создания">{dayjs(props.task.created_date).format("DD.MM.YYYY")}</Wrapper></div>
             <div><Wrapper title="Дата создания">
