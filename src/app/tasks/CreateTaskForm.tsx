@@ -7,8 +7,11 @@ import { Employee } from "../components/types/employee";
 import onSubmit from "./onSubmit";
 import PlusCircleIcon from "@/components/clients/controlPanel/components/create-lead/media/plus_circle.svg"
 import Image from "next/image";
-import DatePicker from "react-datepicker";
 import getEmployees from "./getEmployees";
+import DatePicker from "react-datepicker";
+import { registerLocale } from "react-datepicker";
+import ru from 'date-fns/locale/ru';
+registerLocale('ru', ru);
 
 export default function CreateTaskForm() {
     const modalIsOpen = useStore($modalIsOpen);
@@ -43,6 +46,14 @@ export default function CreateTaskForm() {
                                     <td>Описание задачи</td>
                                     <td>
                                         <textarea className="form-control"  {...register("description")} autoComplete="off" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Комментарий</td>
+                                    <td>
+                                        <textarea className="form-control"  {...register("comment",{
+                                            value: "Новая задача"
+                                        })} autoComplete="off" />
                                     </td>
                                 </tr>
                                 <tr>
