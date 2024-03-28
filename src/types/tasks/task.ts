@@ -6,6 +6,7 @@ export interface TaskFromDBInterface {
   description: string;
   manager: number;
   managerName: string;
+  comment: string;
 }
 
 export interface SearchInterface {
