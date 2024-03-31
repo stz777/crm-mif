@@ -28,12 +28,17 @@ export default function CreateClientForm() {
     const inputValue: any = watch('image');
 
     useEffect(() => {
-        appendPhone({ phone: insertedPhone })
+        appendPhone({ phone: insertedPhone });
     }, [insertedPhone]);
+
+    // useEffect(() => {
+    //     customSetValues(setValue, appendEmail)
+    // }, [insertedPhone]);
+
 
     return (
         <form
-            onSubmit={handleSubmit((e: any) => onSubmit(e, reset))}
+            onSubmit={handleSubmit((e: any) => onSubmit(e))}
             style={{ maxWidth: "1000px" }}
         >
             <table className="table-borderless">
@@ -81,4 +86,23 @@ export default function CreateClientForm() {
             <button className="btn btn-sm btn-outline-dark">Сохранить</button>
         </form>
     );
+}
+
+
+// type SetValueType = 
+
+function customSetValues(setValue: any, appendEmail: any) {
+    // setValue();
+    console.log('appendEmail', appendEmail);
+
+    appendEmail({ email: 'manamana@adsa.ru' });
+    setValue("fio", "шмио");
+    setValue("emails.0.email", "manamana@adsa.ru");
+    setValue("telegram.0.telegram", "oooaaa");
+    setValue("address", "пионерская");
+    setValue("deadline", new Date());
+    setValue("payment", '3123');
+    setValue("description", 'нормальный платеж');
+    setValue("descr", 'нормальный платеж');
+    setValue("sum", '3123');
 }

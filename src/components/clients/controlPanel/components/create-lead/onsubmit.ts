@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { reset } from "./store/modalState";
 
-export default async function onSubmit(data: any, resetForm: any) {
+export default async function onSubmit(data: any) {
   if (!data.phones?.length) {
     toast.error('Нужно заполнить поле "телефон"');
     return;
@@ -61,7 +61,7 @@ export default async function onSubmit(data: any, resetForm: any) {
   const leadFieldsLength = leadFields.length;
   const completedLength = leadFields.filter((x) => x).length;
 
-  if (completedLength > 0 && leadFieldsLength) {
+  if (!(completedLength > 0 && leadFieldsLength)) {
     toast.error('Требуется заполнить все поля оплаты или оставить их пустыми"');
     return;
   }
