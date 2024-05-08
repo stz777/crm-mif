@@ -58,10 +58,9 @@ export default async function onSubmit(data: any) {
     data.deadline,
   ];
 
-  const leadFieldsLength = leadFields.length;
   const completedLength = leadFields.filter((x) => x).length;
 
-  if (!(completedLength > 0 && leadFieldsLength)) {
+  if (completedLength > 0 && completedLength != leadFields.length) {
     toast.error('Требуется заполнить все поля оплаты или оставить их пустыми"');
     return;
   }
