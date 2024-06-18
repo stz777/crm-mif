@@ -11,6 +11,6 @@ export default async function SideMenu() {
     const user = await getUserByToken(auth?.value);
     if (!user) return null;
     return <div style={{ width: "180px" }}>
-        <Client currentPath={currentPath} />
+        <Client currentPath={currentPath} isBoss={Boolean(user.is_boss)} />
     </div>
 }
