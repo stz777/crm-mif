@@ -56,7 +56,7 @@ export default function LeadDetails(props: { lead: LeadInterface }) {
                 <div className="border-bottom my-3"></div>
                 <h4>Чеки</h4>
                 <PaymentChecksViewer lead_id={props.lead.id} />
-                {!props.lead.done_at && <CloseLead lead_id={props.lead.id} />}
+                {!props.lead.done_at ? <CloseLead lead_id={props.lead.id} /> : <ReturnLead lead_id={props.lead.id} />}
             </div>
         </div>
     </>
@@ -89,5 +89,35 @@ function CloseLead(props: { lead_id: number }) {
                     toast.error("Что-то пошло не так #f0f83");
                 })
         }}>Закрыть заказ</button>
+    </>
+}
+
+function ReturnLead(props: { lead_id: number }) {
+    return <>
+        <button className="btn btn-outline-success" onClick={() => {
+            fetch(
+                `/api/leads/return/${props.lead_id}`,
+                {
+                    method: "POST"
+                }
+            ).then(
+                response => {
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        throw new Error(response.statusText);
+                    }
+                }
+            ).then(data => {
+                if (data.success) {
+                    toast.success("Заказ восстановлен");
+                } else {
+                    toast.error("Что-то пошло не так #lf94d4");
+                }
+            })
+                .catch(error => {
+                    toast.error("Что-то пошло не так #f0fs83");
+                })
+        }}>Восстановить заказ</button>
     </>
 }
