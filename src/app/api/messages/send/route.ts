@@ -8,6 +8,7 @@ import { getUserByToken } from "@/app/components/getUserByToken";
 import getEmployeesByProjectId from "@/app/db/employees/getEmployeesByProjectId";
 import getEmployeesByPurchaseTask from "@/app/db/employees/getEmployeesByPurchaseTask";
 import getEmployeesByLeadId from "@/app/db/leads/getLeadFullData/getEmployeesByLeadId";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -79,7 +80,7 @@ export async function POST(
 
 async function saveMessage(text: string, essense: string, essense_id: number, sender: number): Promise<number | false> {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             "INSERT INTO messages (text,essense,essense_id,sender) VALUES (?,?,?,?)",
             [text, essense, essense_id, sender],
             function (err, result: any) {
@@ -106,7 +107,7 @@ async function saveMessage(text: string, essense: string, essense_id: number, se
 
 async function checkImageIsExists(imageName: string) {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             "SELECT * FROM media WHERE name = ?",
             [imageName],
             function (err, res: any) {
@@ -136,7 +137,7 @@ async function saveImageToDB(imageName: string, messageId: number) {
     //     messageId
     // }
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             "INSERT INTO media (message, is_image, name) VALUES(?,?,?)",
             [messageId, 1, imageName],
             function (err, res: any) {

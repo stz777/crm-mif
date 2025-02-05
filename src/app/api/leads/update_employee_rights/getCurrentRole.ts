@@ -1,9 +1,10 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export default async function getCurrentRole(employeeId: number, leadId: number) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM leads_roles WHERE user = ? AND lead_id = ?`,
             [employeeId, leadId],
             function (err, res: any) {

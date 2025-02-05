@@ -1,9 +1,10 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function createNewRole(employeeId: number, project_id: number, role: string) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `INSERT INTO projects_roles (user,project,role) VALUES (?,?,?)`,
             [employeeId, project_id, role],
             function (err, res: any) {

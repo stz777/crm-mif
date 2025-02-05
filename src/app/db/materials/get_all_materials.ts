@@ -1,11 +1,13 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { pool } from "../connect"
 import { MaterialInterface } from "@/types/materials/materialInterface"
+import dbWorker from "../dbWorker/dbWorker"
 
 export default async function get_all_materials(): Promise<MaterialInterface[]> {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             "SELECT * FROM materials",
+            [],
             function (err, result: any[]) {
                 if (err) {
                     sendMessageToTg(

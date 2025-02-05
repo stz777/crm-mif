@@ -1,6 +1,7 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import { cookies } from "next/headers";
 
 export async function getRoleByLeadId(lead_id: number): Promise<string | null> {
@@ -11,7 +12,7 @@ export async function getRoleByLeadId(lead_id: number): Promise<string | null> {
     if (user.is_boss) return "boss";
 
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             'SELECT role FROM leads_roles WHERE user = ? AND lead_id = ?',
             [user?.id, lead_id],
             function (err, res: any) {

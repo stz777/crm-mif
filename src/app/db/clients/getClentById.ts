@@ -1,10 +1,11 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { ClientInterface } from "@/app/components/types/clients"
 import { pool } from "@/app/db/connect"
+import dbWorker from "../dbWorker/dbWorker"
 
 export default async function getClentById(id: number): Promise<ClientInterface | false> {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             "SELECT * FROM clients WHERE id = ? ORDER BY id DESC",
             [id],
             function (err, result: any[]) {

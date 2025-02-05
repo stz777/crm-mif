@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -30,7 +31,7 @@ export async function POST(
 
 async function insertExpense(lead_id: number, sum: number, comment: string, done_by: number): Promise<number | undefined> {
     return new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `INSERT INTO expenses_per_lead (lead_id, sum, comment, done_by) VALUES (?,?,?,?)`,
             [lead_id, sum, comment, done_by],
             function (err, res: any) {

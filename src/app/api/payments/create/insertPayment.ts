@@ -1,5 +1,6 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export default async function insertPayment(
   lead_id: number,
@@ -7,7 +8,7 @@ export default async function insertPayment(
   done_by: number
 ) {
   return new Promise((resolve) => {
-    pool.query(
+    dbWorker(
       `INSERT INTO payments (lead_id, sum, done_by) VALUES (?,?,?)`,
       [lead_id, sum, done_by],
       function (err, res: any) {

@@ -35,7 +35,7 @@ export async function POST(
 
 async function confirmPayment(paymentId: number) {
     return new Promise(resolve => {
-        pool.query(
+        dbWorkerrrr(
             `UPDATE payments SET confirmed = 1 WHERE id = ?`,
             [paymentId],
             function (err, res: any) {
@@ -53,4 +53,8 @@ async function confirmPayment(paymentId: number) {
                 resolve(res.changedRows);
             })
     })
+}
+
+function dbWorkerrrr(arg0: string, arg1: number[], arg2: (err: any, res: any) => void) {
+    throw new Error("Function not implemented.");
 }

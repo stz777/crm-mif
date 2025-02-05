@@ -2,12 +2,13 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { ClientInterface, ClientMetaInterface } from "@/app/components/types/clients";
 import { pool } from "@/app/db/connect";
 import getClentMeta from "../../clients/getClentMeta";
+import dbWorker from "../../dbWorker/dbWorker";
 
 type superInterface = ClientInterface & { meta: ClientMetaInterface[] };
 
 export default async function getClientByLeadId(lead_id: number): Promise<superInterface> {
     const client: ClientInterface = await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM clients WHERE 
             id IN (SELECT client FROM leads WHERE id = ? )
             ORDER BY id DESC`,

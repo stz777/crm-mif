@@ -2,6 +2,7 @@ import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { Employee } from "@/app/components/types/employee";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -38,7 +39,7 @@ export async function POST(
 
 async function updateEmployeeMeta(employee: number, data_type: string, data: string) {
     return await new Promise(r => {
-        pool.query(
+        dbWorker(
             `UPDATE employees_meta SET data = ? WHERE data_type = ? AND employee_id = ?`,
             [data, data_type, employee],
             function (err, res: any) {
@@ -49,7 +50,7 @@ async function updateEmployeeMeta(employee: number, data_type: string, data: str
                                 errorNo: "#dmdsm9NJhdyr",
                                 error: {
                                     err,
-                                    'текст':"в бд у пользователя не созданы контакты"
+                                    'текст': "в бд у пользователя не созданы контакты"
                                 },
                                 values: { data, data_type, employee }
                             }, null, 2),
@@ -75,7 +76,7 @@ async function updateEmployeeMeta(employee: number, data_type: string, data: str
 async function updateSimpleUserData(column: string, value: string, employee_id: number) {
 
     return await new Promise(r => {
-        pool.query(
+        dbWorker(
             `UPDATE employees SET ${column} = ? WHERE id = ?`,
             [value, employee_id],
             function (err, res: any) {
@@ -110,7 +111,7 @@ async function updateSimpleUserData(column: string, value: string, employee_id: 
 
 async function getEmployeeById(id: number): Promise<Employee> { // TODO удалить функции дубли
     const employees: Employee = await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             "SELECT id, username, telegram_id, tg_chat_id, is_manager FROM employees WHERE id= ?",
             [id],
             function (err: any, res: any) {

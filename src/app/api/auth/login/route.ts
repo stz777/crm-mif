@@ -2,6 +2,7 @@ import { pool } from "@/app/db/connect";
 import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { Employee } from "@/app/components/types/employee";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -50,7 +51,7 @@ export async function POST(
 
 async function getUserByTg(tgUsername: string): Promise<Employee | null> {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             "SELECT * FROM employees WHERE telegram_id = ? AND is_active = 1",
             [tgUsername],
             function (err, res: any) {
@@ -78,7 +79,7 @@ async function getUserByTg(tgUsername: string): Promise<Employee | null> {
 
 async function insertCodeToDb(code: number, tg_chat_id: number) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             "UPDATE employees SET password = ? WHERE tg_chat_id = ?",
             [String(code), String(tg_chat_id)],
             function (err, res: any) {

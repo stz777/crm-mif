@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -18,7 +19,7 @@ export async function POST(
     const { name, contacts } = data;
 
     const success = await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `INSERT INTO suppliers (name, contacts ) VALUES (?,?)`,
             [name, contacts],
             function (err, res: any) {

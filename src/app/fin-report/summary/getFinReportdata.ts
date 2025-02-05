@@ -4,6 +4,7 @@ import { PaymentInterface } from "../../components/types/lead";
 import { pool } from "../../db/connect";
 // import { ReportSearchInterface } from "./page";
 import dayjs from "dayjs";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export default async function getFinReportdata(
   searchParams: any
@@ -12,9 +13,9 @@ export default async function getFinReportdata(
   const expenses = await getExpenses(
     searchParams.year
       ? {
-          date_from: dayjs(searchParams.year, "YYYY").startOf('year').format("DD.MM.YYYY"),
-          date_to: dayjs(searchParams.year, "YYYY").endOf('year').format("DD.MM.YYYY"),
-        }
+        date_from: dayjs(searchParams.year, "YYYY").startOf('year').format("DD.MM.YYYY"),
+        date_to: dayjs(searchParams.year, "YYYY").endOf('year').format("DD.MM.YYYY"),
+      }
       : {}
   );
   return {
@@ -34,11 +35,11 @@ async function getPayments(props: {
     const whereString = !whereArray.length
       ? ""
       : "WHERE " +
-        whereArray.map(([i1, i2, i3]) => `${i1} ${i2} ${i3}`).join(" AND ");
+      whereArray.map(([i1, i2, i3]) => `${i1} ${i2} ${i3}`).join(" AND ");
 
     const qs = `SELECT * FROM payments ${whereString} `;
 
-    pool.query(qs, function (err: any, res: PaymentInterface[]) {
+    dbWorker(qs, [], function (err: any, res: PaymentInterface[]) {
       if (err) {
         sendMessageToTg(
           JSON.stringify(

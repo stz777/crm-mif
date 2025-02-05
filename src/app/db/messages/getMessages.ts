@@ -3,11 +3,12 @@ import { EmployeeRoleInEssense, Media, MessageForChatInterface, MessageInterface
 import { pool } from "@/app/db/connect"
 import getEployeeByID from "../employees/getEployeeById";
 import { EssenseName } from "@/app/components/types/essenses";
+import dbWorker from "../dbWorker/dbWorker";
 
 export default async function getMessages(essense: EssenseName, essense_id: number): Promise<MessageForChatInterface[]> {
 
     const messages: MessageInterface[] = await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM messages WHERE essense = ? AND essense_id = ? ORDER BY messages.id DESC`,
             [essense, essense_id],
             function (err, result: any[]) {
@@ -46,7 +47,7 @@ export default async function getMessages(essense: EssenseName, essense_id: numb
 
 async function getMediaByMessageId(messageId: number): Promise<Media[]> {
     return await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM media WHERE message = ?`,
             [messageId],
             function (err, result: any[]) {
@@ -85,7 +86,7 @@ async function getEployeeRoleInEssenseBy(employee_id: number, essense: EssenseNa
     }
 
     return await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT role FROM ${table[essense].table} WHERE ${table[essense].column} = ? AND user = ?`,
             [essense_id, employee_id],
             function (err, result: any[]) {

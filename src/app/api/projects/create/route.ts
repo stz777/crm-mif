@@ -4,6 +4,7 @@ import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { cookies } from 'next/headers'
 import { getUserByToken } from "@/app/components/getUserByToken";
 import getEployeeByID from "@/app/db/employees/getEployeeById";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -43,7 +44,7 @@ export async function POST(
 
 async function createProjectFn(title: string, comment: string, deadline: string): Promise<number> {
     return await new Promise(r => {
-        pool.query(
+        dbWorker(
             `INSERT INTO projects (title, comment, deadline) VALUES (?,?,?)`,
             [title, comment, deadline],
             function (err, res: any) {
@@ -80,7 +81,7 @@ async function createProjectFn(title: string, comment: string, deadline: string)
 
 async function setUserPermissionInProject(employeeId: number, project_id: number, role: "inspector" | "executor" | "viewer" | "no_rights") {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `INSERT INTO projects_roles (user, project, role) VALUES (?, ?, ?)`,
             [employeeId, project_id, role],
             function (err, res: any) {

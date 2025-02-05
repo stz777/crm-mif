@@ -1,9 +1,10 @@
 import { pool } from "@/app/db/connect"
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg"
+import dbWorker from "@/app/db/dbWorker/dbWorker"
 
 export default async function getUserByCode(code: string) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             "SELECT * FROM employees WHERE password = ? AND is_active = 1",
             [code],
             function (err, res: any) {

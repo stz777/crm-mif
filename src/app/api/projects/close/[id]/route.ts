@@ -1,6 +1,7 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import dayjs from "dayjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -26,7 +27,7 @@ export async function POST(
 async function closeProjectFunction(project_id: number) {
     const now = dayjs().format('YYYY-MM-DD HH:mm:ss');
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `UPDATE projects SET done_at = ? WHERE id = ?`,
             [now, project_id],
             function (err, res: any) {

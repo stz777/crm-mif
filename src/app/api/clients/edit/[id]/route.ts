@@ -4,6 +4,7 @@ import createClientMetaFn from "../../create/createClientMetaFn";
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -78,7 +79,7 @@ export async function POST(
 
 async function updateClient(clientData: any, clientId: number) {
     await new Promise(r => {
-        pool.query(`UPDATE clients SET full_name = ?, address=? WHERE id = ?`,
+        dbWorker(`UPDATE clients SET full_name = ?, address=? WHERE id = ?`,
             [clientData.fio, clientData.address, clientId],
             function (err, res) {
                 if (err) {
@@ -113,7 +114,7 @@ async function updateClient(clientData: any, clientId: number) {
 async function clearClientMeta(clientId: number) {
     const qs = `DELETE FROM clients_meta WHERE client = ${clientId}`;
     await new Promise(r => {
-        pool.query(qs,
+        dbWorker(qs, [],
             function (err, res) {
                 if (err) {
                     sendMessageToTg(

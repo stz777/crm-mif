@@ -1,10 +1,11 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 // import { ExpensesPerLeadInterface, PaymentInterface } from "@/app/components/types/lead";
 import { pool } from "@/app/db/connect";
+import dbWorker from "../../dbWorker/dbWorker";
 
 export default async function getExpensesByLeadId(lead_id: number): Promise<any> {
     return await new Promise(r => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM expenses_per_lead WHERE lead_id = ?`,
             [lead_id],
             function (err: any, res: any) {

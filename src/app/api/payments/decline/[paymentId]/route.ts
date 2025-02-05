@@ -1,6 +1,7 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 // import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
@@ -33,7 +34,7 @@ export async function POST(
 
 async function declinePayment(paymentId: number) {
     return new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `DELETE FROM payments WHERE id = ?`,
             [paymentId],
             function (err, res: any) {

@@ -1,10 +1,11 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { pool } from "@/app/db/connect"
 import { EmployeeToPurchaseTaskInterface } from "@/types/employees/employeeToPurchaseTaskInterface"
+import dbWorker from "../dbWorker/dbWorker"
 
 export default async function getEmployeesByPurchaseTask(id: number): Promise<EmployeeToPurchaseTaskInterface[]> {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT purchasing_task_roles.user as user_id, purchasing_task_roles.role, employees.username, employees.tg_chat_id
             FROM purchasing_task_roles 
             LEFT JOIN (employees)

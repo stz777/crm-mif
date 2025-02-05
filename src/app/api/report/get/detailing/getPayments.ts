@@ -1,6 +1,7 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { PaymentInterface } from "@/app/components/types/lead";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 
 export default async function getPayments(props: { year: number, month: number }): Promise<PaymentInterface[]> {
@@ -8,7 +9,7 @@ export default async function getPayments(props: { year: number, month: number }
     return await new Promise(resolve => {
 
         const whereArray: [string, string, string][] = [];
-        
+
         whereArray.push(["YEAR(created_date)", "=", String(props.year)])
         whereArray.push(["MONTH(created_date)", "=", String(props.month)])
         const whereString = !whereArray.length
@@ -17,8 +18,9 @@ export default async function getPayments(props: { year: number, month: number }
 
         const qs = `SELECT * FROM payments ${whereString} `;
 
-        pool.query(
+        dbWorker(
             qs,
+            [],
             function (err: any, res: PaymentInterface[]) {
                 if (err) {
                     sendMessageToTg(

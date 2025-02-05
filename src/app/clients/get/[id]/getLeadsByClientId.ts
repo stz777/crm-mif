@@ -5,6 +5,7 @@ import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
 import getExpensesByLeadId from "@/app/db/leads/getLeadFullData/getExpensesByLeadId";
 import { getPaymentsByLeadId } from "@/app/db/payments/getPaymentsByLeadId";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 interface SearchParametersInterface {
     id?: number
@@ -28,8 +29,9 @@ export async function getLeadsByClientId(
     const qs = `SELECT * FROM leads ${whereString}  ORDER BY id DESC `;
 
     const leads: LeadInterface[] = await new Promise(r => {
-        pool.query(
+        dbWorker(
             qs,
+            [],
             function (err: any, res: any) {
                 if (err) {
                     sendMessageToTg(
@@ -71,7 +73,7 @@ export async function getRoleByLeadId(lead_id: number): Promise<string | null> {
     if (user.is_boss) return "boss";
 
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             'SELECT role FROM leads_roles WHERE user = ? AND lead_id = ?',
             [user?.id, lead_id],
             function (err, res: any) {

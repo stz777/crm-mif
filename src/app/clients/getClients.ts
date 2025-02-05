@@ -5,13 +5,14 @@ import {
   ClientMetaInterface,
   ClientsSearchInterface,
 } from "@/app/components/types/clients";
+import dbWorker from "../db/dbWorker/dbWorker";
 
 export async function getClients(
   searchParams: ClientsSearchInterface
 ): Promise<ClientInterface[]> {
   const whereArray: string[] = [];
   const ids = [];
-  
+
   if (searchParams?.keyword) {
     if (/[0-9]+/.test(searchParams.keyword)) {
       ids.push(searchParams.keyword);
@@ -32,7 +33,7 @@ export async function getClients(
   const qs = `SELECT * FROM clients ${whereString} ORDER BY id DESC`;
 
   const clients: ClientInterface[] = await new Promise((r) => {
-    pool.query(qs, function (err: any, res: ClientInterface[]) {
+    dbWorker(qs, function (err: any, res: ClientInterface[]) {
       if (err) {
         sendMessageToTg(
           JSON.stringify(
@@ -61,7 +62,7 @@ export async function getClients(
 
 async function getClientMeta(clientId: number): Promise<ClientMetaInterface[]> {
   return await new Promise((r) => {
-    pool.query(
+    dbWorker(
       `SELECT * FROM clients_meta WHERE client = ${clientId}`,
       function (err: any, res: any) {
         if (err) {

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -18,7 +19,7 @@ export async function POST(
     const data = await request.json();
     const { title, comment, deadline } = data;
     const new_task_id: number = await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `INSERT INTO purchasing_tasks (title, comment, deadline) VALUES (?,?,?)`,
             [title, comment, deadline],
             function (err, res: any) {
@@ -74,7 +75,7 @@ export async function POST(
 async function setUserPermissionInTask(employeeId: number, task_id: number, role: "inspector" | "executor" | "viewer" | "no_rights") {
 
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `INSERT INTO purchasing_task_roles (user,task,role) VALUES (?,?,?)`,
             [employeeId, task_id, role],
             function (err, res: any) {

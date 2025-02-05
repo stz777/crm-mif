@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { createNewRole } from "./createNewRole";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -71,9 +72,9 @@ export async function POST(
 
 async function getCurrentRole(employeeId: number, project_id: number) {
     console.log(`SELECT * FROM projects_roles WHERE user = ${employeeId} AND project = ${project_id}`);
-    
+
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM projects_roles WHERE user = ? AND project = ?`,
             [employeeId, project_id],
             function (err, res: any) {
@@ -97,7 +98,7 @@ async function getCurrentRole(employeeId: number, project_id: number) {
 
 async function deleteCurrentRole(employeeId: number, project_id: number) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `DELETE FROM projects_roles WHERE user = ? AND project = ?`,
             [employeeId, project_id],
             function (err, res: any) {
@@ -132,7 +133,7 @@ async function deleteCurrentRole(employeeId: number, project_id: number) {
 
 async function updateCurrentRole(employeeId: number, project_id: number, role: string) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `UPDATE projects_roles SET role = ? WHERE user = ? AND project = ?`,
             [role, employeeId, project_id],
             function (err, res: any) {

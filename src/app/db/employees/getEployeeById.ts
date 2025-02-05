@@ -1,10 +1,11 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { Employee } from "@/app/components/types/employee";
 import { pool } from "../connect";
+import dbWorker from "../dbWorker/dbWorker";
 
 export default async function getEployeeByID(id: number): Promise<Employee> {
     return await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM employees WHERE id = ?`,
             [id],
             function (err, result: any[]) {
@@ -19,14 +20,14 @@ export default async function getEployeeByID(id: number): Promise<Employee> {
                         "5050441344"
                     )
                 }
-                if(!result.length){
+                if (!result.length) {
                     sendMessageToTg(
                         JSON.stringify(
                             {
                                 errorNo: "#jdhGy6",
                                 error: "Запросили несуществующего пользователя",
                                 values: { id },
-                                sql:`SELECT * FROM employees WHERE id = ${id}`
+                                sql: `SELECT * FROM employees WHERE id = ${id}`
                             }, null, 2),
                         "5050441344"
                     )

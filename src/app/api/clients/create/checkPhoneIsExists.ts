@@ -1,5 +1,6 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export default async function checkPhoneIsExists(phone: string) {
 
@@ -7,7 +8,7 @@ export default async function checkPhoneIsExists(phone: string) {
     const lastTenChars = numbers.slice(-10);
 
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             'SELECT * FROM clients_meta WHERE data_type = "phone" AND data LIKE ?',
             [`%${lastTenChars}%`],
             function (err, result: any[]) {

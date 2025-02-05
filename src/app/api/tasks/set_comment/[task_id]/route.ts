@@ -1,5 +1,6 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request, params: { params: { task_id: string } }) {
@@ -21,7 +22,7 @@ export async function POST(request: Request, params: { params: { task_id: string
 
 async function updateLeadComment(task_id: number, comment: string) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             "UPDATE tasks SET comment = ? WHERE id = ?",
             [comment, task_id],
             function (err: any, res: any) {

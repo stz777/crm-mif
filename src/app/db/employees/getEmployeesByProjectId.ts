@@ -1,9 +1,10 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { pool } from "@/app/db/connect"
+import dbWorker from "../dbWorker/dbWorker"
 
 export default async function getEmployeesByProjectId(id: number): Promise<Employee[] | false> {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT projects_roles.user as user_id, projects_roles.role, employees.username, employees.tg_chat_id
             FROM projects_roles 
             LEFT JOIN (employees)

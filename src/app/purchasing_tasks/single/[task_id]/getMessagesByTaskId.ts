@@ -1,13 +1,14 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
-import {  Media } from "@/app/components/types/messages";
+import { Media } from "@/app/components/types/messages";
 import { pool } from "@/app/db/connect"
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import { messageToPurchaseTakInterface } from "@/types/messages/messageToPurchaseTakInterface";
 //TODO привести чат к нескольким сущностям (leads,purchase_tasks,projects)
 
 export default async function getMessagesByTaskId(task_id: number): Promise<messageToPurchaseTakInterface[]> {
     const messages: messageToPurchaseTakInterface[] = await new Promise((resolve) => {
 
-        pool.query(
+        dbWorker(
             `SELECT * FROM messages WHERE messages.essense = 'purchase_task' AND messages.essense_id=? ORDER BY messages.id DESC`,
             [task_id],
             function (err, result: any[]) {
@@ -41,7 +42,7 @@ export default async function getMessagesByTaskId(task_id: number): Promise<mess
 
 async function getMediaByMessageId(messageId: number): Promise<Media[]> {
     return await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM media WHERE message = ?`,
             [messageId],
             function (err, result: any[]) {
@@ -68,7 +69,7 @@ async function getMediaByMessageId(messageId: number): Promise<Media[]> {
 async function getRole(task_id: number, user_id: number): Promise<string> {
     return await new Promise((resolve) => {
 
-        pool.query(
+        dbWorker(
             `SELECT * FROM purchasing_task_roles WHERE task = ? AND user = ?`,
             [task_id, user_id],
             function (err, result: any[]) {
@@ -95,7 +96,7 @@ async function getRole(task_id: number, user_id: number): Promise<string> {
 async function getUsername(user_id: number): Promise<string> {
     return await new Promise((resolve) => {
 
-        pool.query(
+        dbWorker(
             `SELECT * FROM employees WHERE id = ?`,
             [user_id],
             function (err, result: any[]) {

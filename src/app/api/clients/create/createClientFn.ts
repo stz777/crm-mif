@@ -1,11 +1,12 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import getEployeeByID from "@/app/db/employees/getEployeeById";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export default async function createClientFn(fio: string, address: string): Promise<number> {
     const boss = await getEployeeByID(1)
     return await new Promise(r => {
-        pool.query(
+        dbWorker(
             `INSERT INTO clients (full_name, address) VALUES (?,?)`,
             [fio, address],
             function (err, res: any) {

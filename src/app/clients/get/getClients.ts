@@ -1,6 +1,7 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { ClientInterface, ClientMetaInterface, ClientsSearchInterface } from "@/app/components/types/clients";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function getClients(searchParams: ClientsSearchInterface): Promise<ClientInterface[]> {
 
@@ -17,11 +18,12 @@ export async function getClients(searchParams: ClientsSearchInterface): Promise<
     const qs = `SELECT * FROM clients ${whereString} ORDER BY id DESC`;
 
     const clients: ClientInterface[] = await new Promise(r => {
-        pool.query(
+        dbWorker(
             qs,
+            [],
             function (err: any, res: ClientInterface[]) {
                 if (err) {
-                    
+
                     sendMessageToTg(
                         JSON.stringify(
                             {
@@ -48,7 +50,7 @@ export async function getClients(searchParams: ClientsSearchInterface): Promise<
 
 async function getClientMeta(clientId: number): Promise<ClientMetaInterface[]> {
     return await new Promise(r => {
-        pool.query(`SELECT * FROM clients_meta WHERE client = ${clientId}`, function (err: any, res: any) {
+        dbWorker(`SELECT * FROM clients_meta WHERE client = ${clientId}`, [], function (err: any, res: any) {
             if (err) {
                 sendMessageToTg(
                     JSON.stringify(

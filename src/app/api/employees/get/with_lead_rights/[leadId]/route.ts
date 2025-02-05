@@ -1,6 +1,7 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -53,7 +54,7 @@ async function getEmployeesByLeadId(leadId: number, view_all: boolean): Promise<
 
 
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             qs,
             [leadId],
             function (err, result: any[]) {

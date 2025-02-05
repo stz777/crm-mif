@@ -4,6 +4,7 @@ import { MessageToLead } from "@/app/components/types/fullLeadTypes";
 import { Media } from "@/app/components/types/messages";
 import { pool } from "@/app/db/connect"
 import { cookies } from "next/headers";
+import dbWorker from "../../dbWorker/dbWorker";
 
 
 export default async function getMessagesByLeadId(leadId: number): Promise<MessageToLead[]> {
@@ -23,7 +24,7 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
     const whereString = ` WHERE ${whereArr.join(" AND ")}`;
 
     const messages: MessageToLead[] = await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT 
                 messages.id, messages.text, messages.text, messages.created_date, employees.username, leads_roles.role
              FROM 
@@ -35,6 +36,7 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
              ${whereString}
              ORDER BY messages.id DESC
              `,
+            [],
             function (err, result: any[]) {
                 if (err) {
                     sendMessageToTg(
@@ -64,7 +66,7 @@ export default async function getMessagesByLeadId(leadId: number): Promise<Messa
 
 async function getMediaByMessageId(messageId: number): Promise<Media[]> {
     return await new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM media WHERE message = ?`,
             [messageId],
             function (err, result: any[]) {

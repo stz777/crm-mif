@@ -12,6 +12,7 @@ import insertPayment from "../../clients/create/insertPayment";
 import createNewRole from "../update_employee_rights/createNewRole";
 import fs from "fs";
 import saveImageToDB from "../../payments/create/saveImageToDB";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
   request: Request,
@@ -106,7 +107,7 @@ export async function createLead(props: {
 }): Promise<number> {
   const { client, description, title, deadline, sum } = props;
   return await new Promise((resolve) => {
-    pool.query(
+    dbWorker(
       `INSERT INTO leads (client, description, title, deadline, sum, comment) VALUES (?,?,?,?,?,?)`,
       [client, description, title, deadline, sum, "недавно создан"],
       function (err, res: any) {

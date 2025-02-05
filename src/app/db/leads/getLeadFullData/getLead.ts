@@ -1,10 +1,11 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg"
 import { LeadInterface } from "@/app/components/types/lead"
 import { pool } from "@/app/db/connect"
+import dbWorker from "../../dbWorker/dbWorker"
 
 export default async function getLead(leadId: number): Promise<LeadInterface | false> {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             "SELECT * FROM leads WHERE id = ? ORDER BY id DESC",
             [leadId],
             function (err, result: any[]) {

@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { createNewRole } from "./createNewRole";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -73,7 +74,7 @@ export async function POST(
 
 async function getCurrentRole(employeeId: number, task_id: number) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM purchasing_task_roles WHERE user = ? AND task = ?`,
             [employeeId, task_id],
             function (err, res: any) {
@@ -97,7 +98,7 @@ async function getCurrentRole(employeeId: number, task_id: number) {
 
 async function deleteCurrentRole(employeeId: number, task_id: number) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `DELETE FROM purchasing_task_roles WHERE user = ? AND task = ?`,
             [employeeId, task_id],
             function (err, res: any) {
@@ -132,7 +133,7 @@ async function deleteCurrentRole(employeeId: number, task_id: number) {
 
 async function updateCurrentRole(employeeId: number, task_id: number, role: string) {
     return await new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `UPDATE purchasing_task_roles SET role = ? WHERE user = ? AND task = ?`,
             [role, employeeId, task_id],
             function (err, res: any) {

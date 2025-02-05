@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { cookies } from "next/headers";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function POST(
     request: Request,
@@ -16,7 +17,7 @@ export async function POST(
 
     const { task_id, comment, sum, material } = await request.json();
 
-    pool.query(
+    dbWorker(
         `INSERT INTO expenses_per_purchase_task (purchase_task, comment, sum, materials) VALUES (?,?,?,?)`,
         [task_id, comment, sum, material],
         function (err, res) {

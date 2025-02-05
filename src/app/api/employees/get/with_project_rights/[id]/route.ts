@@ -1,6 +1,7 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { getUserByToken } from "@/app/components/getUserByToken";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -27,7 +28,7 @@ export async function POST(
 
 async function getEmployeesByProjectId(task_id: number): Promise<Employee[] | false> {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             `SELECT employees.id as user_id, projects_roles.role, employees.username
             FROM employees 
             LEFT JOIN (projects_roles)

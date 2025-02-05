@@ -3,91 +3,121 @@ import { getUserByToken } from "@/app/components/getUserByToken";
 import { MaterialInterface } from "@/app/components/types/material";
 import { SupplierInterface } from "@/app/components/types/supplierInterface";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: number } }) {
-    const auth = cookies().get('auth');
-    if (!auth?.value) return redirect("/");
-    const user = await getUserByToken(auth?.value);
-    if (!user) return redirect("/");
-    if (!user.is_manager) return redirect("/");
-    
-    const { id: suplierId } = params;
-    const supplier = await getSupplierById(suplierId);
-    const materials = await getMaterialsBySupplierId(suplierId);
-    return <>
-        <h1>Поставщик</h1>
-        <table className="table w-auto">
-            <tbody>
-                <tr><td>Наименование</td><td>{supplier.name}</td></tr>
-                <tr><td>Контакты</td><td>{supplier.contacts}</td></tr>
-            </tbody>
+  const auth = cookies().get("auth");
+  if (!auth?.value) return redirect("/");
+  const user = await getUserByToken(auth?.value);
+  if (!user) return redirect("/");
+  if (!user.is_manager) return redirect("/");
+
+  const { id: suplierId } = params;
+  const supplier = await getSupplierById(suplierId);
+  const materials = await getMaterialsBySupplierId(suplierId);
+  return (
+    <>
+      <h1>Поставщик</h1>
+      <table className="table w-auto">
+        <tbody>
+          <tr>
+            <td>Наименование</td>
+            <td>{supplier.name}</td>
+          </tr>
+          <tr>
+            <td>Контакты</td>
+            <td>{supplier.contacts}</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Материалы от поставщика</h3>
+
+      {materials ? (
+        <table className="table table-bordered table-striped w-auto">
+          <thead>
+            <tr>
+              <th>артикул</th>
+              <th>наименование</th>
+            </tr>
+          </thead>
+          <tbody>
+            {materials.map((material) => (
+              <tr key={material.id}>
+                <td>{material.id}</td>
+                <td>{material.name}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
-        <h3>Материалы от поставщика</h3>
+      ) : (
+        <>нет материалов</>
+      )}
 
-        {materials ? <table className="table table-bordered table-striped w-auto">
-            <thead>
-                <tr>
-                    <th>артикул</th>
-                    <th>наименование</th>
-                </tr>
-            </thead>
-            <tbody>
-                {materials.map(material => <tr key={material.id}>
-                    <td>{material.id}</td>
-                    <td>{material.name}</td>
-                </tr>)}
-            </tbody>
-        </table> : <>нет материалов</>}
-
-
-        <Link href={`/materials/create/${suplierId}`} className="btn btn-outline-dark btn-sm">Добавить материал</Link>
-
+      <Link
+        href={`/materials/create/${suplierId}`}
+        className="btn btn-outline-dark btn-sm"
+      >
+        Добавить материал
+      </Link>
     </>
+  );
 }
 
-export async function getSupplierById(supplierId: number): Promise<SupplierInterface> {
-    return await new Promise(r => {
-        pool.query("SELECT * FROM suppliers WHERE id = ?",
-            [supplierId],
-            function (err: any, res: any) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#ndmNydi03Jjd",
-                                error: err,
-                                values: { supplierId }
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-                r(res?.pop());
-            })
-    });
+export async function getSupplierById(
+  supplierId: number
+): Promise<SupplierInterface> {
+  return await new Promise((r) => {
+    dbWorker(
+      "SELECT * FROM suppliers WHERE id = ?",
+      [supplierId],
+      function (err: any, res: any) {
+        if (err) {
+          sendMessageToTg(
+            JSON.stringify(
+              {
+                errorNo: "#ndmNydi03Jjd",
+                error: err,
+                values: { supplierId },
+              },
+              null,
+              2
+            ),
+            "5050441344"
+          );
+        }
+        r(res?.pop());
+      }
+    );
+  });
 }
 
-
-
-export async function getMaterialsBySupplierId(supplierId: number): Promise<MaterialInterface[]> {
-    return await new Promise(r => {
-        pool.query("SELECT * FROM materials WHERE supplier = ?",
-            [supplierId],
-            function (err: any, res: any) {
-                if (err) {
-                    sendMessageToTg(
-                        JSON.stringify(
-                            {
-                                errorNo: "#msn3nsJdhb",
-                                error: err,
-                                values: { supplierId }
-                            }, null, 2),
-                        "5050441344"
-                    )
-                }
-                r(res);
-            })
-    });
+export async function getMaterialsBySupplierId(
+  supplierId: number
+): Promise<MaterialInterface[]> {
+  return await new Promise((r) => {
+    dbWorker(
+      "SELECT * FROM materials WHERE supplier = ?",
+      [supplierId],
+      function (err: any, res: any) {
+        if (err) {
+          sendMessageToTg(
+            JSON.stringify(
+              {
+                errorNo: "#msn3nsJdhb",
+                error: err,
+                values: { supplierId },
+              },
+              null,
+              2
+            ),
+            "5050441344"
+          );
+        }
+        r(res);
+      }
+    );
+  });
 }

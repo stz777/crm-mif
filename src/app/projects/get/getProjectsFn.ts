@@ -1,6 +1,7 @@
 import { pool } from "@/app/db/connect";
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { ProjectInterface } from "@/app/components/types/projects";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 interface SearchParametersInterface {
     id?: number
@@ -27,8 +28,9 @@ export async function getProjectsFn(searchParams
     const qs = `SELECT * FROM projects ${whereString} ORDER BY id DESC`;
 
     const projects: ProjectInterface[] = await new Promise(r => {
-        pool.query(
+        dbWorker(
             qs,
+            [],
             function (err: any, res: any) {
                 if (err) {
                     sendMessageToTg(

@@ -1,9 +1,10 @@
 import { pool } from "@/app/db/connect"
 import { sendMessageToTg } from "../../bugReport/sendMessageToTg"
+import dbWorker from "@/app/db/dbWorker/dbWorker"
 
 export default async function checkImageIsExists(imageName: string) {
     return new Promise((resolve) => {
-        pool.query(
+        dbWorker(
             "SELECT * FROM media WHERE name = ?",
             [imageName],
             function (err, res: any) {

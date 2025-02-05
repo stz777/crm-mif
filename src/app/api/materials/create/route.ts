@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { sendMessageToTg } from '../../bugReport/sendMessageToTg';
 import { getUserByToken } from '@/app/components/getUserByToken';
 import { cookies } from 'next/headers';
+import dbWorker from '@/app/db/dbWorker/dbWorker';
 
 export async function POST(req: any, res: any) {
 
@@ -22,7 +23,7 @@ export async function POST(req: any, res: any) {
 
 async function createClientFn(name: string, supplier_id: number): Promise<number> {
     return await new Promise(r => {
-        pool.query(
+        dbWorker(
             `INSERT INTO materials (name, supplier) VALUES (?,?)`,
             [name, supplier_id],
             function (err, res: any) {

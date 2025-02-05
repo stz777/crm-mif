@@ -1,6 +1,7 @@
 import { sendMessageToTg } from "@/app/api/bugReport/sendMessageToTg";
 import { Employee, EmployeeMeta } from "@/app/components/types/employee";
 import { pool } from "@/app/db/connect";
+import dbWorker from "@/app/db/dbWorker/dbWorker";
 
 export async function getEmployees(searchParams?: {
   is_active: 1 | 0;
@@ -11,7 +12,7 @@ export async function getEmployees(searchParams?: {
   }
   const employees: Employee[] = await new Promise((resolve) => {
     pool.getConnection(function (err, conn) {
-      pool.query(
+      dbWorker(
         "SELECT * FROM employees WHERE is_active = ?",
         [is_active],
         function (err: any, res: any) {
@@ -51,7 +52,7 @@ export async function getEmployees(searchParams?: {
 
 async function getEmployeeMeta(employeeId: number): Promise<EmployeeMeta[]> {
   const employees: EmployeeMeta[] = await new Promise((resolve, reject) => {
-    pool.query(
+    dbWorker(
       "SELECT * FROM employees_meta WHERE employee_id = ?",
       [employeeId],
       function (err: any, res: any) {
@@ -81,8 +82,9 @@ async function getEmployeeMeta(employeeId: number): Promise<EmployeeMeta[]> {
 
 async function getLeadsPerEmployeeId(employeeId: number): Promise<any[]> {
   return await new Promise((resolve, reject) => {
-    pool.query(
+    dbWorker(
       `SELECT * FROM leads_roles WHERE user = ${employeeId}`,
+      [],
       function (err: any, res: EmployeeMeta[]) {
         if (err) {
           sendMessageToTg(
