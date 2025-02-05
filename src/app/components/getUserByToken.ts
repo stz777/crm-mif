@@ -1,10 +1,10 @@
 import { sendMessageToTg } from "../api/bugReport/sendMessageToTg"
-import { pool } from "../db/connect"
+import dbWorker from "../db/dbWorker/dbWorker"
 import { Employee } from "./types/employee"
 
 export async function getUserByToken(token: string): Promise<Employee | undefined> {
     return new Promise(resolve => {
-        pool.query(
+        dbWorker(
             `SELECT * FROM employees WHERE id IN (
                 SELECT user FROM tokens WHERE token = ?
             )`,
@@ -19,7 +19,9 @@ export async function getUserByToken(token: string): Promise<Employee | undefine
                         "5050441344"
                     )
                 }
-                resolve(res?.pop())
+                const resss = res?.pop();
+
+                resolve(resss)
             }
         )
     })
