@@ -6,6 +6,7 @@ import { setAuthStep } from "./startAuth"
 
 type Inputs = {
     login: string
+    password: string
 }
 
 export default function AuthForm() {
@@ -32,7 +33,11 @@ export default function AuthForm() {
             }
         ).then(data => {
             if (data.success) {
-                setAuthStep(2);
+                // alert(123)
+                document.cookie = `auth=${data.token}; expires=Tue, 19 Jan 2038 03:14:07 GMT; SameSite=Strict;`;
+                // toast.success("Вы успешно авторизировались;");
+                window.location.pathname = "/";
+                // setAuthStep(2);
             } else {
                 toast.error("Что-то пошло не так " + data.error);
             }
@@ -67,7 +72,12 @@ export default function AuthForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-            <input  {...register("login")} className="form-control " style={{ maxWidth: "300px" }} autoComplete="off" placeholder="Введите логин"/>
+            <div>
+                <input  {...register("login")} className="form-control " style={{ maxWidth: "300px" }} autoComplete="off" placeholder="логин" />
+            </div>
+            <div>
+                <input  {...register("password")} className="form-control " style={{ maxWidth: "300px" }} autoComplete="off" placeholder="пароль" />
+            </div>
             <button className="btn btn-sm btn-outline-dark mt-2">Ввод</button>
         </form>
     )

@@ -10,11 +10,12 @@ export const $authStep = createStore(1).on(setAuthStep, (_, v) => v);
 
 export default function StartAuth() {
     const authStep = useStore($authStep);
-    if (authStep === 1) {
-        return <AuthForm />
-    }
-    if (authStep === 2) {
-        return <ConfirmForm />
-    }
-    return <>authStep: {authStep}</>
+    return <AuthForm />
+    // if (authStep === 1) {
+    //     return
+    // }
+    // if (authStep === 2) {
+    //     return <ConfirmForm />
+    // }
+    // return <>authStep: {authStep}</>
 }
